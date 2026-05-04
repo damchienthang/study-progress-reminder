@@ -14,10 +14,10 @@ public class App {
     @EventListener(ApplicationReadyEvent.class)
     public void onReady() {
         System.out.println();
-        System.out.println("Server khởi động thành công!");
-        System.out.println("Truy cập tại: ");
+        System.out.println("Server start successfull!");
+        System.out.println("Visit at: ");
         System.out.println("http://localhost:8080");
-        System.out.println("Dừng server: nhấn Ctrl + C");
+        System.out.println("Stop server: Ctrl + C");
         System.out.println();
     }
 }
