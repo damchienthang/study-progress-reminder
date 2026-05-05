@@ -2,6 +2,38 @@
 
 Dự án quản lý học tập dành cho sinh viên, xây dựng trên nền tảng **Spring Boot 3** và **SQLite**, đáp ứng đầy đủ các yêu cầu về phân tích thiết kế hệ thống (ERD) và các testcase nghiệp vụ.
 
+## 📂 Cấu trúc Dự án (Project Structure)
+```text
+study-progress-reminder/
+├── pom.xml                        # Quản lý thư viện Maven
+├── README.md                      # Tài liệu hướng dẫn
+└── src/main/
+    ├── java/com/nhom14/
+    │   ├── App.java               # File chạy chính của Spring Boot
+    │   ├── config/                # Cấu hình hệ thống & Security
+    │   │   ├── WebConfig.java     # Đăng ký Interceptor
+    │   │   └── SessionInterceptor.java # Kiểm tra login & Real-time lock
+    │   ├── controller/            # Tầng xử lý điều hướng (Web Controller)
+    │   │   ├── AuthController.java     # Login, Register, Profile
+    │   │   ├── AdminController.java    # Quản lý User (Lock/Unlock)
+    │   │   ├── CourseController.java   # Quản lý Môn học
+    │   │   ├── TaskController.java     # Quản lý Nhiệm vụ & Trạng thái
+    │   │   └── DashboardController.java # Trang chủ thống kê
+    │   ├── model/                 # Định nghĩa thực thể (Database Entities)
+    │   │   ├── DatabaseConnection.java # Kết nối SQLite & Init Schema
+    │   │   └── User, Task, Course, Plan... # Các Model theo ERD
+    │   ├── dao/                   # Tầng truy xuất dữ liệu (Data Access Object)
+    │   │   └── UserDAO, TaskDAO, CourseDAO... # Query SQL thuần
+    │   └── service/               # Tầng xử lý logic nghiệp vụ (Service Layer)
+    │       └── TaskService, CourseService... # Logic Validation & Tính toán
+    └── resources/
+        ├── application.properties # Cấu hình Port, Database URL
+        ├── static/css/            # File Style CSS toàn hệ thống
+        └── templates/             # Giao diện HTML (Thymeleaf)
+            ├── auth/, admin/      # Giao diện User & Quản trị
+            └── courses/, plans/, tasks/ # Giao diện chức năng học tập
+```
+
 ## 📁 Cấu trúc Project (Architecture)
 Hệ thống tuân thủ kiến trúc MVC/BCE chuyên nghiệp:
 *   `com.nhom14.controller`: Xử lý điều hướng và tiếp nhận yêu cầu từ người dùng.
