@@ -1,169 +1,49 @@
-# Study Reminder — Hệ thống nhắc nhở tiến trình học tập
+# Study Progress Reminder — Hệ thống Nhắc nhở Tiến độ Học tập
 
-> Đồ án môn Nhập môn Công nghệ Phần mềm — Nhóm 14
+Dự án quản lý học tập dành cho sinh viên, xây dựng trên nền tảng **Spring Boot 3** và **SQLite**, đáp ứng đầy đủ các yêu cầu về phân tích thiết kế hệ thống (ERD) và các testcase nghiệp vụ.
 
----
+## 📁 Cấu trúc Project (Architecture)
+Hệ thống tuân thủ kiến trúc MVC/BCE chuyên nghiệp:
+*   `com.nhom14.controller`: Xử lý điều hướng và tiếp nhận yêu cầu từ người dùng.
+*   `com.nhom14.service`: Chứa logic nghiệp vụ (Validation, Tính toán tiến độ, Xử lý ràng buộc).
+*   `com.nhom14.dao`: Tương tác trực tiếp với Database (SQLite) bằng JDBC.
+*   `com.nhom14.model`: Định nghĩa các thực thể (User, Task, Course, StudyPlan...) khớp 100% với ERD.
+*   `com.nhom14.config`: Cấu hình hệ thống (Bảo mật, Interceptor).
+*   `src/main/resources/templates`: Giao diện người dùng (Thymeleaf, CSS Vanilla).
 
-## Giới thiệu
+## 🚀 Hướng dẫn khởi chạy
+1. **Yêu cầu:** Đã cài đặt Java 17+ và Maven.
+2. **Chạy server:**
+   ```powershell
+   mvn spring-boot:run
+   ```
+3. **Truy cập:** [http://localhost:8080](http://localhost:8080)
 
-**Study Reminder** là ứng dụng web giúp sinh viên quản lý và theo dõi tiến trình học tập cá nhân. Hệ thống cho phép người dùng lập kế hoạch học tập, quản lý môn học, theo dõi nhiệm vụ và nhận nhắc nhở tự động khi deadline sắp đến.
+## 🔑 Tài khoản kiểm thử (Test Accounts)
+| Vai trò | Email | Mật khẩu | Chức năng chính |
+| :--- | :--- | :--- | :--- |
+| **Quản trị viên** | `admin@gmail.com` | `admin123` | Quản lý người dùng, Khóa/Mở khóa tài khoản. |
+| **Sinh viên** | `ta1@gmail.com` | `tando1879` | Quản lý môn học, kế hoạch, nhiệm vụ và tiến độ. |
 
----
+## 🛠 Nhật ký thay đổi (Changelog - Các điểm đã hoàn thiện)
 
-## Kiến trúc hệ thống
+### ✅ Database & ERD Alignment
+*   Đồng bộ toàn bộ thuộc tính bảng: Thêm `lecturer` (Môn học), `studentId`, `username` (Người dùng), `courseId` (Kế hoạch).
+*   Thiết lập `PRAGMA foreign_keys = ON` và `ON DELETE CASCADE` để đảm bảo tính nhất quán (Xóa môn học xóa luôn Nhiệm vụ).
 
-Hệ thống được xây dựng theo mô hình **MVC mở rộng** (Model - View - Controller + Service + DAO):
+### ✅ Bảo mật (Security)
+*   **SessionInterceptor:** Chặn truy cập trái phép, tự động đẩy người dùng bị Admin khóa "nóng" ra khỏi hệ thống.
+*   **Fix Browser Cache:** Ngăn chặn việc nhấn nút "Back" trên trình duyệt có thể xem lại dữ liệu sau khi Logout.
 
-```
-View (Thymeleaf HTML)
-    ↕
-Controller (Spring MVC)
-    ↕
-Service (Business Logic)
-    ↕
-DAO (Data Access Object)
-    ↕
-Model (Java POJO)
-    ↕
-Database (SQLite)
-```
+### ✅ Tính năng Nghiệp vụ (Business Logic)
+*   **Task Validation:** Chặn Deadline trong quá khứ và Deadline nằm ngoài khoảng thời gian của kế hoạch học tập.
+*   **Real-time Filter:** Bổ sung ô tìm kiếm môn học ngay tại giao diện (phản hồi tức thì không cần load trang).
+*   **Progress Calculation:** Tự động tính toán lại % tiến độ kế hoạch mỗi khi trạng thái nhiệm vụ thay đổi.
 
----
-
-## Công nghệ sử dụng
-
-| Thành phần | Công nghệ | Phiên bản |
-|---|---|---|
-| Ngôn ngữ | Java | 17 (LTS) |
-| Framework | Spring Boot | 3.2.5 |
-| View Engine | Thymeleaf | 3.x |
-| Database | SQLite | 3.47.x |
-| Build Tool | Maven | 3.9.x |
-| Server | Apache Tomcat (nhúng) | 10.x |
-
----
-
-## Cấu trúc project
-
-```
-StudyReminderBoot/
-├── pom.xml                                      ← Maven dependencies
-└── src/main/
-    ├── java/com/nhom14/
-    │   ├── App.java                             ← Entry point Spring Boot
-    │   ├── controller/
-    │   │   ├── AuthController.java              ← Login, Register, Logout, Profile
-    │   │   └── DashboardController.java         ← Dashboard
-    │   ├── model/
-    │   │   ├── DatabaseConnection.java          ← Singleton SQLite + tạo schema
-    │   │   └── User.java                        ← Model người dùng
-    │   ├── dao/
-    │   │   └── UserDAO.java                     ← CRUD bảng users
-    │   └── service/
-    │       └── AuthService.java                 ← Logic xác thực + hash SHA-256
-    └── resources/
-        ├── application.properties               ← Cấu hình Spring Boot
-        ├── static/css/
-        │   └── style.css                        ← CSS toàn bộ app
-        └── templates/
-            ├── dashboard.html                   ← Trang chính sau đăng nhập
-            └── auth/
-                ├── login.html                   ← Trang đăng nhập
-                ├── register.html                ← Trang đăng ký
-                └── profile.html                 ← Trang hồ sơ / đổi mật khẩu
-```
+### ✅ Sửa lỗi (Bug Fixes)
+*   Fix lỗi 500 khi đổi mật khẩu/cập nhật hồ sơ (thiếu Model attribute).
+*   Fix lỗi 404 khi cập nhật trạng thái nhiệm vụ từ trang chi tiết kế hoạch.
+*   Fix lỗi định dạng ngày tháng `datetime-local` không tương thích với SQLite.
 
 ---
-
-## Cơ sở dữ liệu
-
-File SQLite được tạo tự động tại thư mục gốc project với tên `study_reminder.db`.
-
-### Sơ đồ các bảng
-
-| Bảng | Mô tả |
-|---|---|
-| `users` | Tài khoản người dùng (Student / Admin) |
-| `study_plans` | Kế hoạch học tập |
-| `courses` | Môn học |
-| `tasks` | Nhiệm vụ học tập |
-| `reminders` | Nhắc nhở tự động |
-
-### Quan hệ giữa các bảng
-```
-users (1) ──── (N) study_plans
-users (1) ──── (N) courses
-study_plans (1) ──── (N) tasks
-courses (1) ──── (N) tasks
-tasks (1) ──── (N) reminders
-users (1) ──── (N) reminders
-```
-
----
-
-## Hướng dẫn cài đặt và chạy
-
-### Yêu cầu môi trường
-- **JDK 17+** — https://adoptium.net
-- **Maven 3.9+** — https://maven.apache.org/download.cgi
-- **VS Code** với extension **Extension Pack for Java** và **Spring Boot Extension Pack**
-
-### Các bước chạy
-
-**1. Clone repository**
-```bash
-git clone https://github.com/<your-username>/StudyReminderBoot.git
-cd StudyReminderBoot
-```
-
-**2. Chạy ứng dụng**
-```bash
-mvn spring-boot:run
-```
-
-**3. Truy cập**
-
-Mở trình duyệt và vào: http://localhost:8080
-
-> **Lưu ý:** Đường dẫn thư mục project **không được chứa ký tự tiếng Việt hoặc khoảng trắng** để tránh lỗi Maven encoding.
-
----
-
-## Tính năng hiện tại
-
-### ✅ Module 1 — Quản lý người dùng
-- [x] Đăng ký tài khoản
-- [x] Đăng nhập / Đăng xuất
-- [x] Đổi mật khẩu
-- [x] Phân quyền Student / Admin
-- [x] Mật khẩu được mã hóa SHA-256
-
-### 🚧 Module 2 — Quản lý kế hoạch học tập
-- [ ] Xem danh sách kế hoạch
-- [ ] Tạo / Sửa / Xóa kế hoạch
-- [ ] Thêm nhiệm vụ vào kế hoạch
-
-### 🚧 Module 3 — Quản lý môn học và nhiệm vụ
-- [ ] Quản lý môn học (CRUD)
-- [ ] Quản lý nhiệm vụ (CRUD)
-- [ ] Cập nhật trạng thái nhiệm vụ
-
-### 🚧 Module 4 — Nhắc nhở và theo dõi tiến độ
-- [ ] Dashboard tổng quan
-- [ ] Danh sách nhắc nhở
-- [ ] Gửi nhắc nhở tự động (SystemTimer)
-
-### 🚧 Admin Panel
-- [ ] Xem danh sách người dùng
-- [ ] Khóa / Mở khóa tài khoản
-- [ ] Xóa tài khoản
-
----
-
-## 🔐 Bảo mật
-
-- Mật khẩu được hash bằng **SHA-256** trước khi lưu vào database
-- Session được quản lý bởi Spring (HttpSession)
-- Tài khoản bị khóa không thể đăng nhập
-
----
+*Dự án được hoàn thiện bởi Antigravity AI Assistant.*
