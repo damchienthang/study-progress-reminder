@@ -24,6 +24,7 @@ public class TaskController {
     @GetMapping
     public String list(@RequestParam(required = false) String status,
                        @RequestParam(required = false) String priority,
+                       @RequestParam(required = false) String sort,
                        HttpSession session, Model model) {
         User u = currentUser(session);
         if (u == null) return "redirect:/login";
@@ -44,9 +45,23 @@ public class TaskController {
                     .collect(Collectors.toList());
         }
 
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("status", status);
+        // Sắp xếp
+        if ("priority".equals(sort)) {
+            java.util.Map<String, Integer> pOrder = java.util.Map.of("HIGH", 1, "MEDIUM", 2, "LOW", 3);
+            tasks = tasks.stream()
+                    .sorted(java.util.Comparator.comparingInt(t -> pOrder.getOrDefault(t.getPriority(), 9)))
+                    .collect(Collectors.toList());
+        } else if ("deadline".equals(sort)) {
+            tasks = tasks.stream()
+                    .sorted(java.util.Comparator.comparing(
+                            t -> t.getDeadline() != null ? t.getDeadline() : "9999"))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("tasks",    tasks);
+        model.addAttribute("status",   status);
         model.addAttribute("priority", priority);
+        model.addAttribute("sort",     sort);
         return "tasks/list";
     }
 

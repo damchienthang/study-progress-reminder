@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Danh sách thông báo nhắc nhở nhiệm vụ học tập — StudyReminder">
+    <title>Thông báo — StudyReminder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <!-- ════ NAV ════ -->
+    <nav id="main-nav">
+        <div class="logo">📚 StudyReminder</div>
+        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
+        <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
+        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+
+        <div class="nav-right">
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm active" id="notif-toggle-btn"
+                style="position:relative;text-decoration:none">
+                🔔 Thông báo
+                <span th:if="${unreadCount != null and unreadCount > 0}" th:text="${unreadCount}"
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
+            </a>
+            <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
+                th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+        </div>
+    </nav>
+
+    <!-- ════ APP ════ -->
+    <div class="app" id="main-app">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="main-sidebar">
+            <div class="sidebar-section">Tổng quan</div>
+            <a th:href="@{/dashboard}" class="sidebar-item">
+                <span class="icon">🏠</span>Dashboard
+            </a>
+
+            <div class="sidebar-section">Học tập</div>
+            <a th:href="@{/courses}" class="sidebar-item">
+                <span class="icon">📖</span>Môn học
+            </a>
+            <a th:href="@{/tasks}" class="sidebar-item">
+                <span class="icon">✅</span>Nhiệm vụ
+            </a>
+            <a th:href="@{/plans}" class="sidebar-item">
+                <span class="icon">📅</span>Kế hoạch
+            </a>
+
+            <div class="sidebar-section">Thông báo</div>
+            <a th:href="@{/reminders}" class="sidebar-item active">
+                <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadCount != null and unreadCount > 0}" th:text="${unreadCount}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
+            </a>
+
+            <div class="sidebar-section">Tài khoản</div>
+            <a th:href="@{/profile}" class="sidebar-item">
+                <span class="icon">👤</span>Hồ sơ
+            </a>
+            <a th:href="@{/logout}" class="sidebar-item">
+                <span class="icon">🚪</span>Đăng xuất
+            </a>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">🔔 Thông báo nhắc nhở</h1>
+                    <div class="page-subtitle">
+                        Hệ thống tự động gửi nhắc nhở khi nhiệm vụ còn dưới 24 giờ đến hạn
+                    </div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center">
+                    <span th:if="${unreadCount != null and unreadCount > 0}" style="font-size:13px;color:var(--text2)">
+                        <span style="color:var(--red);font-weight:700" th:text="${unreadCount}">0</span> chưa đọc
+                    </span>
+                    <form th:action="@{/reminders/read-all}" method="post"
+                        th:if="${reminders != null and !reminders.isEmpty()}">
+                        <button type="submit" class="btn btn-secondary btn-sm" id="btn-read-all">
+                            ✓ Đánh dấu tất cả đã đọc
+                        </button>
+                    </form>
+                    <!-- Manual trigger cho testing (TC4-PUSH-1A) -->
+                    <form th:action="@{/api/reminder/trigger}" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-secondary btn-sm" id="btn-trigger-reminder"
+                            title="Manual trigger: kiểm tra ngay các task sắp đến hạn">
+                            ⚡ Kiểm tra ngay
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Flash messages -->
+            <div th:if="${success}"
+                style="margin-bottom:12px;padding:10px 16px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px"
+                th:text="${success}"></div>
+
+            <!-- REMINDER LIST -->
+            <div class="card">
+                <div th:if="${reminders != null and !reminders.isEmpty()}">
+                    <div th:each="r : ${reminders}"
+                        th:style="${!r.read} ? 'border-left:4px solid var(--accent);background:var(--bg2);' : 'border-left:4px solid var(--bg3);opacity:0.7;'"
+                        style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px">
+
+                        <!-- Icon -->
+                        <div style="font-size:24px;min-width:32px;text-align:center">
+                            <span th:if="${!r.read}">🔔</span>
+                            <span th:if="${r.read}" style="opacity:0.4">🔕</span>
+                        </div>
+
+                        <!-- Content -->
+                        <div style="flex:1">
+                            <div style="font-size:14px;font-weight:600;margin-bottom:4px" th:text="${r.message}">Nội
+                                dung thông báo</div>
+                            <div style="display:flex;gap:12px;font-size:11px;color:var(--text2);margin-top:4px">
+                                <span>📋 <span th:text="${r.taskName ?: 'Nhiệm vụ'}">Task</span></span>
+                                <span>🕐 <span th:text="${r.sentAt}">thời gian</span></span>
+                                <span th:if="${!r.read}" style="color:var(--accent);font-weight:600">● Chưa đọc</span>
+                                <span th:if="${r.read}" style="color:var(--text2)">✓ Đã đọc</span>
+                            </div>
+                        </div>
+
+                        <!-- Action -->
+                        <div th:if="${!r.read}" style="min-width:100px">
+                            <form th:action="@{/reminders/{id}/read(id=${r.reminderId})}" method="post">
+                                <button type="submit" class="btn btn-secondary btn-sm"
+                                    th:id="'btn-read-' + ${r.reminderId}">
+                                    ✓ Đánh dấu đọc
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty state -->
+                <div th:if="${reminders == null or reminders.isEmpty()}"
+                    style="padding:60px 40px;text-align:center;color:var(--text2)">
+                    <div style="font-size:48px;margin-bottom:16px">🔕</div>
+                    <div style="font-size:16px;font-weight:600;margin-bottom:8px">Không có thông báo nào</div>
+                    <div style="font-size:13px">Hệ thống sẽ tự động gửi thông báo khi nhiệm vụ còn dưới 24 giờ đến hạn.
+                    </div>
+                    <div style="margin-top:16px;display:flex;gap:12px;justify-content:center">
+                        <a th:href="@{/tasks}" class="btn btn-secondary btn-sm">✅ Xem nhiệm vụ</a>
+                        <form th:action="@{/api/reminder/trigger}" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-primary btn-sm" id="btn-trigger-now">⚡ Kiểm tra
+                                ngay</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO BOX -->
+            <div class="card" style="margin-top:16px;padding:16px 20px">
+                <div style="font-size:13px;color:var(--text2)">
+                    <div style="font-weight:600;margin-bottom:8px;color:var(--text1)">ℹ️ Thông tin về hệ thống nhắc nhở
+                    </div>
+                    <ul style="margin:0;padding-left:20px;line-height:1.8">
+                        <li>Hệ thống tự động quét mỗi <strong>5 phút</strong> và gửi thông báo khi nhiệm vụ còn &lt; 24
+                            giờ đến hạn</li>
+                        <li>Mỗi nhiệm vụ nhận tối đa <strong>2 thông báo</strong> trong vòng 24 giờ (UR-32)</li>
+                        <li>Nhiệm vụ đã hoàn thành (<strong>DONE</strong>) sẽ không được nhắc nhở</li>
+                        <li>Nhấn <strong>"Kiểm tra ngay"</strong> để trigger thủ công (dùng cho testing)</li>
+                    </ul>
+                </div>
+            </div>
+        </div><!-- end .main -->
+    </div><!-- end .app -->
+
+</body>
+
+</html>

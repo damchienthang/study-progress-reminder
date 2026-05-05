@@ -84,6 +84,35 @@ public class CourseDAO {
         return list;
     }
 
+    /** Tìm môn học theo tên (search) */
+    public List<Course> findByUserAndSearch(int userId, String keyword) {
+        List<Course> list = new ArrayList<>();
+        String kw = "%" + keyword.toLowerCase() + "%";
+        try (PreparedStatement ps = conn().prepareStatement(
+                "SELECT * FROM courses WHERE userId=? AND (LOWER(courseName) LIKE ? OR LOWER(courseCode) LIKE ?) ORDER BY courseName ASC")) {
+            ps.setInt(1, userId); ps.setString(2, kw); ps.setString(3, kw);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(map(rs));
+        } catch (SQLException ignored) {}
+        return list;
+    }
+
+    /** Tìm môn học kết hợp search + semester */
+    public List<Course> findByUserSemesterAndSearch(int userId, String semester, String keyword) {
+        List<Course> list = new ArrayList<>();
+        String kw = "%" + keyword.toLowerCase() + "%";
+        String semFilter = (semester != null && !semester.isBlank()) ? semester : null;
+        String sql = "SELECT * FROM courses WHERE userId=? AND (LOWER(courseName) LIKE ? OR LOWER(courseCode) LIKE ?)"
+                + (semFilter != null ? " AND semester=?" : "") + " ORDER BY courseName ASC";
+        try (PreparedStatement ps = conn().prepareStatement(sql)) {
+            ps.setInt(1, userId); ps.setString(2, kw); ps.setString(3, kw);
+            if (semFilter != null) ps.setString(4, semFilter);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(map(rs));
+        } catch (SQLException ignored) {}
+        return list;
+    }
+
     public boolean existsCode(int userId, String courseCode, int excludeId) {
         try (PreparedStatement ps = conn().prepareStatement(
                 "SELECT 1 FROM courses WHERE userId=? AND courseCode=? AND courseId!=?")) {

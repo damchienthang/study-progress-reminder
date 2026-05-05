@@ -51,6 +51,14 @@ public class ReminderDAO {
         } catch (SQLException e) { return false; }
     }
 
+    public void markAllRead(int userId) {
+        try (PreparedStatement ps = conn().prepareStatement(
+                "UPDATE reminders SET isRead=1 WHERE userId=?")) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
     /** Đếm số thông báo đã gửi cho task trong vòng 24h — giới hạn không quá 2 */
     public int countSentLast24h(int taskId) {
         try (PreparedStatement ps = conn().prepareStatement(

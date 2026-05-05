@@ -19,14 +19,37 @@ public class CourseController {
 
     @GetMapping
     public String list(@RequestParam(required = false) String semester,
+                       @RequestParam(required = false) String search,
                        HttpSession session, Model model) {
         User u = currentUser(session);
         if (u == null) return "redirect:/login";
-        model.addAttribute("courses",
-                (semester != null && !semester.isBlank())
-                        ? courseService.findByUserAndSemester(u.getUserId(), semester)
-                        : courseService.findByUser(u.getUserId()));
-        model.addAttribute("semester", semester);
+
+        java.util.List<Course> courses;
+        boolean hasSearch   = search   != null && !search.isBlank();
+        boolean hasSemester = semester != null && !semester.isBlank();
+
+        if (hasSearch && hasSemester) {
+            courses = courseService.findByUserSemesterAndSearch(u.getUserId(), semester, search);
+        } else if (hasSearch) {
+            courses = courseService.findByUserAndSearch(u.getUserId(), search);
+        } else if (hasSemester) {
+            courses = courseService.findByUserAndSemester(u.getUserId(), semester);
+        } else {
+            courses = courseService.findByUser(u.getUserId());
+        }
+
+        // Lấy danh sách học kỳ duy nhất để hiển thị dropdown filter
+        java.util.List<String> semesters = courseService.findByUser(u.getUserId()).stream()
+                .map(Course::getSemester)
+                .filter(s -> s != null && !s.isBlank())
+                .distinct()
+                .sorted()
+                .toList();
+
+        model.addAttribute("courses", courses);
+        model.addAttribute("semester",  semester);
+        model.addAttribute("search",    search);
+        model.addAttribute("semesters", semesters);
         return "courses/list";
     }
 

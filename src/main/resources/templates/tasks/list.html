@@ -16,9 +16,9 @@
         <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
 
         <div class="nav-right">
-            <button class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative">
-                🔔 <span class="badge" id="notif-badge" style="display:none">0</span>
-            </button>
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative;text-decoration:none">
+                🔔 Thông báo
+            </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
@@ -45,6 +45,11 @@
                 <span class="icon">📅</span>Kế hoạch
             </a>
 
+            <div class="sidebar-section">Thông báo</div>
+            <a th:href="@{/reminders}" class="sidebar-item">
+                <span class="icon">🔔</span>Nhắc nhở
+            </a>
+
             <div class="sidebar-section">Tài khoản</div>
             <a th:href="@{/profile}" class="sidebar-item">
                 <span class="icon">👤</span>Hồ sơ
@@ -62,9 +67,9 @@
                 </div>
             </div>
 
-            <!-- Bộ lọc -->
+            <!-- Bộ lọc + Sort -->
             <div class="card" style="padding:16px;margin-bottom:16px">
-                <form method="get" th:action="@{/tasks}" style="display:flex;gap:12px;align-items:flex-end">
+                <form method="get" th:action="@{/tasks}" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
                     <div class="form-group" style="margin-bottom:0">
                         <label class="form-label">Trạng thái</label>
                         <select name="status" class="form-input" style="width:160px">
@@ -78,13 +83,21 @@
                         <label class="form-label">Độ ưu tiên</label>
                         <select name="priority" class="form-input" style="width:160px">
                             <option value="ALL">Tất cả</option>
-                            <option value="HIGH" th:selected="${priority == 'HIGH'}">🔴 Cao</option>
+                            <option value="HIGH"   th:selected="${priority == 'HIGH'}">🔴 Cao</option>
                             <option value="MEDIUM" th:selected="${priority == 'MEDIUM'}">🟡 Trung bình</option>
-                            <option value="LOW" th:selected="${priority == 'LOW'}">🟢 Thấp</option>
+                            <option value="LOW"    th:selected="${priority == 'LOW'}">🟢 Thấp</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-secondary btn-sm">🔍 Lọc</button>
-                    <a th:href="@{/tasks}" class="btn btn-secondary btn-sm">✕ Xóa lọc</a>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Sắp xếp theo</label>
+                        <select name="sort" class="form-input" style="width:160px" id="select-sort">
+                            <option value="">Mặc định (deadline)</option>
+                            <option value="priority" th:selected="${sort == 'priority'}">🔴 Độ ưu tiên</option>
+                            <option value="deadline" th:selected="${sort == 'deadline'}">📅 Hạn chót</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-sm" id="btn-filter-task">🔍 Lọc</button>
+                    <a th:href="@{/tasks}" class="btn btn-secondary btn-sm" id="btn-clear-task-filter">✕ Xóa lọc</a>
                 </form>
             </div>
 

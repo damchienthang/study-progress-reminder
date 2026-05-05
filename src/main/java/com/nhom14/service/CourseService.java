@@ -47,4 +47,12 @@ public class CourseService {
     public List<Course> findByUserAndSemester(int userId, String semester) {
         return courseDAO.findByUserAndSemester(userId, semester);
     }
+
+    public List<Course> findByUserAndSearch(int userId, String keyword) {
+        return courseDAO.findByUserAndSearch(userId, keyword);
+    }
+
+    public List<Course> findByUserSemesterAndSearch(int userId, String semester, String keyword) {
+        return courseDAO.findByUserSemesterAndSearch(userId, semester, keyword);
+    }
 }

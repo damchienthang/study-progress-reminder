@@ -1,0 +1,3993 @@
+HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG
+KHOA CNTT1
+BÁO CÁO CUỐI KỲ
+Học phần: Nhập môn công nghệ phần mềm
+Đề tài: Phần mềm nhắc nhở tiến trình học tập
+Sinh viên thực hiện
+Mã Sinh Viên
+Đàm Chiến Thắng
+: B23DCKH106
+Nguyễn Duy Linh
+: B23DCKH070
+Đỗ Quốc Tấn
+: B23DCKH104
+Nguyễn Tuấn Thành
+: B23DCKH112
+Lớp học phần
+: INT1340
+Giảng viên bộ môn: Ths.Nguyễn Đình Quảng
+Hà Nội – 04/202
+MỤC LỤC
+CHƯƠNG 1: MÔ TẢ HỆ THỐNG4
+1. Mô tả hệ thống4
+1.1. Mô tả chung về hệ thống, lý do lựa chọn4
+1.2. Khảo sát hệ thống tương tự4
+1.3. Bảng phân chia công việc6
+CHƯƠNG 2: THU THẬP DỮ LIỆU7
+2. Thu thập dữ liệu7
+2.1. Bảng thuật ngữ7
+2.2. Mô hình nghiệp vụ bằng ngôn ngữ tự nhiên9
+2.3. Bảng yêu cầu người dùng16
+CHƯƠNG 3: PHÂN TÍCH HỆ THỐNG20
+3. Mô hình nghiệp vụ bằng UML20
+3.1. Xác định các Actor của hệ thống20
+3.2. Các use case cho từng Actor21
+3.2.1. Quản lý người dùng21
+3.2.2. Quản lý kế hoạch học tập22
+3.2.3. Quản lý môn học và nhiệm vụ học tập22
+3.2.4. Nhắc nhở và theo dõi tiến độ học tập23
+3.3. Đặc tả use case25
+3.3.1. Quản lý người dùng25
+3.3.2. Quản lý kế hoạch học tập38
+3.3.3. Quản lý môn học và nhiệm vụ học tập:43
+3.3.4. Nhắc nhở và theo dõi tiến độ học tập:48
+3.4. Trích xuất thực thể và xây dựng sơ đồ lớp phân tích53
+3.4.1. Quản lý người dùng55
+3.4.2. Quản lý kế hoạch học tập59
+3.4.3. Quản lý môn học và nhiệm vụ học tập62
+3.4.4. Nhắc nhở và theo dõi tiến độ học tập65
+CHƯƠNG 4: THIẾT KẾ KIẾN TRÚC HỆ THỐNG72
+4. Architectural Design72
+4.1. Lựa chọn kiến trúc triển khai72
+4.2. Component / Module Diagram73
+4.2.1. Tạo các Component73
+4.2.2. Các liên kết Interface cần thiết lập74
+4.2.3. Thêm Dependency (Phụ thuộc)75
+4.3. Sơ đồ triển khai (Deployment Diagram)75
+4.3.1 Kiến trúc triển khai tổng thể75
+4.3.2 Deployment Diagram75
+4.3.3. Đặc tả chi tiết các Node (Thiết bị) và Artifact (Phần mềm)76
+4.3.4. Giao thức mạng và Cơ chế giao tiếp76
+CHƯƠNG 5: THIẾT KẾ CHI TIẾT77
+5. Detailed Design77
+5.1. Detailed Class Diagram77
+5.1.1. Quản lý người dùng77
+5.1.2. Quản lý kế hoạch học tập77
+5.1.3. Quản lý môn học và nhiệm vụ học tập77
+5.1.4. Nhắc nhở và theo dõi tiến độ77
+5.2. Detailed Sequence Diagram77
+5.3. ERD — Entity Relationship Diagram83
+CHƯƠNG 6: TEST CASE86
+6. Test Case86
+6.1. Quản lý người dùng86
+6.2. Quản lý kế hoạch học tập95
+6.3. Quản lý môn học và nhiệm vụ học tập101
+6.4. Nhắc nhở và theo dõi tiến độ học tập113
+CHƯƠNG 7: THIẾT KẾ HỆ THỐNG122
+7. Thiết kế và cài đặt hệ thống122
+7.1. Môi trường phát triển122
+7.2. Cấu trúc project123
+7.3. Cài đặt cơ sở dữ liệu123
+7.4. Demo chức năng từng module123
+7.4.1. Module 1 - Quản lý người dùng123
+7.4.2. Module 2 - Quản lý kế hoạch học tập123
+7.4.3. Module 3 - Quản lý môn học & nhiệm vụ123
+7.4.4. Module 4 - Nhắc nhở & theo dõi tiến độ123
+7.5. Kết quả kiểm thử (đối chiếu Test Case)123
+CHƯƠNG 1: MÔ TẢ HỆ THỐNG
+Mô tả hệ thống
+Mô tả chung về hệ thống, lý do lựa chọn
+Trong quá trình học tập tại các trường đại học, sinh viên thường phải quản lý nhiều môn học, bài tập, bài kiểm tra và các deadline khác nhau. Tuy nhiên, nhiều sinh viên gặp khó khăn trong việc theo dõi tiến độ học tập, dễ quên deadline hoặc không sắp xếp được kế hoạch học tập hợp lý.
+Vì vậy, việc xây dựng một hệ thống phần mềm hỗ trợ nhắc nhở tiến trình học tập là cần thiết. Hệ thống này giúp sinh viên quản lý các môn học, các nhiệm vụ học tập và nhận thông báo nhắc nhở trước khi đến thời hạn hoàn thành.
+Khảo sát hệ thống tương tự
+Hiện nay có nhiều ứng dụng hỗ trợ người dùng quản lý thời gian, lập kế hoạch và nhắc nhở công việc. Các ứng dụng này có chức năng tương tự với một phần của hệ thống đề xuất, đặc biệt là các chức năng như tạo nhiệm vụ, đặt deadline và gửi thông báo nhắc nhở. Một số hệ thống tiêu biểu được khảo sát gồm:
+Google Calendar là một ứng dụng quản lý lịch và lập kế hoạch phổ biến, cho phép người dùng tạo sự kiện, đặt lịch và nhận thông báo nhắc nhở. Người dùng có thể tạo nhiều lịch khác nhau để quản lý các hoạt động như học tập, công việc hoặc cá nhân.
+Hình 1.1 Google Calendar
+Todoist là một ứng dụng quản lý công việc (task management) phổ biến, được sử dụng để tạo danh sách công việc và theo dõi tiến độ hoàn thành nhiệm vụ. Ứng dụng này được nhiều người sử dụng để quản lý công việc cá nhân và học tập.
+Hình 1.2 Todoist
+Notion là một nền tảng quản lý công việc và ghi chú đa năng. Người dùng có thể tạo các bảng dữ liệu, danh sách công việc hoặc dashboard để quản lý công việc cá nhân.
+Hình 1.3 Notion
+Qua việc khảo sát các hệ thống có thể thấy rằng các ứng dụng hiện nay chủ yếu tập trung vào việc quản lý lịch và sự kiện, tạo danh sách các công việc hay là nhắc nhở deadline...Tuy nhiên, các hệ thống này chưa được thiết kế cho việc quản lý tiến trình học tập cho học sinh, sinh viên, đặc biệt là một số chức năng như: Liên kết nhiệm vụ với môn học,  theo dõi tiến độ học tập, thống kê và đánh giá tiến trình học tập…
+Do đó việc xây dựng phần mềm hỗ trợ nhắc nhở tiến trình học tập sinh viên là cần thiết nhằm cung cấp một công cụ chuyên biệt giúp sinh viên quản lý việc học tập một cách hiệu quả hơn.
+Bảng phân chia công việc
+Họ và tên
+Mã SV
+Công việc
+Nguyễn Duy Linh
+B23DCKH070
+Module: Quản lý người dùng
+Nguyễn Tuấn Thành
+B23DCKH112
+Module: Quản lý kế hoạch học tập
+Đỗ Quốc Tấn
+B23DCKH104
+Module: Quản lý môn học và nhiệm vụ học tập
+Đàm Chiến Thắng
+B23DCKH106
+Module: Nhắc nhở và theo dõi tiến độ học tập
+CHƯƠNG 2: THU THẬP DỮ LIỆU
+Thu thập dữ liệu
+Bảng thuật ngữ
+STT
+Thuật ngữ
+Mô tả
+1
+User
+Người sử dụng hệ thống nói chung, bao gồm cả sinh viên và quản trị viên.
+2
+Student
+Sinh viên, đối tượng chính sử dụng phần mềm để quản lý nhiệm vụ và theo dõi tiến độ học tập.
+3
+Admin
+Quản trị viên, người có quyền quản lý tài khoản người dùng và giám sát hệ thống.
+4
+Account
+Tài khoản người dùng dùng để đăng nhập và sử dụng hệ thống.
+5
+User Profile
+Thông tin cá nhân của người dùng như tên, email, tên hiển thị và thông tin liên hệ.
+6
+Authentication
+Quá trình xác thực danh tính người dùng khi đăng nhập vào hệ thống.
+7
+Authorization
+Quá trình xác định quyền truy cập của người dùng đối với các chức năng trong hệ thống.
+8
+Session
+Phiên đăng nhập, dùng để duy trì trạng thái hoạt động của người dùng trong suốt quá trình sử dụng hệ thống.
+9
+Register
+Quá trình tạo tài khoản mới (Đăng ký)
+10
+Login
+Quá trình đăng nhập vào hệ thống bằng tài khoản đã đăng ký.
+11
+Logout
+Hành động đăng xuất khỏi hệ thống để kết thúc phiên làm việc.
+12
+Change Password
+Chức năng thay đổi mật khẩu hiện tại hoặc đặt lại mật khẩu khi bị quên.
+13
+Forgot Password
+Chức năng cho phép người dùng đặt lại mật khẩu khi quên mật khẩu đăng nhập.
+14
+Update Profile
+Chức năng cho phép người dùng chỉnh sửa hoặc cập nhật thông tin cá nhân.
+15
+Delete Account
+Chức năng cho phép người dùng xóa tài khoản khỏi hệ thống.
+16
+Course
+Môn học hoặc học phần mà sinh viên đang tham gia trong học kỳ.
+17
+Semester
+Học kỳ hiện tại, dùng để phân nhóm và quản lý môn học, tránh nhầm lẫn dữ liệu.
+18
+Credit
+Tín chỉ của môn học, dùng để đánh giá mức độ ưu tiên hoặc thời lượng học.
+19
+Study Plan
+Kế hoạch học tập theo giai đoạn do sinh viên tự khởi tạo.
+20
+Schedule
+Lịch trình học tập của sinh viên được sắp xếp dựa trên các nhiệm vụ và deadline.
+21
+Task
+Nhiệm vụ học tập cụ thể thuộc về một môn học (Ví dụ: bài tập, đọc tài liệu, ôn thi).
+22
+Task Description
+Mô tả chi tiết yêu cầu của nhiệm vụ học tập.
+23
+Deadline
+Ngày và giờ hạn chót bắt buộc phải hoàn thành một nhiệm vụ.
+24
+Priority
+Mức độ ưu tiên của nhiệm vụ.
+25
+Task Status
+Trạng thái hiện tại của nhiệm vụ (Chưa bắt đầu, Đang thực hiện, Đã hoàn thành).
+26
+Progress
+Mức độ/Tiến độ hoàn thành các nhiệm vụ học tập của sinh viên (tính bằng %).
+27
+Upcoming Task
+Nhiệm vụ học tập sắp đến hạn hoàn thành.
+28
+Overdue Task
+Nhiệm vụ đã quá hạn nhưng chưa hoàn thành.
+29
+Reminder
+Thông báo nhắc nhở tự động được hệ thống gửi cho sinh viên trước khi đến Deadline.
+30
+Notification
+Thông báo mà hệ thống gửi đến người dùng để thông tin về các hoạt động liên quan đến nhiệm vụ học tập.
+Mô hình nghiệp vụ bằng ngôn ngữ tự nhiên
+Mục tiêu và phạm vi hệ thống
+Mục tiêu: Xây dựng một công cụ số hóa giúp sinh viên tự chủ trong việc quản lý thời gian, tổ chức công việc học tập khoa học. Đặc biệt, hệ thống hướng tới việc tự động hóa quá trình theo dõi, đo lường tiến độ và chủ động nhắc nhở sinh viên hoàn thành bài tập trước hạn chót, giúp nâng cao hiệu suất học tập.
+Phạm vi hệ thống: Phần mềm được thiết kế và giới hạn trong 3 phạm vi cụ thể sau:
+Phạm vi áp dụng:
+Phần mềm được xây dựng và triển khai để phục vụ chuyên biệt cho đối tượng sinh viên nội bộ của Học viện Công nghệ Bưu Chính Viễn Thông. Hệ thống hoạt động như một công cụ hỗ trợ học tập cá nhân an toàn và đồng bộ trong quy mô nhà trường.
+Phạm vi người dùng: Hệ thống giới hạn cấp quyền truy cập cho 2 nhóm đối tượng chính: Sinh viên nội bộ (người sử dụng trực tiếp các tính năng quản lý, theo dõi học tập) và Quản trị viên - Admin (người vận hành, cấp quyền và giám sát tài khoản).
+Phạm vi chức năng:
+Quản lý người dùng: Hỗ trợ xác thực (Đăng nhập, đăng ký, khôi phục/đổi mật khẩu), quản lý hồ sơ cá nhân và quản trị tài khoản người dùng.
+Quản lý kế hoạch học tập: Cung cấp công cụ khởi tạo, chỉnh sửa, xóa và cấu trúc các Kế hoạch học tập (Study Plan) theo thời gian.
+Quản lý môn học và nhiệm vụ học tập: Quản lý danh mục môn học (Course), thêm các Nhiệm vụ (Task) tương ứng, và cho phép cập nhật trạng thái thực tế của nhiệm vụ.
+Nhắc nhở và theo dõi tiến độ học tập: Tự động chạy ngầm để tính toán và phân loại nhiệm vụ (Upcoming/Overdue), gửi thông báo nhắc nhở (Reminder), tính toán tỷ lệ % để trực quan hóa lên biểu đồ tiến độ.
+Đối tượng sử dụng phần mềm
+Hệ thống được thiết kế với hai loại người dùng chính:
+Sinh viên (Student): Sinh viên là người sử dụng chính của hệ thống. Sinh viên sử dụng hệ thống để tạo kế hoạch học tập, quản lý các nhiệm vụ học tập và theo dõi tiến trình hoàn thành các nhiệm vụ. Bên cạnh đó, sinh viên có quyền thao tác với dữ liệu cá nhân
+Quản trị viên (Admin): Quản trị viên là người chịu trách nhiệm quản lý hệ thống. Admin có quyền quản lý tài khoản người dùng và giám sát hoạt động của hệ thống để đảm bảo hệ thống hoạt động ổn định.
+Chức năng đối với từng người dùng
+Nhóm chức năng dành cho sinh viên:
+Quản lý người dùng:
+Đăng ký tài khoản mới
+Đăng nhập/ Đăng xuất hệ thống
+Quên mật khẩu và đổi mật khẩu
+Xem, cập nhật hồ sơ cá nhân và Xóa tài khoản
+Quản lý kế hoạch học tập:
+Tạo mới kế hoạch học tập
+Xem danh sách và chi tiết các kế hoạch học tập
+Chỉnh sửa, cập nhật thông tin kế hoạch
+Xóa kế hoạch học tập
+Thêm nhiệm vụ vào 1 kế hoạch học tập cụ thể
+Quản lý môn học và nhiệm vụ học tập:
+Khởi tạo và quản lý danh mục môn học (Thêm, Xem, Sửa, Xóa).
+Cập nhật trạng thái nhiệm vụ học tập (Task Status: Chưa bắt đầu, Đang thực hiện, Đã hoàn thành).
+Nhắc nhở và theo dõi tiến độ học tập
+Xem bảng điều khiển (Dashboard) trực quan hóa thống kê tiến độ học tập.
+Xem danh sách phân loại cảnh báo hạn chót (Nhiệm vụ sắp đến hạn / Nhiệm vụ quá hạn).
+Nhận thông báo nhắc nhở tự động từ hệ thống.
+Nhóm chức năng dành cho Quản trị viên:
+Xem danh sách toàn bộ người dùng (Sinh viên) trong hệ thống.
+Quản lý trạng thái tài khoản (Khóa/Mở khóa hoặc Xóa tài khoản vi phạm).
+Mô tả chức năng
+Phân hệ Quản lý người dùng:
+Đăng ký tài khoản (Register):
+Người dùng chưa có tài khoản truy cập vào trang Đăng ký.
+Hệ thống hiển thị form yêu cầu nhập thông tin (Tên, Email, Mật khẩu).
+Người dùng điền đầy đủ thông tin và nhấn "Đăng ký".
+Hệ thống kiểm tra dữ liệu, đảm bảo email chưa bị trùng lặp, tiến hành lưu thông tin và tạo Account mới trong Database.
+Đăng nhập (Login):
+Người dùng nhập Email và Mật khẩu vào form Đăng nhập.
+Hệ thống thực hiện quá trình Authentication (xác thực) để đối chiếu thông tin trong Database.
+Hệ thống kiểm tra Authorization (phân quyền Role), cấp Session (phiên làm việc) và chuyển hướng người dùng (Sinh viên vào trang chủ, Admin vào trang quản trị).
+Quên mật khẩu / Đổi mật khẩu:
+Người dùng chọn chức năng Quên mật khẩu / Đổi mật khẩu.
+Hệ thống yêu cầu cung cấp email xác thực hoặc mật khẩu cũ.
+Người dùng nhập mật khẩu mới và xác nhận.
+Hệ thống mã hóa và lưu mật khẩu mới vào cơ sở dữ liệu.
+Cập nhật Hồ sơ cá nhân (Update Profile):
+Sinh viên chọn mục "Hồ sơ cá nhân".
+Hệ thống hiển thị User Profile hiện tại.
+Sinh viên thay đổi các thông tin (Tên hiển thị, Liên hệ...) và nhấn "Lưu".
+Hệ thống cập nhật dữ liệu mới vào CSDL.
+Phân hệ Quản lý Kế hoạch học tập
+Tạo Kế hoạch học tập (Study Plan):
+Sinh viên chọn chức năng 'Tạo kế hoạch học tập'.
+Hệ thống hiển thị form yêu cầu nhập liệu gồm: Tên kế hoạch, Môn học, Ngày bắt đầu, Ngày kết thúc.
+Sinh viên nhập thông tin.
+Nhấn 'Lưu kế hoạch'.
+Hệ thống kiểm tra tính hợp lệ của dữ liệu và lưu Kế hoạch mới vào cơ sở dữ liệu.
+Xem / Chỉnh sửa / Xóa Kế hoạch học tập:
+Sinh viên chọn mục 'Kế hoạch học tập', hệ thống hiển thị danh sách kế hoạch hiện có.
+Xem: Sinh viên click vào một kế hoạch, hệ thống hiển thị chi tiết các nhiệm vụ và trạng thái bên trong.
+Sửa: Sinh viên nhấn 'Chỉnh sửa' trên một kế hoạch, hệ thống hiển thị form chứa dữ liệu cũ. Sinh viên cập nhật lại thông tin, nhấn 'Lưu' để hệ thống cập nhật dữ liệu.
+Xóa: Sinh viên nhấn 'Xóa'. Hệ thống hiển thị thông báo xác nhận. Nếu đồng ý, kế hoạch bị xóa vĩnh viễn khỏi CSDL; nếu hủy thì quay lại trang trước.
+Thêm Nhiệm vụ (Task) vào kế hoạch:
+Sinh viên mở chi tiết một Kế hoạch học tập.
+Nhấn 'Thêm nhiệm vụ'.
+Nhập thông tin vào form: Tên nhiệm vụ, Môn học, Deadline, Mức độ ưu tiên.
+Nhấn 'Lưu'.
+Hệ thống lưu nhiệm vụ mới và liên kết dữ liệu trực tiếp vào Kế hoạch tương ứng.
+Phân hệ Quản lý Môn học và Nhiệm vụ học tập
+Khởi tạo và Quản lý Môn học (Course):
+Sinh viên vào trang "Danh sách môn học", nhấn "Thêm môn học mới".
+Giao diện hiển thị các trường nhập liệu. Sinh viên điền: Tên môn học, Mã môn, Giảng viên, Số tín chỉ.
+Nhấn "Lưu lại".
+Hệ thống xác thực dữ liệu và cấp phát định danh duy nhất (Course_ID) để lưu vào Database. Các chức năng xem chi tiết, sửa thông tin, xóa môn học cũng thao tác với luồng tương tự.
+Cập nhật trạng thái nhiệm vụ học tập (Task Status Update):
+Tại màn hình danh sách Nhiệm vụ, sinh viên sử dụng bộ lọc để xem "Chỉ các bài chưa làm".
+Trong quá trình học, khi làm xong một bài, sinh viên bấm tick (vào checkbox) hoặc thao tác chọn trạng thái từ "Chưa bắt đầu" sang "Đang thực hiện" hoặc "Đã hoàn thành".
+Hệ thống tiếp nhận thao tác và thực hiện lệnh cập nhật dữ liệu tiến độ của kế hoạch vào Database.
+Phân hệ Nhắc nhở và Theo dõi tiến độ học tập
+Nhận diện và Cảnh báo hạn chót (Deadline Warning):
+Sinh viên truy cập vào khu vực Bảng điều khiển (Dashboard).
+Hệ thống tự động chạy thuật toán quét và so sánh thời gian thực tế với Deadline của các Nhiệm vụ.
+Hệ thống trích xuất danh sách và hiển thị giao diện làm nổi bật: Các bài tập sắp hết hạn được gắn nhãn Upcoming Task, các bài đã trễ hạn bị bôi đỏ với nhãn Overdue Task.
+Gửi nhắc nhở tự động (Reminder):
+Bộ đếm thời gian của Hệ thống chạy ngầm liên tục, truy vấn CSDL.
+Khi phát hiện một Upcoming Task chạm ngưỡng thời gian cần cảnh báo (đã được cấu hình trước, ví dụ: cách Deadline 24 giờ), hệ thống tự động kích hoạt tạo thông báo.
+Hệ thống đẩy Reminder (Push Notification) hiển thị trên thiết bị của Sinh viên.
+Sinh viên click vào thông báo để được hệ thống chuyển hướng trực tiếp đến trang chi tiết nhiệm vụ.
+Trực quan hóa Tiến độ (Progress Tracking):
+Hệ thống liên tục "lắng nghe" sự thay đổi dữ liệu của Trạng thái nhiệm vụ (Task Status).
+Ngay khi ghi nhận có một Task vừa được Sinh viên cập nhật sang trạng thái "Đã hoàn thành", hệ thống lập tức tính toán lại dựa trên công thức: (Số lượng Task hoàn thành / Tổng số lượng Task của Kế hoạch).
+Hệ thống xuất ra chỉ số %, sau đó tự động vẽ lại biểu đồ tiến độ / thanh phần trăm hoàn thành trên màn hình để sinh viên theo dõi.
+Thông tin/đối tượng mà hệ thống cần xử lý
+Thông tin về Sinh viên / Người dùng (User & Profile): Hệ thống quản lý các thông tin cơ bản như Mã sinh viên, Tên sinh viên, Email, Mật khẩu, Tên hiển thị. Những thông tin này được sử dụng để xác định danh tính và phục vụ việc phân tách không gian lưu trữ dữ liệu cá nhân của từng sinh viên.
+Thông tin về Tài khoản & Phiên đăng nhập (Account & Session): Hệ thống lưu trữ trạng thái tài khoản (Hoạt động/Bị khóa), quyền truy cập nhằm phục vụ cho cơ chế Authentication (Xác thực) và Authorization (Phân quyền). Quản lý phiên đăng nhập (Session) giúp duy trì trạng thái hoạt động của người dùng trong suốt quá trình thao tác mà không cần đăng nhập lại liên tục.
+Thông tin về Môn học (Course): Là đối tượng cha dùng để chứa các nhiệm vụ. Hệ thống cấp phát một định danh duy nhất và quản lý các trường dữ liệu bao gồm: Tên môn học, Số tín chỉ, Giảng viên phụ trách, và Học kỳ tương ứng. Dữ liệu này giúp sinh viên liên kết các nhiệm vụ một cách khoa học.
+Thông tin về Kế hoạch học tập (Study Plan): Hệ thống xử lý các kế hoạch do sinh viên thiết lập. Mỗi kế hoạch quản lý các thông tin:
+Tên kế hoạch
+Thời gian bắt đầu
+Thời gian kết thúc.
+Giúp tổ chức và phân chia quá trình học tập theo từng giai đoạn hoặc học kỳ.
+Thông tin về Nhiệm vụ học tập (Task): Đây là thực thể mang tính "động" nhất trong hệ thống. Hệ thống phải quản lý chi tiết: Tên nhiệm vụ, Môn học, Mức độ ưu tiên: Deadline (thời hạn chót) và Task Status (Trạng thái thực tế: Chưa bắt đầu / Đang làm / Đã xong). Trong đó, Deadline là cơ sở dữ liệu quan trọng nhất để bộ đếm thời gian chạy ngầm phía sau đối chiếu.
+Thông tin về Lịch trình (Schedule): Tập hợp toàn bộ các nhiệm vụ đã được sắp xếp theo trục thời gian của sinh viên. Xử lý đối tượng này giúp hệ thống có cái nhìn tổng quan về khối lượng công việc.
+Thông tin Thông báo và Nhắc nhở (Notification & Reminder): Hệ thống lưu trữ các nội dung thông điệp sẽ được phát đi, phân loại rõ ràng (lời nhắc giục làm bài hay thông báo cập nhật tình hình). Quản lý thời điểm cần kích hoạt gửi đi và trạng thái của thông báo.
+Thông tin về Tiến độ (Progress): Hệ thống xử lý các số liệu thống kê liên quan đến hiệu suất. Nó tổng hợp số lượng công việc có trạng thái "Đã hoàn thành" trên tổng khối lượng công việc, từ đó tính toán ra tỷ lệ % và lưu trữ dữ liệu này phục vụ cho việc vẽ biểu đồ trực quan .
+Quan hệ giữa các đối tượng
+Đối tượng 1
+Quan hệ
+Đối tượng 2
+Mô tả chi tiết mối quan hệ
+User (Sinh viên)
+1 - N
+Course (Môn học)
+Một sinh viên có thể tự tạo và quản lý nhiều môn học khác nhau. Dữ liệu môn học được gắn chặt với ID định danh của sinh viên đó, đảm bảo tính cá nhân hóa (không ai xem được của ai).
+User (Sinh viên)
+1 - N
+Study Plan (Kế hoạch)
+Một sinh viên có thể thiết lập nhiều kế hoạch học tập theo từng học kỳ hoặc từng giai đoạn khác nhau để phục vụ mục tiêu cá nhân.
+Course (Môn học)
+1 - N
+Task (Nhiệm vụ)
+Một môn học chứa nhiều nhiệm vụ học tập (như bài tập, đồ án, tiểu luận). Nếu xóa một môn học, các nhiệm vụ thuộc môn đó sẽ bị ảnh hưởng (xóa theo hoặc mồ côi).
+Study Plan (Kế hoạch)
+1 - N
+Task (Nhiệm vụ)
+Để dễ quản lý, các nhiệm vụ được sinh viên phân bổ và gom nhóm vào một Kế hoạch học tập cụ thể theo khung thời gian định trước.
+Task (Nhiệm vụ)
+1 - N
+Reminder (Nhắc nhở)
+Một nhiệm vụ khi sắp đến hạn chót (Deadline) có thể kích hoạt hệ thống sinh ra một hoặc nhiều thông báo nhắc nhở để gửi đến thiết bị của sinh viên.
+Study Plan (Kế hoạch)
+1 - 1
+Progress (Tiến độ)
+Đối tượng Tiến độ không tồn tại độc lập mà là thực thể phụ thuộc (1-1). Nó là kết quả thống kê toán học trực tiếp từ tổng số Task và trạng thái (Status) của chúng bên trong một Kế hoạch.
+Bảng yêu cầu người dùng
+Chú thích: Loại: Chức năng (functional)  |  Phi chức năng (non-functional)  |  Độ ưu tiên: Cao  Trung bình  Thấp
+ID
+Mô tả yêu cầu
+Loại
+Actor
+Độ ưu tiên
+Module 1: Quản lý người dùng
+UR-01
+Người dùng chưa có tài khoản có thể đăng ký bằng tên, email và mật khẩu
+Chức năng
+Student
+Cao
+UR-02
+Người dùng có thể đăng nhập vào hệ thống bằng email và mật khẩu đã đăng ký
+Chức năng
+Student, Admin
+Cao
+UR-03
+Người dùng có thể đăng xuất khỏi hệ thống để kết thúc phiên làm việc
+Chức năng
+Student, Admin
+Trung bình
+UR-04
+Người dùng có thể khôi phục mật khẩu thông qua email khi bị quên
+Chức năng
+Student, Admin
+Trung bình
+UR-05
+Sinh viên có thể xem, cập nhật thông tin cá nhân và đổi mật khẩu
+Chức năng
+Student
+Cao
+UR-06
+Admin có thể xem danh sách toàn bộ tài khoản người dùng trong hệ thống
+Chức năng
+Admin
+Cao
+UR-07
+Admin có thể khóa, mở khóa hoặc xóa tài khoản sinh viên vi phạm
+Chức năng
+Admin
+Cao
+UR-08
+Hệ thống phân quyền rõ ràng: Student vào Dashboard học tập, Admin vào trang quản trị
+Chức năng
+Hệ thống
+Cao
+UR-09
+Mật khẩu phải được mã hóa trước khi lưu vào cơ sở dữ liệu
+Phi chức năng
+Hệ thống
+Cao
+UR-10
+Thời gian phản hồi đăng nhập không vượt quá 2 giây
+Phi chức năng
+Hệ thống
+Trung bình
+Module 2: Quản lý kế hoạch học tập
+UR-11
+Sinh viên có thể tạo kế hoạch học tập mới với tên, ngày bắt đầu và ngày kết thúc
+Chức năng
+Student
+Cao
+UR-12
+Sinh viên có thể xem danh sách và chi tiết các kế hoạch học tập đã tạo
+Chức năng
+Student
+Cao
+UR-13
+Sinh viên có thể chỉnh sửa thông tin của kế hoạch học tập hiện có
+Chức năng
+Student
+Trung bình
+UR-14
+Sinh viên có thể xóa kế hoạch học tập không còn cần thiết
+Chức năng
+Student
+Trung bình
+UR-15
+Sinh viên có thể thêm nhiệm vụ học tập vào một kế hoạch cụ thể với tên, deadline và độ ưu tiên
+Chức năng
+Student
+Cao
+UR-16
+Tên kế hoạch không được trùng lặp trong cùng một tài khoản sinh viên
+Phi chức năng
+Hệ thống
+Cao
+UR-17
+Sinh viên chỉ được xem và chỉnh sửa kế hoạch do chính mình tạo ra
+Phi chức năng
+Hệ thống
+Cao
+Module 3: Quản lý môn học và nhiệm vụ học tập
+UR-18
+Sinh viên có thể thêm môn học mới với tên môn, mã môn, giảng viên và số tín chỉ
+Chức năng
+Student
+Cao
+UR-19
+Sinh viên có thể xem danh sách, chỉnh sửa và xóa môn học đã tạo
+Chức năng
+Student
+Cao
+UR-20
+Sinh viên có thể thêm, xem, sửa và xóa nhiệm vụ học tập gắn với môn học cụ thể
+Chức năng
+Student
+Cao
+UR-21
+Sinh viên có thể cập nhật trạng thái nhiệm vụ: Chưa bắt đầu, Đang thực hiện, Đã hoàn thành
+Chức năng
+Student
+Cao
+UR-22
+Khi xóa môn học, toàn bộ nhiệm vụ thuộc môn đó bị xóa theo (Cascade Delete)
+Phi chức năng
+Hệ thống
+Cao
+UR-23
+Deadline của nhiệm vụ không được đặt trong quá khứ so với thời điểm hiện tại
+Phi chức năng
+Hệ thống
+Trung bình
+UR-24
+Nhiệm vụ mới tạo mặc định có trạng thái là Chưa bắt đầu
+Phi chức năng
+Hệ thống
+Thấp
+Module 4: Nhắc nhở và theo dõi tiến độ học tập
+UR-25
+Sinh viên có thể xem Dashboard trực quan hóa tỷ lệ % hoàn thành theo từng kế hoạch và môn học
+Chức năng
+Student
+Cao
+UR-26
+Sinh viên có thể xem danh sách nhiệm vụ sắp đến hạn (Upcoming) và quá hạn (Overdue)
+Chức năng
+Student
+Cao
+UR-27
+Sinh viên có thể nhấn vào thông báo để xem chi tiết nhiệm vụ cần hoàn thành
+Chức năng
+Student
+Trung bình
+UR-28
+Hệ thống tự động gắn nhãn Upcoming cho nhiệm vụ còn dưới 24 giờ đến deadline
+Chức năng
+System Timer
+Cao
+UR-29
+Hệ thống tự động gắn nhãn Overdue cho nhiệm vụ đã qua deadline nhưng chưa hoàn thành
+Chức năng
+System Timer
+Cao
+UR-30
+Hệ thống tự động gửi thông báo nhắc nhở (Push Notification) đến thiết bị sinh viên khi nhiệm vụ sắp đến hạn
+Chức năng
+System Timer
+Cao
+UR-31
+Hệ thống tự động tính lại tỷ lệ % tiến độ mỗi khi sinh viên cập nhật trạng thái nhiệm vụ
+Chức năng
+System Timer
+Cao
+UR-32
+Không gửi quá 2 thông báo nhắc nhở cho cùng một nhiệm vụ trong vòng 24 giờ
+Phi chức năng
+Hệ thống
+Trung bình
+UR-33
+Thời gian phản hồi và vẽ biểu đồ Dashboard không vượt quá 3 giây
+Phi chức năng
+Hệ thống
+Trung bình
+CHƯƠNG 3: PHÂN TÍCH HỆ THỐNG
+Mô hình nghiệp vụ bằng UML
+Xác định các Actor của hệ thống
+Trong hệ thống Phần mềm hỗ trợ nhắc nhở tiến trình học tập sinh viên, các actor đại diện cho các đối tượng bên ngoài tương tác với hệ thống. Các actor chính của hệ thống gồm:
+Sinh viên (Student): Người dùng cốt lõi, trực tiếp tương tác với hệ thống để tổ chức và quản lý tiến trình học tập cá nhân (bao gồm cả thao tác đăng ký tài khoản ban đầu).
+Quản trị viên (Admin): Người vận hành, có quyền hạn cao nhất trong việc giám sát hệ thống và quản lý danh sách/trạng thái tài khoản người dùng.
+Hệ thống (System Timer): Tác nhân tự động (chạy ngầm) đóng vai trò kích hoạt các thuật toán đếm thời gian, tính toán dữ liệu và tự động phát luồng thông báo mà không cần con người can thiệp.
+Sơ đồ tổng quát Use case hệ thống:
+Hình 3.1. Sơ đồ UC tổng quát hệ thống
+Các use case cho từng Actor
+3.2.1. Quản lý người dùng
+Phân hệ này đảm nhận toàn bộ các vấn đề về tài khoản, bảo mật và thông tin cá nhân.
+Sinh viên thực hiện:
+UC Đăng ký tài khoản
+UC Khôi phục mật khẩu (Quên mật khẩu)
+UC Cập nhật hồ sơ cá nhân
+Cả Sinh viên và Admin cùng thực hiện:
+UC Đăng nhập hệ thống
+UC Đăng xuất hệ thống
+UC Thay đổi mật khẩu
+Admin thực hiện:
+UC Xem danh sách tài khoản
+UC Khóa / Mở khóa tài khoản (Xử lý vi phạm)
+Hình 3.2. Sơ đồ UC phân hệ quản lý người dùng
+3.2.2. Quản lý kế hoạch học tập
+Phân hệ này giúp sinh viên tạo ra các chiến dịch/giai đoạn để gom nhóm công việc.
+Sinh viên thực hiện:
+UC Lập kế hoạch học tập (Bao gồm các thao tác CRUD: Thêm, Xem danh sách, Xem chi tiết, Sửa, Xóa kế hoạch)
+Hình 3.3. Sơ đồ UC tổng quát phân hệ Quản lý kế hoạch học tập
+3.2.3. Quản lý môn học và nhiệm vụ học tập
+Phân hệ này là nơi sinh viên thiết lập dữ liệu môn học và tạo ra các bài tập (Task) gắn vào kế hoạch.
+Sinh viên: người trực tiếp sử dụng hệ thống để thiết lập khung chương trình học , số hóa các bài tập, thiết lập deadline và chủ động đánh dấu tiến độ làm bài của chính mình.
+UC Subject Management : Quản lý về môn học như thêm sửa xóa thay đổi lọc môn .
+UC Managing learning tasks: Thêm, Xem, Sửa, Xóa bài tập/nhiệm vụ vào bên trong Kế hoạch.
+UC Update mission status : Chuyển đổi các trạng thái: Chưa làm -> Đang làm -> Đã hoàn thành).
+Hình 3.4. Sơ đồ UC tổng quát Quản lý môn học và nhiệm vụ học tập
+3.2.4. Nhắc nhở và theo dõi tiến độ học tập
+Trong phân hệ này, Quản trị viên (Admin) không tham gia. Chỉ có 2 Tác nhân chính tương tác với nhau:
+Sinh viên (Student): Người dùng thụ hưởng kết quả. Sinh viên sẽ xem các báo cáo trực quan và nhận các cảnh báo từ hệ thống để điều chỉnh việc học.
+Hệ thống (System Timer): Tác nhân tự động (Cronjob/Background Task). Nó đóng vai trò như một "người quản gia" thầm lặng, liên tục đếm thời gian, tính toán số liệu và chủ động gửi thông báo mà không cần ai ra lệnh.
+Hình 3.5. Sơ đồ UC tổng quát nhắc nhở và theo dõi tiến trình
+Tác nhân Sinh viên (Student):
+View Dashboard: Xem Dashboard tổng hợp với các biểu đồ thể hiện tỷ lệ % hoàn thành của từng kế hoạch.
+View Reminder List: Mở danh sách các Nhiệm vụ sắp đến hạn (Upcoming) hoặc đã trễ hạn (Overdue) được hệ thống bôi đỏ/vàng cảnh báo.
+View Reminder Details: Nhấn vào một lời nhắc nhở (Push Notification) để xem nội dung chi tiết hệ thống muốn gửi.
+Tác nhân Hệ thống (System Timer):
+Send Reminder Notification: Khi phát hiện một nhiệm vụ sắp đến Deadline (ví dụ: còn 24h), hệ thống tự động sinh ra một thông báo và đẩy về thiết bị của sinh viên.
+Đặc tả use case
+3.3.1. Quản lý người dùng
+Bảng đặc tả Use Case: Đăng ký tài khoản (UC-M1-01)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-01
+Tên Use Case
+Register
+Priority
+Cao (High)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Cho phép người dùng tạo tài khoản mới để truy cập hệ thống.
+Trigger
+Người dùng nhấn nút "Register" (Đăng ký) trên giao diện.
+Tiền điều kiện
+Người dùng chưa có tài khoản trong hệ thống.
+Hậu điều kiện
+Tài khoản mới được tạo và lưu vào CSDL.
+Luồng sự kiện chính
+1. Người dùng truy cập trang Đăng ký.
+2. Nhập các thông tin bắt buộc: Tên hiển thị, Email, Mật khẩu.
+3. Nhấn nút "Register".
+4. Hệ thống kiểm tra tính hợp lệ của dữ liệu (Định dạng email, độ mạnh mật khẩu).
+5. Hệ thống kiểm tra sự tồn tại của Email trong CSDL.
+6. Dữ liệu hợp lệ, hệ thống tạo tài khoản mới và lưu vào database.
+7. Hiển thị thông báo đăng ký thành công và chuyển hướng sang trang Login.
+Luồng thay thế
+Luồng 1: Người dùng đã có tài khoản
+1a. Tại bước 1, người dùng nhấn vào liên kết "Đã có tài khoản? Đăng nhập".
+2a. Hệ thống chuyển hướng sang trang Login (Kích hoạt UC-M1-02).
+Use Case kết thúc.
+Luồng ngoại lệ
+4a. Dữ liệu không hợp lệ (Sai format email hoặc mật khẩu quá yếu).
+5a. Hệ thống báo lỗi ngay tại trường dữ liệu tương ứng.
+6a. Yêu cầu nhập lại (Quay lại bước 2).
+Use Case kết thúc (Thất bại).
+5b. Email đã tồn tại trong CSDL.
+6b. Hệ thống hiển thị thông báo: "Email này đã được sử dụng, vui lòng chọn email khác hoặc đăng nhập".
+Use Case kết thúc (Thất bại).
+Business Rule
+- Tính duy nhất: Email đăng ký là (Unique Identifier) định danh duy nhất, không được trùng lặp trong toàn bộ hệ thống.
+- Bảo mật: Mật khẩu phải được mã hóa (Hash) trước khi lưu vào cơ sở dữ liệu.
+Non-Functional Req.
+Thời gian phản hồi kiểm tra form và lưu dữ liệu không vượt quá 3 giây.
+Bảng đặc tả Use Case: Đăng nhập (UC-M1-02)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-02
+Tên Use Case
+Login
+Priority
+Cao (High)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Cho phép người dùng truy cập vào hệ thống bằng tài khoản đã đăng ký.
+Trigger
+Người dùng nhấn nút "Login" (Đăng nhập).
+Tiền điều kiện
+Người dùng đã có tài khoản hợp lệ.
+Hậu điều kiện
+Người dùng đăng nhập thành công, phiên làm việc (Session) được tạo.
+Luồng sự kiện chính
+1. Người dùng truy cập trang đăng nhập.
+2. Nhập thông tin Email và Mật khẩu.
+3. Nhấn nút "Login".
+4. Hệ thống gửi yêu cầu xác thực và đối chiếu với dữ liệu Database.
+5. Xác thực thành công, hệ thống tạo session đăng nhập và ghi nhận trạng thái online.
+6. Chuyển hướng người dùng đến trang chính (Dashboard).
+Luồng thay thế
+Luồng 1: Chuyển sang Quên mật khẩu
+2a. Người dùng nhấn liên kết "Quên mật khẩu".
+3a. Hệ thống chuyển sang màn hình Quên mật khẩu (Kích hoạt UC-UM-04).
+Use Case kết thúc.
+Luồng ngoại lệ
+4a. Thông tin sai (Email không tồn tại hoặc sai mật khẩu).
+5a. Hệ thống hiển thị lỗi: "Tài khoản hoặc mật khẩu không chính xác".
+6a. Yêu cầu nhập lại.
+Use Case kết thúc (Thất bại).
+4b. Hệ thống không thể kết nối tới cơ sở dữ liệu (Server Timeout).
+5b. Hệ thống hiển thị thông báo: "Lỗi kết nối máy chủ, vui lòng thử lại sau".
+Use Case kết thúc (Thất bại).
+Business Rule
+- Phân quyền (Authorization): Sau khi xác thực, hệ thống phải kiểm tra Role (Vai trò). Nếu là Admin, chuyển hướng sang Admin Panel. Nếu là Sinh viên, chuyển hướng sang Dashboard học tập.
+Non-Functional Req.
+Thời gian phản hồi cho thao tác xác thực đăng nhập không vượt quá 2 giây.
+Bảng đặc tả Use Case: Đăng xuất (UC-M1-03)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-03
+Tên Use Case
+Logout
+Priority
+Trung bình (Medium)
+Tác nhân (Actor)
+Sinh viên, Admin
+Mục đích
+Kết thúc phiên làm việc an toàn, bảo vệ dữ liệu cá nhân.
+Trigger
+Người dùng nhấn nút "Logout" trên thanh menu/avatar.
+Tiền điều kiện
+Người dùng đang trong trạng thái đăng nhập (Có Session/Token).
+Hậu điều kiện
+Session bị xóa, người dùng không thể truy cập các trang nội bộ nếu không đăng nhập lại.
+Luồng sự kiện chính
+1. Người dùng nhấn nút "Logout".
+2. Hệ thống tiếp nhận yêu cầu.
+3. Hệ thống thực thi lệnh hủy phiên làm việc (Xóa Session / Token hiện tại).
+4. Hệ thống chuyển hướng người dùng về trang Login.
+Luồng thay thế
+Không có.
+Luồng ngoại lệ
+3a. Lỗi hệ thống mất kết nối mạng, không gửi được request lên Server.
+4a. Ứng dụng tự động xóa Session lưu ở Local (Trình duyệt/App) và đẩy người dùng ra màn hình Login để đảm bảo an toàn.
+Use Case kết thúc.
+Business Rule
+- Sau khi đăng xuất, nếu người dùng sử dụng nút "Back" của trình duyệt để quay lại trang trước đó, hệ thống bắt buộc phải chặn lại và chuyển hướng về trang Login.
+Non-Functional Req.
+Thao tác đăng xuất phải phản hồi ngay lập tức (≤ 1 giây).
+Bảng đặc tả Use Case: Quên mật khẩu (UC-M1-04)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-04
+Tên Use Case
+Forgot Password
+Priority
+Trung bình (Medium)
+Tác nhân (Actor)
+Sinh viên, Admin
+Mục đích
+Hỗ trợ người dùng khôi phục và thiết lập lại mật khẩu mới.
+Trigger
+Người dùng nhấn nút "Forgot Password" tại màn hình Đăng nhập.
+Tiền điều kiện
+Người dùng sở hữu một tài khoản hợp lệ trong hệ thống.
+Hậu điều kiện
+Người dùng nhận được cơ chế đặt lại mật khẩu thành công.
+Luồng sự kiện chính
+1. Người dùng nhấn nút "Forgot Password".
+2. Hệ thống hiển thị form yêu cầu nhập Email tài khoản.
+3. Người dùng nhập Email và nhấn "Xác nhận".
+4. Hệ thống kiểm tra sự tồn tại của Email trong cơ sở dữ liệu.
+5. Trùng khớp, hệ thống tạo một liên kết (Link/OTP) khôi phục và gửi vào hòm thư Email của người dùng.
+6. Cho phép người dùng chuyển sang màn hình thiết lập lại mật khẩu mới.
+Luồng thay thế
+Không có.
+Luồng ngoại lệ
+4a. Email người dùng cung cấp không tồn tại trong hệ thống.
+5a. Hệ thống hiển thị thông báo lỗi: "Không tìm thấy tài khoản với email này".
+Use Case kết thúc (Thất bại).
+Business Rule
+- Mã OTP hoặc Link khôi phục mật khẩu gửi qua email chỉ có hiệu lực trong khoảng thời gian nhất định (Ví dụ: 15 phút) để bảo mật.
+Non-Functional Req.
+Thời gian truy vấn và kích hoạt lệnh gửi email khôi phục ≤ 3 giây.
+Bảng đặc tả Use Case: Quản lý hồ sơ người dùng (UC-M1-05)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-05
+Tên Use Case
+Manage User Profile
+Priority
+Cao (High)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Xem thông tin cá nhân hiện tại và điều hướng đến các tính năng chỉnh sửa tài khoản.
+Trigger
+Sinh viên truy cập vào trang User Profile.
+Tiền điều kiện
+Sinh viên đã đăng nhập thành công.
+Hậu điều kiện
+Hệ thống hiển thị đúng thông tin của tài khoản đó.
+Luồng sự kiện chính
+1. Sinh viên nhấn vào biểu tượng avatar, chọn "Hồ sơ của tôi".
+2. Hệ thống truy vấn thông tin cá nhân của Sinh viên từ Database.
+3. Hệ thống hiển thị màn hình User Profile với các thông tin hiện tại.
+4. Sinh viên xem thông tin.
+Luồng thay thế
+Luồng 1: Cập nhật thông tin (Update Profile)
+4a. Sinh viên nhấn nút "Chỉnh sửa thông tin".
+5a. Hệ thống mở form cập nhật. Sinh viên nhập thông tin mới, nhấn "Lưu".
+6a. Dữ liệu được lưu vào Database.
+Use Case kết thúc.
+Luồng 2: Đổi mật khẩu (Change Password)
+4b. Sinh viên nhấn nút "Đổi mật khẩu".
+5b. Hệ thống yêu cầu nhập MK cũ, MK mới. Nhấn "Xác nhận".
+6b. Hệ thống lưu mật khẩu mới.
+Use Case kết thúc.
+Luồng ngoại lệ
+2a. Lỗi tải dữ liệu do mất kết nối CSDL.
+3a. Hệ thống hiển thị thông báo "Không thể tải thông tin lúc này" và hiển thị giao diện tải lại.
+Use Case kết thúc (Thất bại).
+Business Rule
+- Xác thực: Sinh viên chỉ được phép xem và chỉnh sửa profile của chính mình. Field "Email" là trường Read-only (không được sửa).
+Non-Functional Req.
+Tốc độ tải và hiển thị trang Profile ≤ 2 giây.
+Bảng đặc tả Use Case: Xem danh sách người dùng (UC-M1-06)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-06
+Tên Use Case
+View User List
+Priority
+Cao (High)
+Tác nhân (Actor)
+Quản trị viên (Admin)
+Mục đích
+Cho phép Admin xem và tra cứu danh sách toàn bộ tài khoản trong hệ thống.
+Trigger
+Admin truy cập vào menu "Quản lý người dùng" trên Admin Panel.
+Tiền điều kiện
+Admin đã đăng nhập thành công bằng tài khoản cấp quản trị.
+Hậu điều kiện
+Màn hình hiển thị danh sách người dùng.
+Luồng sự kiện chính
+1. Admin truy cập trang "Quản lý người dùng".
+2. Hệ thống gửi request lấy danh sách user.
+3. Hệ thống truy vấn CSDL (Bảng Users).
+4. Trả về danh sách và hiển thị dưới dạng Bảng dữ liệu (Table).
+5. Admin xem danh sách thông tin sinh viên.
+Luồng thay thế
+Luồng 1: Admin tìm kiếm/lọc người dùng
+5a. Admin gõ tên/email sinh viên vào thanh tìm kiếm hoặc chọn bộ lọc trạng thái.
+6a. Hệ thống truy vấn lại theo từ khóa và hiển thị kết quả lọc mới.
+Use Case tiếp tục bước 5.
+Luồng 2: Chưa có người dùng nào
+3b. Hệ thống truy vấn nhưng Database trống.
+4b. Hệ thống trả về danh sách rỗng, giao diện hiển thị "Chưa có dữ liệu người dùng".
+Use Case kết thúc.
+Luồng ngoại lệ
+2a. Admin bị hết hạn phiên làm việc (Session expired).
+3a. Hệ thống từ chối quyền truy cập, đẩy Admin văng ra trang Login.
+Use Case kết thúc (Thất bại).
+Business Rule
+Phân quyền tuyệt đối: Tài khoản role STUDENT gọi route /admin/* sẽ bị hệ thống chặn và trả về HTTP 403 Forbidden.
+Non-Functional Req.
+Khả năng phản hồi truy vấn danh sách ≤ 3 giây.
+Bảng đặc tả Use Case: Quản lý tài khoản người dùng (UC-M1-07)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M1-07
+Tên Use Case
+Manage User Account
+Priority
+Cao (High)
+Tác nhân (Actor)
+Quản trị viên (Admin)
+Mục đích
+Cung cấp cho Admin quyền sửa thông tin, khóa trạng thái hoặc xóa tài khoản sinh viên vi phạm.
+Trigger
+Admin nhấn chọn một User cụ thể từ bảng Danh sách người dùng.
+Tiền điều kiện
+Admin đang ở trang Xem danh sách người dùng.
+Hậu điều kiện
+Trạng thái của User bị thao tác được cập nhật vào CSDL.
+Luồng sự kiện chính
+1. Admin chọn một sinh viên từ danh sách.
+2. Hệ thống hiển thị popup/trang chi tiết thông tin của sinh viên đó.
+3. Admin xem chi tiết thông tin tài khoản.
+Luồng thay thế
+Luồng 1: Khóa / Mở khóa tài khoản
+3a. Admin nhấn "Khóa" hoặc "Mở khóa".
+4a. Hệ thống cập nhật status = LOCKED hoặc ACTIVE vào CSDL.
+5a. Danh sách tự động tải lại.
+Use Case kết thúc.
+Luồng 2: Xóa tài khoản
+3b. Admin chọn hành động "Xóa tài khoản".
+4b. Hệ thống hiển thị bảng cảnh báo xác nhận (Hành động không thể hoàn tác).
+5b. Admin nhấn "Xác nhận".
+6b. Hệ thống xóa user khỏi CSDL và tải lại danh sách.
+Use Case kết thúc.
+Luồng ngoại lệ
+5b. Xảy ra lỗi truy xuất trong lúc xóa.
+6b. Hệ thống báo lỗi: "Không thể thao tác lúc này, vui lòng thử lại".
+Business Rule
+Toàn vẹn dữ liệu: Khi xóa một sinh viên, toàn bộ Study Plan, Course, Task và Reminder gắn với sinh viên đó bị xóa theo (ON DELETE CASCADE). Admin không được tự xóa tài khoản của chính mình.
+Non-Functional Req.
+Thời gian xử lý thao tác cập nhật/xóa phản hồi ≤ 3 giây.
+3.3.2. Quản lý kế hoạch học tập
+Đặc tả Use Case: Create Study Plan
+Mục
+Nội dung
+Use Case ID
+UC - M2 - 01
+Use Case Name
+Create Study Plan
+Priority
+High
+Actor
+Student
+Mô tả
+Cho phép Student khởi tạo một khung kế hoạch học tập mới.
+Tiền điều kiện
+Student đã đăng nhập vào hệ thống thành công.
+Luồng sự kiện chính (Basic Flow)
+1. Student chọn chức năng tạo kế hoạch.
+2. Hệ thống hiển thị biểu mẫu nhập thông tin.
+3. Student nhập Tên kế hoạch, Ngày bắt đầu, Ngày kết thúc.
+4. Student chọn lưu.
+5. Hệ thống kiểm tra dữ liệu, lưu vào database và thông báo thành công.
+Ngoại lệ (Exception Flow)
+- Nếu ngày kết thúc nhỏ hơn ngày bắt đầu: Hệ thống báo lỗi và yêu cầu nhập lại.
+- Nếu bỏ trống các trường bắt buộc: Hệ thống nhắc nhở hoàn thiện biểu mẫu.
+Đặc tả Use Case: View Study Plan
+Mục
+Nội dung
+Use Case ID
+UC - M2 - 02
+Use Case Name
+View Study Plan
+Priority
+High
+Actor
+Student
+Mô tả
+Cho phép Student xem danh sách tổng thể và chi tiết các nhiệm vụ bên trong một kế hoạch học tập.
+Tiền điều kiện
+Student đã đăng nhập và có ít nhất một bản ghi Study Plan trong hệ thống.
+Luồng sự kiện chính (Basic Flow)
+1. Student chọn mục 'Kế hoạch học tập'.
+2. Hệ thống hiển thị danh sách các kế hoạch đã tạo.
+3. Student click chọn vào một kế hoạch cụ thể.
+4. Hệ thống hiển thị chi tiết các nhiệm vụ (Task) và trạng thái hiện tại của chúng.
+Ngoại lệ (Exception Flow)
+- Nếu tài khoản chưa tạo kế hoạch nào: Hệ thống hiển thị thông báo "Bạn chưa có kế hoạch học tập nào" và gợi ý nút "Tạo kế hoạch mới".
+Đặc tả Use Case: Edit Study Plan
+Mục
+Nội dung
+Use Case ID
+UC - M2 - 03
+Use Case Name
+Edit Study Plan
+Priority
+Medium
+Actor
+Student
+Mô tả
+Cho phép Student cập nhật, thay đổi thông tin của một kế hoạch học tập đang tồn tại.
+Tiền điều kiện
+Student đang xem danh sách hoặc chi tiết một Study Plan.
+Luồng sự kiện chính (Basic Flow)
+1. Student chọn một kế hoạch cần thay đổi.
+2. Nhấn nút 'Chỉnh sửa'.
+3. Hệ thống hiển thị form chỉnh sửa với dữ liệu cũ đã được điền sẵn.
+4. Student cập nhật thông tin mới.
+5. Nhấn nút 'Lưu'.
+6. Hệ thống xác thực, cập nhật dữ liệu vào database và thông báo thành công.
+Ngoại lệ (Exception Flow)
+- Dữ liệu nhập vào không hợp lệ (ví dụ: ngày kết thúc bị sửa thành trước ngày bắt đầu): Hệ thống chặn thao tác lưu, hiển thị lỗi màu đỏ tại trường dữ liệu sai.
+Đặc tả Use Case: Delete Study Plan
+Mục
+Nội dung
+Use Case ID
+UC - M2 - 04
+Use Case Name
+Delete Study Plan
+Priority
+Medium
+Actor
+Student
+Mô tả
+Cho phép Student xóa bỏ hoàn toàn một kế hoạch học tập khỏi hệ thống.
+Tiền điều kiện
+Student đang xem danh sách hoặc chi tiết một Study Plan.
+Luồng sự kiện chính (Basic Flow)
+1. Student chọn kế hoạch muốn loại bỏ.
+2. Nhấn nút 'Xóa'.
+3. Hệ thống hiển thị hộp thoại (popup) yêu cầu xác nhận hành động xóa.
+4. Student chọn 'Đồng ý'.
+5. Hệ thống xóa dữ liệu kế hoạch (và các nhiệm vụ liên quan), cập nhật lại giao diện danh sách.
+Luồng thay thế (Alternative Flow)
+- Ở bước 4, nếu Student chọn 'Hủy': Hệ thống đóng hộp thoại, hủy bỏ lệnh xóa và quay lại trang trước.
+Đặc tả Use Case: Add Task
+Mục
+Nội dung
+Use Case ID
+UC - M2 - 05
+Use Case Name
+Add Task
+Priority
+High
+Actor
+Student
+Mô tả
+Student chi tiết hóa các công việc cần làm vào trong một kế hoạch đã có.
+Tiền điều kiện
+Đã tồn tại ít nhất một kế hoạch học tập (Study Plan).
+Luồng sự kiện chính (Basic Flow)
+1. Student mở một Study Plan cụ thể.
+2. Chọn chức năng thêm nhiệm vụ.
+3. Nhập các thông tin: Tên nhiệm vụ, Môn học, Deadline, Mức độ ưu tiên.
+4. Nhấn lưu.
+5. Hệ thống ghi nhận Task và hiển thị vào danh sách công việc của Study Plan đó.
+Ngoại lệ (Exception Flow)
+- Deadline nằm ngoài khoảng thời gian của Study Plan: Hệ thống cảnh báo và yêu cầu chỉnh sửa.
+3.3.3. Quản lý môn học và nhiệm vụ học tập:
+1. Bảng đặc tả Use Case: subject management (UC-M3-01)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M3-01
+Tên Use Case
+subject management
+Priority
+Cao (High)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Thiết lập danh sách các môn học trong học kỳ để làm cơ sở quản lý nhiệm vụ.
+Trigger
+Sinh viên nhấn vào mục "Quản lý môn học" trên menu điều hướng.
+Tiền điều kiện
+Sinh viên đã đăng nhập vào hệ thống thành công.
+Hậu điều kiện
+Danh sách môn học được cập nhật; Các nhiệm vụ liên quan bị xóa khỏi DB nếu người dùng thực hiện lệnh Xóa môn.
+Luồng sự kiện chính
+1. Sinh viên chọn mục "Quản lý môn học" trên menu.
+2. Hệ thống truy xuất và hiển thị danh sách môn học từ cơ sở dữ liệu.
+3. Sinh viên chọn thao tác (Ví dụ: Thêm môn học).
+4. Hệ thống hiển thị Form tương ứng. Sinh viên nhập dữ liệu và nhấn "Lưu".
+5. Hệ thống xác thực dữ liệu, cập nhật Database.
+6. Hệ thống thông báo thành công và tải lại danh sách.
+Luồng thay thế
+Luồng 1: Tìm kiếm môn học
+2a. Tại bước 2, sinh viên sử dụng thanh Search để tìm môn học nhanh thay vì lướt danh sách.
+3a. Hệ thống lọc và hiển thị kết quả tìm kiếm.
+Use Case tiếp tục bước 3.
+Luồng ngoại lệ
+4a. (E1 - Dữ liệu rỗng) Sinh viên để trống trường "Tên môn học" khi nhấn Lưu.
+5a. Hệ thống hiển thị thông báo lỗi và yêu cầu nhập lại.
+Use Case kết thúc (Thất bại).
+3b. (E2 - Xóa môn) Sinh viên chọn thao tác "Xóa" một môn học.
+4b. Hệ thống hiển thị cảnh báo: "Việc này sẽ xóa tất cả các nhiệm vụ liên quan. Bạn có chắc chắn?".
+5b. Nếu sinh viên nhấn Hủy, quay lại bước 3.
+6b. Nếu sinh viên xác nhận, hệ thống xóa dữ liệu và chuyển sang bước 6 của luồng chính.
+Use Case kết thúc.
+Business Rule
+- Không được phép trùng Tên môn hoặc Mã môn học trong cùng một học kỳ của cùng một sinh viên.
+- Nếu xóa môn học, toàn bộ nhiệm vụ (Task) thuộc môn học đó sẽ bị xóa theo (Cascade Delete).
+Non-Functional Req.
+Thao tác lưu/xóa dữ liệu phải hoàn tất dưới 1 giây.
+2. Bảng đặc tả Use Case: Managing learning tasks (UC-M3-02)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M3-02
+Tên Use Case
+Managing learning tasks
+Priority
+Cao (High)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Số hóa các đầu việc, bài tập cụ thể gắn liền với từng môn học.
+Trigger
+Sinh viên nhấn "Thêm nhiệm vụ" tại màn hình môn học hoặc To-do list.
+Tiền điều kiện
+Sinh viên đã đăng nhập và Hệ thống đã tồn tại ít nhất 1 môn học để tham chiếu.
+Hậu điều kiện
+Nhiệm vụ được khởi tạo/cập nhật và sẵn sàng cho module nhắc nhở (Reminder).
+Luồng sự kiện chính
+1. Sinh viên chọn một Môn học cụ thể từ danh sách.
+2. Sinh viên nhấn "Thêm nhiệm vụ".
+3. Hệ thống hiển thị Form (Mã môn học được tự động điền sẵn).
+4. Sinh viên nhập Tên nhiệm vụ, chọn Deadline, Mô tả.
+5. Hệ thống kiểm tra: Deadline không được nhỏ hơn thời gian hiện tại.
+6. Dữ liệu hợp lệ, hệ thống lưu vào CSDL và phản hồi thành công.
+Luồng thay thế
+Luồng 1: Thêm nhiệm vụ từ Dashboard
+1a. Sinh viên nhấn nút "Thêm nhiệm vụ" trực tiếp từ trang Dashboard (không qua trang Môn học).
+2a. Hệ thống yêu cầu chọn Môn học từ danh sách thả xuống (Dropdown) trước khi hiển thị Form nhập liệu.
+Use Case tiếp tục bước 4.
+Business Rule
+- Deadline tối thiểu phải từ thời điểm hiện tại trở đi.
+- Nhiệm vụ mới khởi tạo mặc định luôn ở trạng thái "Chưa bắt đầu".
+Non-Functional Req.
+- Form thêm nhiệm vụ sử dụng Date-picker để chọn Deadline trực quan, tránh lỗi format ngày tháng.
+3. Bảng đặc tả Use Case: Update mission status(UC-M3-03)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M3-03
+Tên Use Case
+Update mission status
+Priority
+Trung bình (Medium)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Sinh viên tự đánh dấu tiến độ công việc (Chưa bắt đầu -> Đang làm -> Hoàn thành).
+Trigger
+Sinh viên tương tác với Checkbox / Dropdown trạng thái trên Dashboard hoặc To-do list.
+Tiền điều kiện
+Sinh viên đã đăng nhập và có ít nhất một nhiệm vụ đang hiển thị.
+Hậu điều kiện
+Trường Status trong Database được cập nhật; dữ liệu sẵn sàng cho biểu đồ thống kê tiến độ.
+Luồng sự kiện chính
+1. Sinh viên truy cập Dashboard hoặc danh sách To-do list.
+2. Sinh viên thay đổi trạng thái nhiệm vụ qua Checkbox hoặc Dropdown (Sang "Hoàn thành").
+3. Hệ thống ghi nhận mốc thời gian hoàn thành thực tế.
+4. Giao diện thay đổi màu sắc/hiệu ứng (ví dụ: gạch ngang chữ) để phản hồi trực quan.
+5. Hệ thống lưu trạng thái mới vào Cơ sở dữ liệu.
+Luồng thay thế
+Luồng 1: Hoàn tác (Undo)
+2a. Sinh viên vô tình chọn nhầm trạng thái.
+3a. Sinh viên nhấn lại vào Checkbox (hoặc nút Undo).
+4a. Hệ thống khôi phục trạng thái cũ trên giao diện và trong Database.
+Use Case kết thúc.
+Luồng ngoại lệ
+3a. (E1 - Hoàn thành trễ) Thời gian ghi nhận hoàn thành thực tế > Deadline ban đầu của Task.
+4a. Hệ thống tự động gán nhãn phụ "Hoàn thành trễ" (Done Late) vào dữ liệu trước khi thực hiện bước 4 và 5.
+Use Case tiếp tục hoàn thành.
+4b. Lỗi kết nối mạng trong lúc cập nhật.
+5b. Hệ thống rollback hiệu ứng giao diện (bỏ gạch ngang chữ) và hiển thị Toast báo lỗi.
+Use Case kết thúc (Thất bại).
+Business Rule
+- Chỉ những nhiệm vụ chuyển sang trạng thái "Hoàn thành" mới được cộng vào tử số để tính tỷ lệ % tiến độ ở Dashboard (Module 4).
+Non-Functional Req.
+- Hiệu ứng chuyển đổi trạng thái (Check/Uncheck) trên giao diện phải mượt mà, thời gian phản hồi dưới 0.3 giây.
+3.3.4. Nhắc nhở và theo dõi tiến độ học tập:
+Bảng đặc tả Use case: Theo dõi tiến độ học tập (UC-M4-01)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M4-01
+Tên Use Case
+Theo dõi tiến độ học tập
+Priority
+Cao (High) - Là chức năng cốt lõi để sinh viên nắm bắt tình hình học tập.
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Cho phép sinh viên xem các biểu đồ thống kê tỷ lệ phần trăm (%) hoàn thành của các Kế hoạch học tập và Môn học.
+Trigger
+Sinh viên nhấn vào tab "Dashboard" (Tiến độ) trên thanh điều hướng của ứng dụng.
+Tiền điều kiện
+Sinh viên đã đăng nhập thành công vào ứng dụng và thiết bị có kết nối mạng
+Hậu điều kiện
+Màn hình Dashboard hiển thị chính xác biểu đồ và số liệu thống kê tiến độ học tập tính đến thời điểm hiện tại.
+Luồng sự kiện chính
+1. Sinh viên nhấn vào tab "Tiến độ / Dashboard" trên thanh điều hướng.
+2. Hệ thống gửi yêu cầu lấy dữ liệu thống kê lên máy chủ.
+3. Hệ thống thực hiện tính toán tỷ lệ hoàn thành để tổng hợp số liệu.
+4. Hệ thống trả về dữ liệu và vẽ các biểu đồ trực quan.
+5. Sinh viên xem tổng quan tiến độ của mình.
+Luồng thay thế
+Luồng 1: Sinh viên chưa có dữ liệu học tập
+3a. Hệ thống kiểm tra và phát hiện sinh viên chưa tạo Kế hoạch hoặc Nhiệm vụ học tập nào.
+4a. Hệ thống trả về dữ liệu mặc định với tỷ lệ hoàn thành là 0%.
+5a. Màn hình Dashboard vẽ biểu đồ trực quan ở mức 0% (Ví dụ: biểu đồ vành khăn màu xám toàn bộ).
+Use Case kết thúc.
+Luồng 2: Sinh viên sử dụng bộ lọc
+5b. Sinh viên chọn lọc biểu đồ theo "Học kỳ" hoặc "Môn học cụ thể" thay vì xem tổng quan.
+6b. Hệ thống tính toán lại dựa trên tham số bộ lọc và hiển thị biểu đồ mới thành công.
+Use Case kết thúc.
+Luồng ngoại lệ
+2a.Hệ thống không thể tải được dữ liệu do mất kết nối mạng từ phía thiết bị người dùng, máy chủ đang bảo trì, hoặc Truy vấn Database bị quá thời gian chờ.
+3a. Hệ thống hiển thị thông báo “Không thể kết nối tới máy chủ” kèm nút “Tải lại”
+Use case kết thúc (Thất bại)
+Business Rules
+Hệ thống chỉ được phép tổng hợp tiến độ dựa trên các nhiệm vụ đang ở trạng thái kích hoạt. Các nhiệm vụ đã bị xóa hoặc hủy bỏ không được đưa vào tổng số lượng để chia tỷ lệ.
+Đối với một Kế hoạch học tập chưa được phân bổ bất kỳ nhiệm vụ nào mặc định là 0%.
+Non-Functional Requirement
+Thời gian phản hồi và vẽ biểu đồ không vượt quá 3 giây kể từ khi chuyển tab.
+Bảng đặc tả Use Case: Send Reminder Notification (UC-M4-02)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M4-02
+Tên Use Case
+Send Reminder Notification
+Priority
+Cao (High)
+Tác nhân (Actor)
+SystemTimer (tác nhân tự động chạy ngầm)
+Mục đích
+Tự động tạo thông báo nhắc nhở cho sinh viên khi nhiệm vụ sắp đến hạn (< 24 giờ) và lưu vào CSDL để hiển thị trong ứng dụng.
+Trigger
+Bộ đếm thời gian hệ thống (Spring @Scheduled) chạy định kỳ mỗi 30 phút.
+Tiền điều kiện
+Hệ thống đang chạy; có ít nhất 1 Task chưa hoàn thành với deadline trong tương lai.
+Hậu điều kiện
+Bản ghi Reminder mới được lưu vào bảng reminders với is_read = 0. Sinh viên thấy thông báo khi mở ứng dụng.
+Luồng sự kiện chính
+1. SystemTimer kích hoạt tiến trình kiểm tra định kỳ.
+2.  Hệ thống truy vấn danh sách Task chưa hoàn thành có deadline trong vòng 24 giờ.
+3. Với mỗi Task thỏa điều kiện, hệ thống kiểm tra số lần đã gửi nhắc nhở trong 24 giờ qua.
+4. Nếu chưa đủ 2 lần, hệ thống tạo bản ghi Reminder mới và lưu vào CSDL.
+5. Sinh viên mở ứng dụng sẽ thấy thông báo mới trên giao diện Reminder List.
+Luồng thay thế
+Luồng 1: Task đã được nhắc đủ 2 lần trong 24 giờ
+4a. Hệ thống bỏ qua Task đó, không tạo Reminder mới.
+Use Case tiếp tục bước 5.
+Luồng ngoại lệ
+2a. Lỗi kết nối CSDL trong lúc truy vấn.
+3a. Hệ thống ghi log lỗi và kết thúc tiến trình. Lần chạy tiếp theo sẽ thử lại.
+Business Rule
+Chống spam: Không tạo quá 2 Reminder cho cùng 1 Task trong vòng 24 giờ. Chỉ tạo Reminder cho Task có status là TODO hoặc IN_PROGRESS.
+Non-Functional Req.
+Tiến trình nền chạy định kỳ không ảnh hưởng đến hiệu năng giao diện người dùng.
+Bảng đặc tả Use Case: View Reminder Details (UC-M4-03)
+Thuộc tính
+Nội dung mô tả
+Use Case ID
+UC-M4-03
+Tên Use Case
+View Reminder Details
+Priority
+Trung bình (Medium)
+Tác nhân (Actor)
+Sinh viên
+Mục đích
+Sinh viên truy cập vào nội dung chi tiết của một lời cảnh báo từ hệ thống để nắm rõ công việc cần làm.
+Trigger
+Sinh viên nhấn (Tap) vào thông báo nhắc nhở trên điện thoại.
+Tiền điều kiện
+Sinh viên có ít nhất một thông báo nhắc nhở được gửi tới thiết bị.
+Hậu điều kiện
+Màn hình hiển thị chi tiết Task. Lời nhắc chuyển sang trạng thái "Đã đọc".
+Luồng sự kiện chính
+1. Sinh viên nhấn vào một Push Notification ở màn hình khóa điện thoại.
+2. Ứng dụng tự động khởi động và chuyển hướng vào thẳng màn hình "Chi tiết nhiệm vụ".
+3. Ứng dụng gọi API lên máy chủ để đánh dấu thông báo này là "Đã đọc".
+4. Sinh viên xem chi tiết công việc trên giao diện.
+Luồng thay thế
+1a. Sinh viên đang ở trong App, nhấn vào tab "Thông báo" (Hình quả chuông).
+2a. Sinh viên nhấn chọn 1 thông báo chưa đọc trong danh sách.
+Use Case tiếp tục bước 2.
+Luồng ngoại lệ
+2a. Hệ thống không tìm thấy ID của Task (do đã bị xóa từ trước).
+3a. Hệ thống hiển thị pop-up: "Nhiệm vụ này không còn tồn tại hoặc đã bị xóa".
+Use Case kết thúc (Thất bại).
+Business Rule
+Chỉ tài khoản chủ sở hữu của Task đó mới được quyền xem chi tiết Task.
+Non-Functional Req.
+Quá trình mở app từ màn hình khóa phải mượt mà, không bị văng ứng dụng.
+Trích xuất thực thể và xây dựng sơ đồ lớp phân tích
+Sơ đồ lớp phân tích toàn hệ thống:
+Quản lý người dùng
+1.Tách lớp thực thể
+1. User (Người dùng) – Lớp trung tâm
+Mô tả:Là thực thể cốt lõi của hệ thống, lưu trữ toàn bộ thông tin định      danh, xác thực và hồ sơ cá nhân của người dùng. Mọi chức năng như đăng nhập, phân quyền, quản lý dữ liệu đều xoay quanh lớp này.
+2. Role (Phân quyền)
+Mô tả: Đại diện cho vai trò của người dùng trong hệ thống, quyết định quyền truy cập và chức năng được phép sử dụng.
+3. PasswordResetToken (Quên mật khẩu)
+Mô tả: Dùng để hỗ trợ chức năng quên mật khẩu, cấp một mã token tạm thời cho người dùng để xác thực khi đặt lại mật khẩu.
+2. Sơ đồ lớp phân tích
+Phân tích tĩnh:
+Đăng nhập hệ thống: Hệ thống hiển thị AuthView. Lớp này gọi login() của AuthController để kiểm tra thông tin từ thực thể User. Nếu hợp lệ, hệ thống cho phép người dùng truy cập theo quyền.
+Đăng ký tài khoản: Tại AuthView, khi người dùng nhập thông tin và nhấn đăng ký, giao diện gọi register() của AuthController để tạo mới một thực thể User trong hệ thống.
+Quên mật khẩu: Tại AuthView, khi người dùng chọn “Forgot Password”, giao diện gọi resetPassword() của AuthController. Controller tạo và quản lý thực thể PasswordResetToken để xác thực việc đặt lại mật khẩu cho User.
+Xem thông tin cá nhân: Hệ thống hiển thị UserProfileView. Lớp này gọi getProfile() của UserController để lấy dữ liệu từ thực thể User và hiển thị lên giao diện.
+Cập nhật thông tin cá nhân: Tại UserProfileView, khi người dùng chỉnh sửa thông tin, giao diện gọi updateUser() của UserController để cập nhật lại dữ liệu trong thực thể User.
+Xem danh sách người dùng (Admin): Hệ thống hiển thị AdminUserView. Lớp này gọi getUsers() của AdminController để lấy danh sách các thực thể User và hiển thị.
+Khóa tài khoản: Tại AdminUserView, khi admin thực hiện khóa tài khoản, giao diện gọi lockAccount() của AdminController để cập nhật trạng thái của thực thể User.
+Xóa tài khoản: Tại AdminUserView, khi admin chọn xóa, giao diện gọi deleteUser() của AdminController để xóa thực thể User khỏi hệ thống.
+3. Sơ đồ Sequence phân tích (Analysis Sequence Diagram)
+Register
+Hình 3.7. Sơ đồ sequence Register
+2. Login
+Hình 3.8. Sơ đồ sequence Login
+3.Logout
+Hình 3.9. Sơ đồ sequence Logout
+4. Forgot Password
+Hình 3.10. Sơ đồ sequence Forgot Password
+5. Update Profile
+Hình 3.11. Sơ đồ sequence Update Profile
+6. View User List
+Hình 3.12. Sơ đồ sequence View UserList
+7. Manage User Account
+Hình 3.13. Sơ đồ sequence Manage User Account
+Quản lý kế hoạch học tập
+1. Tách lớp thực thể (Entity Class Identification)
+Lớp Student (Sinh viên)
+Đại diện cho người dùng hệ thống.
+Thuộc tính: studentId (Mã SV), fullName (Họ tên), email.
+Lớp StudyPlan (Kế hoạch học tập)
+Lưu trữ thông tin khung thời gian học tập.
+Thuộc tính: planId (Mã kế hoạch), planName (Tên kế hoạch), startDate (Ngày bắt đầu), endDate (Ngày kết thúc).
+Lớp Course (Môn học)
+Danh mục môn học sinh viên đăng ký.
+Thuộc tính: courseId (Mã môn), courseName (Tên môn).
+Lớp Task (Nhiệm vụ học tập)
+Các công việc chi tiết cần làm.
+Thuộc tính: taskId (Mã nhiệm vụ), taskName (Tên nhiệm vụ), deadline (Thời hạn), priority (Mức độ ưu tiên), status (Trạng thái).
+2. Vẽ sơ đồ lớp thực thể
+Hình 3.14. Sơ đồ lớp thực thể Module 2
+3. Vẽ sơ đồ sequence phân tích
+UC1: Create study plan
+Hình 3.15. Sơ đồ sequence UC1
+UC2: View study plan
+Hình 3.16. Sơ đồ sequence UC2
+UC3: Edit study plan
+Hình 3.17. Sơ đồ sequence UC3
+UC4: Delete study plan
+Hình 3.18. Sơ đồ sequence UC4
+UC5: Add task
+Hình 3.19. Sơ đồ sequence UC5
+Quản lý môn học và nhiệm vụ học tập
+Dựa trên các Use case của module , hệ thống được phân tích thành 3 lớp thực thể cốt lõi sau:
+Course (Môn học):Quản lý thông tin về các môn học mà sinh viên học .
+Task(Nhiệm vụ): Quản lý thông tin chi tiết về một công việc/bài tập cụ thể mà sinh viên cần thực hiện.
+StudyPlan(Kế hoạch học tập):Mang tính chất khung thời gian dùng để điều phối và gom nhóm các môn học , nhiệm vụ cụ thể.
+Sơ đồ lớp phân tích:
+Phân tích tĩnh:
+Xem danh sách môn học : Hệ thống hiện CourseListView. Lớp gọi getCourseList() của CourseController để kéo dữ liệu từ thực thể Course lên giao diên
+Thêm sửa môn học : Tại CourseFormView, khi click “Save” giao diện gọi createCourse() hoặc updateCourse của CourseController để lưu thông tin vào thẳng thực thể
+Xem danh sách nhiệm vụ : Hệ thống hiện TaskListView. Lớp gọi getTaskList() củaTaskController để lấy đúng các thực thể Task thuộc về môn học đang xem
+Cập nhật nhiệm vụ : tại TaskListView, khi người dung đổi trạng thái hoặc dùng bộ lọc , giao diện sẽ gọi updateStatus() hoặc filterbyStatus() của TaskController để xử lý và cập nhật lại thực thể.
+Hình 3.20. Sơ đồ lớp phân tích Module 3
+Sơ đồ Sequence phân tích
+a, Sequence diagram: Thêm môn học mới (Add Course)
+Hình 3.21. Sơ đồ Sequence Add Course
+b, Sequence diagram: xem danh sách và cập nhật trạng thái nhiệm vụ (View and update status Task)
+Hình 3.22. Sơ đồ Sequence View and update status Task
+c, Sequence diagram: thêm nhiệm vụ (Add Task)
+Hình 3.23. Sơ đồ Sequence Add Task
+Nhắc nhở và theo dõi tiến độ học tập
+Dựa trên các Use case của module: Nhắc nhở và theo dõi tiến độ học tập, có thể trích xuất được thành 4 lớp thực thể sau:
+StudyPlan (Kế hoạch học tập): Đại diện cho các đợt học tập trung dùng để gom nhóm và quản lý các nhiệm vụ.
+Task (Nhiệm vụ): Quản lý thông tin chi tiết về một công việc/bài tập cụ thể mà sinh viên cần thực hiện.
+Progress (Tiến độ): Quản lý số liệu và kết quả thống kê để phục vụ việc hiển thị trực quan trên Dashboard.
+Reminder (Thông báo & Nhắc nhở): Quản lý các thông điệp cảnh báo và cập nhật được hệ thống phát đi.
+Sơ đồ lớp phân tích:
+Phân tích tĩnh:
+Khi vào hệ thống, giao diện chính hiện ra là DashboardView, hiển thị tổng quan biểu đồ tiến độ và con số tỷ lệ phần trăm hoàn thành (%) của kế hoạch học tập hiện tại.
+Đồng thời, DashboardView cũng đảm nhận việc gửi yêu cầu đến ProgressController thông qua phương thức getOverdueTasks() để kiểm tra các nhiệm vụ trễ hạn.
+ProgressController thực hiện lấy và lọc dữ liệu từ thực thể Task (dựa trên điều kiện deadline < hiện tại và trạng thái chưa hoàn thành) để trả về danh sách chính xác.
+Nếu hệ thống phát hiện có nhiệm vụ trễ hạn, DashboardView sẽ trực tiếp hiển thị cảnh báo và danh sách các nhiệm vụ này ngay trên màn hình (thông qua hàm showOverdueTaskAlert()), giúp người dùng tập trung xử lý các đầu việc tồn đọng mà không cần chuyển hướng sang trang khác.
+Bên cạnh đó, để quản lý các thông báo nhắc nhở cụ thể được tạo ra tự động bởi hệ thống, người dùng có thể chọn xem giao diện ReminderListView.
+Tại đây, ReminderListView gọi đến ReminderController (thông qua requestReminderList()) để truy xuất dữ liệu từ thực thể Reminder và hiển thị chi tiết nội dung nhắc nhở cho sinh viên.
+Hình 3.24. Sơ đồ lớp phân tích Module 4
+Sơ đồ Sequence phân tích
+Sequence Diagram được sử dụng để mô tả luồng tương tác giữa các thành phần trong hệ thống theo thời gian, thể hiện cách hệ thống xử lý các yêu cầu của người dùng và các tiến trình tự động. Trong module Nhắc nhở và theo dõi tiến độ học tập, sơ đồ tuần tự giúp làm rõ:
+Cách hệ thống tính toán tiến độ học tập.
+Cách hiển thị dữ liệu cho người dùng.
+Cách hệ thống tự động gửi thông báo nhắc nhở.
+Các thành phần tham gia: Các đối tượng trong sơ đồ được xây dựng theo mô hình BCE (Boundary - Control - Entity):
+Actor:
+Student: Người dùng hệ thống.
+System Timer: Tiến trình tự động kích hoạt theo chu kỳ.
+Boundary:
+frmDashboard: Giao diện hiển thị tiến độ.
+frmReminderList: Giao diện hiển thị danh sách thông báo.
+Control:
+ProgressController: Xử lý logic tính toán tiến độ.
+ReminderController: Xử lý logic nhắc nhở.
+Entity:
+Task: Lưu trữ thông tin nhiệm vụ.
+Reminder: Lưu trữ thông báo nhắc nhở.
+Progress: Lưu trữ dữ liệu tiến độ.
+External Service:
+Push Service: Dịch vụ gửi thông báo đến thiết bị.
+Sequence Diagram: Xem Dashboard (View Dashboard)
+Mô tả luồng: Khi sinh viên truy cập Dashboard, hệ thống sẽ truy xuất dữ liệu nhiệm vụ, tính toán tỷ lệ hoàn thành và hiển thị kết quả:
+Student gửi yêu cầu xem Dashboard (requestDashboard())
+DashboardView gửi yêu cầu đến ProgressController (getProgress(studentId))
+ProgressController yêu cầu Task cung cấp danh sách nhiệm vụ (getTasks(studentId))
+Task trả về danh sách nhiệm vụ (taskList)
+ProgressController thực hiện tính toán tiến độ (calculateProgress(taskList))
+Kết quả tiến độ được lưu vào Progress (saveProgress(rate))
+Progress xác nhận lưu thành công (confirmation)
+ProgressController trả dữ liệu tiến độ về giao diện (progressData)
+DashboardView hiển thị kết quả cho người dùng (displayResult())
+Hình 3.25. Sơ đồ sequence View Dashboard
+b) Sequence Diagram: Xem danh sách thông báo (View Reminder List)
+Mô tả luồng: Sinh viên yêu cầu xem danh sách các thông báo nhắc nhở, hệ thống truy xuất dữ liệu từ cơ sở dữ liệu và hiển thị:
+Student gửi yêu cầu xem danh sách thông báo (requestReminderList()) đến giao diện.
+ReminderListView (Boundary) gửi yêu cầu lấy dữ liệu đến ReminderController (Control) thông qua hàm getReminders(studentId).
+ReminderController yêu cầu thực thể Reminder (Entity) cung cấp danh sách thông báo của sinh viên đó (findRemindersByStudent(id)).
+Reminder trả về danh sách các thông báo (reminderList) cho Controller.
+ReminderController trả dữ liệu danh sách thông báo (reminderData) về cho giao diện frmReminderList.
+ReminderListView gọi hàm hiển thị (displayReminders()) để sinh viên nhìn thấy danh sách trên màn hình.
+Hình 3.26. Sơ đồ sequence View Reminder List
+c) Sequence Diagram: Xem chi tiết thông báo (View Reminder Details)
+Mô tả luồng: Sinh viên chọn một thông báo để xem chi tiết nội dung và thông tin nhiệm vụ liên quan.
+Student chọn một thông báo (selectReminder(reminderId))
+ReminderListView gửi yêu cầu đến ReminderController (getReminderDetail(reminderId))
+ReminderController yêu cầu Reminder cung cấp thông tin thông báo (getReminder(reminderId))
+Reminder trả về dữ liệu thông báo (reminderData)
+ReminderController yêu cầu Task cung cấp thông tin nhiệm vụ liên quan (getTask(reminder.taskId))
+Task trả về thông tin nhiệm vụ (taskDetail)
+ReminderController cập nhật trạng thái đã đọc của thông báo (markAsRead(reminderId))
+Reminder xác nhận cập nhật (confirmation)
+ReminderController trả dữ liệu chi tiết về giao diện (detailData)
+ReminderListView hiển thị chi tiết thông báo cho người dùng (displayResult())
+Hình 3.27. Sơ đồ sequence View Reminder Details
+d) Sequence Diagram: Gửi thông báo nhắc nhở (Send Reminder Notification)
+Mô tả luồng: Hệ thống tự động kiểm tra các nhiệm vụ theo chu kỳ và gửi thông báo khi gần đến hạn:
+System Timer kích hoạt tiến trình kiểm tra định kỳ (triggerScheduledJob())
+ReminderController yêu cầu Task cung cấp danh sách nhiệm vụ (getUpcomingTasks())
+Task trả về danh sách nhiệm vụ (taskList)
+Hệ thống lặp qua từng nhiệm vụ (for each task)
+ReminderController kiểm tra thời hạn nhiệm vụ (isNearDeadline(task))
+Nếu nhiệm vụ gần đến hạn:
+ReminderController tạo thông báo nhắc nhở (createReminder(task))
+Reminder trả về dữ liệu thông báo (reminderData)
+ReminderController gửi thông báo qua Push Service (sendNotification(reminderData))
+Push Service gửi thông báo đến Student (deliverNotification)
+ReminderController cập nhật trạng thái thông báo (updateStatus(reminder, "sent"))
+Reminder xác nhận cập nhật (confirmation)
+Hình 3.28. Sơ đồ sequence Send Reminder Notification
+CHƯƠNG 4: THIẾT KẾ KIẾN TRÚC HỆ THỐNG
+Architectural Design
+Lựa chọn kiến trúc triển khai
+Hệ thống phần mềm nhắc nhở tiến trình học tập được xây dựng theo kiến trúc MVC (Model – View – Controller). Đây là pattern phổ biến và phù hợp vì hệ thống có giao diện người dùng rõ ràng (mobile/web app), logic nghiệp vụ phức tạp và cơ sở dữ liệu quan hệ cần quản lý chặt chẽ.
+Lý do lựa chọn MVC:
+Model (Tầng dữ liệu & Thực thể): Sử dụng các lớp Java POJO kết hợp với Data Access Object (DAO) để thao tác với file cơ sở dữ liệu SQLite cục bộ.
+View (Tầng giao diện): Sử dụng Thymeleaf Template Engine để render trực tiếp HTML/CSS từ phía server (Server-side rendering) và gửi về trình duyệt của người dùng, đảm bảo tốc độ tải trang nhanh và đồng bộ.
+Controller & Service (Tầng điều khiển & Nghiệp vụ): Spring MVC Controller tiếp nhận HTTP Request từ View, gọi các Service để xử lý logic (tính phần trăm tiến độ, xác thực mật khẩu SHA-256) và trả dữ liệu về lại cho View.
+Ánh xạ MVC vào hệ thống:
+Tầng MVC
+Thành phần
+Ví dụ trong hệ thống
+Model
+Lớp thực thể và truy vấn CSDL
+User, Course, Task, StudyPlan, Reminder, Progress
+View
+Giao diện người dùng
+Màn hình Đăng nhập, Dashboard, Danh sách kế hoạch, Chi tiết nhiệm vụ...
+Controller
+Xử lý request & điều phối
+AuthController, PlanController, TaskController, ReminderController...
+Ngoài ra, hệ thống bổ sung thêm tầng Service (Service Layer) nằm giữa Controller và Model để chứa logic nghiệp vụ phức tạp (tính tỉ lệ tiến độ, quét deadline...), giúp Controller không bị phình to và dễ viết unit test.
+Việc lựa chọn kiến trúc MVC mang lại nhiều lợi ích quan trọng. Trước hết, nó giúp tách biệt rõ ràng giữa giao diện, logic xử lý và dữ liệu, từ đó làm giảm sự phụ thuộc giữa các thành phần. Ngoài ra, kiến trúc này còn giúp hệ thống dễ dàng mở rộng khi cần bổ sung chức năng mới mà không ảnh hưởng đến các phần khác. Đồng thời, việc phân chia rõ ràng các thành phần cũng hỗ trợ quá trình phát triển theo nhóm, khi mỗi thành viên có thể tập trung vào một phần cụ thể của hệ thống.
+Nhìn chung, kiến trúc MVC là lựa chọn phù hợp cho hệ thống quản lý học tập này, vì nó đảm bảo tính linh hoạt, khả năng mở rộng và dễ bảo trì, đồng thời tạo nền tảng vững chắc cho việc thiết kế chi tiết các thành phần trong các phần tiếp theo.
+Component / Module Diagram
+4.2.1. Tạo các Component
+Presentation Layer:
+UI (Mobile/Web)
+Controller Layer:
+AuthController
+PlanController
+TaskController
+ReminderController
+ProgressController
+Service Layer:
+AuthService
+PlanService
+TaskService
+ReminderService
+ProgressService
+Repository (Data Access) Layer:
+UserRepository
+PlanRepository
+TaskRepository
+ReminderRepository
+ProgressRepository
+External/Database:
+Database (Bạn có thể dùng biểu tượng Component hoặc Database)
+PushService (FCM/APNs)
+4.2.2. Các liên kết Interface cần thiết lập
+Controller -> Service:
+AuthController cần IAuthService (được cung cấp bởi AuthService).
+PlanController cần IPlanService (được cung cấp bởi PlanService).
+TaskController cần ITaskService (được cung cấp bởi TaskService).
+ReminderController cần IReminderService (được cung cấp bởi ReminderService).
+ProgressController cần IProgressService (được cung cấp bởi ProgressService).
+Service -> Repository:
+AuthService cần IUserRepository (cung cấp bởi UserRepository).
+PlanService cần IPlanRepository (cung cấp bởi PlanRepository).
+TaskService cần ITaskRepository (cung cấp bởi TaskRepository).
+ReminderService cần IReminderRepository (cung cấp bởi ReminderRepository).
+ProgressService cần IProgressRepository (cung cấp bởi ProgressRepository).
+4.2.3. Thêm Dependency (Phụ thuộc)
+Nối từ UI (Mobile/Web) đến các Controller (AuthController, PlanController, v.v.).
+Nối từ các Repository (UserRepository, PlanRepository, ...) đến Database.
+Nối từ ReminderService đến PushService (FCM/APNs).
+4.3. Sơ đồ triển khai (Deployment Diagram)
+4.3.1 Kiến trúc triển khai tổng thể
+Hệ thống nhắc nhở tiến trình học tập được triển khai theo mô hình Client-Server hướng phân tán, kết hợp với các dịch vụ đám mây ( Cloud Services ) để phục vụ chức năng chạy ngầm (System Timer) và đẩy thông báo Push Notification theo thời gian thực
+Client-tier: Thiết bị di động hoặc trình duyệt của Sinh viên/Admin.
+Service-tier: Máy chủ ứng dụng (Web Server) xử lý nghiệp vụ chung.
+Data-tier: Hệ quản trị cơ sở dữ liệu (DBMS).
+4.3.2 Deployment Diagram
+4.3.3. Đặc tả chi tiết các Node (Thiết bị) và Artifact (Phần mềm)
+Client Device (Thiết bị đầu cuối):
+Artifact: Trình duyệt web (Chrome, Safari, Edge...).
+Vai trò: Hiển thị giao diện HTML/CSS/JS do máy chủ render, tiếp nhận thao tác người dùng và gửi HTTP Request lên server.
+Application Server (Máy chủ ứng dụng Spring Boot):
+Artifact 1 - Embedded Tomcat Server: Đóng vai trò làm Web Server để chạy ứng dụng Spring Boot (Cổng mặc định 8080). Chứa các Controller, Service xử lý logic nghiệp vụ.
+Artifact 2 - Embedded SQLite Database: Cơ sở dữ liệu được triển khai dưới dạng một file vật lý (study_reminder.db) nằm trực tiếp trên cùng không gian lưu trữ của máy chủ ứng dụng, giúp hệ thống gọn nhẹ, dễ triển khai (Portable) mà không cần cấu hình DB Server phức tạp.
+Artifact 3 - System Timer (Background Task): Module sử dụng @Scheduled của Spring Boot chạy ngầm độc lập với vòng đời request để quét Database và phát hiện các Task sắp hết hạn.
+4.3.4. Giao thức mạng và Cơ chế giao tiếp
+Client ↔ Application Server : Giao tiếp qua giao thức HTTP/HTTPS. Client gửi Request (GET/POST) từ form và nhận về các trang HTML hoàn chỉnh.
+Application Server  ↔ SQLite:  Kết nối trực tiếp qua thư viện JDBC driver trong nội bộ máy chủ, không sử dụng giao thức mạng (TCP/IP).
+CHƯƠNG 5: THIẾT KẾ CHI TIẾT
+5. Detailed Design
+5.1. Detailed Class Diagram
+5.1.1. Quản lý người dùng
+5.1.2. Quản lý kế hoạch học tập
+5.1.3. Quản lý môn học và nhiệm vụ học tập
+5.1.4. Nhắc nhở và theo dõi tiến độ
+Luồng dữ liệu của hệ thống tuân thủ nghiêm ngặt theo mô hình MVC, đi từ giao diện người dùng (View) qua bộ điều khiển (Controller), xử lý nghiệp vụ (Service), tương tác với cơ sở dữ liệu (DAO) và phản hồi ngược lại. Dưới đây là 3 luồng hoạt động chính của module:
+Luồng 1: Xem Dashboard và Cập nhật tiến độ
+Người dùng mở giao diện Dashboard hoặc bấm nút làm mới, DashboardView sẽ kích hoạt sự kiện và gửi yêu cầu (request) đến ProgressController (thông qua hàm doGet hoặc refreshDashboard).
+ProgressController tiếp nhận yêu cầu và gọi đến ProgressService.
+Tại đây, ProgressService thực hiện hai nghiệp vụ:
+Gọi ProgressDAO.getByPlanId() và TaskDAO.getTasksByPlan() để lấy dữ liệu tính toán tỷ lệ phần trăm hoàn thành (getCompletionRate()).
+Gọi TaskDAO.findOverdue() để lọc ra danh sách các công việc đã trễ hạn (findLateTasks()). Các DAO này sử dụng DBConnect để mở kết nối và truy vấn trực tiếp vào cơ sở dữ liệu SQLite.
+Sau khi tính toán xong, ProgressService trả về các đối tượng Task và giá trị float (tỷ lệ tiến độ) cho ProgressController.
+Controller đẩy dữ liệu này lên DashboardView để hiển thị biểu đồ (displayProgressChart) và cảnh báo đỏ cho các công việc trễ hạn (showOverdueTaskAlert).
+Luồng 2: Quản lý và Tương tác Nhắc nhở
+Khi người dùng mở tab Nhắc nhở, ReminderListView gửi yêu cầu đến ReminderController.
+ReminderController gọi ReminderService để lấy danh sách thông báo. ReminderService thông qua ReminderDAO truy vấn cơ sở dữ liệu và trả về một danh sách các đối tượng Reminder. View sẽ dùng danh sách này để render ra màn hình (displayReminderList).
+Khi người dùng click vào một thông báo chưa đọc (onMarkAsReadClick), một yêu cầu POST được gửi tới markReminderAsRead() của ReminderController.
+Controller gọi ReminderService.updateStatusToRead(), Service này tiếp tục gọi ReminderDAO.updateIsRead() để cập nhật trạng thái isRead = true xuống cơ sở dữ liệu. Đồng thời, đối tượng Reminder cũng cập nhật trạng thái qua hàm markAsRead().
+Luồng 3: Tự động quét và sinh Nhắc nhở (Luồng ngầm - Background Job)
+Hệ thống sẽ có một bộ đếm thời gian (Timer/Cronjob) chạy ngầm, định kỳ gọi trực tiếp vào phương thức checkAndGenerateReminders() của ReminderService.
+ReminderService sẽ sử dụng TaskDAO để quét toàn bộ các Task đang ở trạng thái IN_PROGRESS hoặc PENDING.
+Thông qua hàm isNearDeadline(hours) của lớp Task, Service kiểm tra xem công việc nào sắp đến hạn.
+Nếu phát hiện công việc sắp đến hạn hoặc đã trễ hạn, ReminderService sẽ khởi tạo các đối tượng Reminder mới (với NotificationType tương ứng là REMINDER hoặc NOTIFICATION) và gọi ReminderDAO.save() để lưu thông báo mới này vào cơ sở dữ liệu, chờ người dùng mở app lên để xem.
+5.2. Detailed Sequence Diagram
+Sequence diagram thiết kế chi tiết thể hiện rõ tên phương thức gọi giữa các lớp/object cụ thể trong hệ thống. Các sơ đồ dưới đây đại diện cho các luồng xử lý quan trọng nhất, bao phủ toàn bộ các chức năng chính của hệ thống.
+SD-01: Đăng nhập hệ thống (UC-M1-01):
+Actors/Objects: Student (Actor), AuthController, AuthService, UserRepository, Database
+Bước
+Đối tượng gọi → nhận
+Phương thức / Mô tả
+1
+Student→ AuthController
+POST /api/auth/login ({email, password})
+2
+AuthController → AuthService
+login(email, passwo;rd)
+3
+AuthService → UserRepository
+findByEmail(email)
+4
+UserRepository → Database
+SELECT * FROM users WHERE email = ?
+5
+Database → UserRepository
+Return: user
+6
+AuthService → AuthService
+comparePassword(password, hashedPwd)
+7
+AuthService → AuthService
+generateJWT(userId)
+8
+AuthController → Student
+Return 200: {token, userInfo}
+SD-02: Tạo kế hoạch học tập (UC-M2-01)
+Actors/Objects: Student (Actor), PlanController, PlanService, PlanRepository, ProgressService, Database
+Bước
+Đối tượng gọi → nhận
+Phương thức / Mô tả
+1
+Student → PlanController
+POST /api/plans ({planName, startDate, endDate})
+2
+PlanController → PlanService
+createPlan(userId, planName, startDate, endDate)
+3
+PlanService → PlanService
+validate(startDate, endDate)
+4
+PlanService → PlanRepository
+save({planId, userId, planName, startDate, endDate})
+5
+PlanRepository → Database
+INSERT INTO study_plans VALUES (...)
+6
+PlanService → ProgressService
+initProgress(planId)
+7
+PlanController → Student
+Return 201: {plan, message}
+SD-03: Xem Dashboard (UC-M4-01)
+Actors/Objects: Student (Actor), DashboardView, ProgressController, ProgressService, TaskRepository, ProgressRepository, Database
+Bước
+Đối tượng gọi → nhận
+Phương thức / Mô tả
+1
+Student → ProgressController
+requestDashboard()
+2
+DashboardView → ProgressController
+GET /api/dashboard
+3
+ProgressController → ProgressService
+getProgress(userId)
+4
+ProgressService → TaskRepository
+findTasksByUser(userId)
+5
+TaskRepository → Database
+SELECT * FROM tasks
+6
+Database → TaskRepository
+Return: taskList
+6.1
+TaskRepository → ProgressService
+Return: taskList
+7
+ProgressService → ProgressService
+calculateProgress(taskList)
+8
+ProgressService → ProgressRepository
+save(progressData)
+9
+ProgressRepository → Database
+UPDATE progress
+9.1
+Database → ProgressRepository
+Return: confirmation
+9.2
+ProgressRepository → ProgressService
+Return: saved ok
+9.3
+ProgressService → ProgressController
+Return: progressData
+10
+ProgressController → DashboardView
+Return: progressData
+11
+DashboardView → StudentdisplayResult()
+displayResult()
+SD-04: Gửi thông báo nhắc nhở (UC-M4-03)
+Actors/Objects: System Timer (Actor), ReminderService, TaskRepository, NotificationService, Database
+Bước
+Đối tượng gọi → nhận
+Phương thức / Mô tả
+1
+System Timer → ReminderService
+triggerScheduledJob()
+2
+ReminderService → TaskRepository
+findUpcomingTasks()
+3
+TaskRepository → Database
+SELECT tasks WHERE deadline gần
+4
+Database → TaskRepository
+Return: taskList
+4.1
+TaskRepository → ReminderService
+Return: taskList
+5
+ReminderService → ReminderService
+isNearDeadline(task)
+6
+ReminderService → ReminderService
+createReminder(task)
+7
+ReminderService → NotificationService
+sendNotification(reminderData)
+8
+NotificationService → External Service
+push notification
+8.1
+Notification → ReminderService
+push ok
+9
+ReminderService → ReminderRepository
+saveReminder(reminderData, status="sent")
+9.1
+ReminderRepository → Database
+INSERT INTO reminders ...
+9.2
+Database → ReminderRepository
+Return: confirmation
+5.3. ERD — Entity Relationship Diagram
+a) Ánh xạ từ Thiết kế Phân nhóm (Chương 4)
+Tại Chương 4, nhóm đã trích xuất các Lớp Phân tích chính gồm User, Course, Task, StudyPlan. Tại bước thiết kế chi tiết CSDL này, các thực thể này được chuẩn hóa thành các bảng (Table) vật lý, bổ sung các trường Khóa chính (PK), Khóa ngoại (FK) để đảm bảo ràng buộc toàn vẹn.
+b, Biểu đồ cấu trúc ERD
+Cơ sở dữ liệu được chuẩn hóa thành / bảng chính với các định duy nhất:
+User : Lưu trữ thông tin tài khoản và định danh sinh viên (PK: userId).
+Course : Danh mục các môn học do sinh viên tự quản lý (PK: courseId, FK: userId).
+StudyPlan : Các kế hoạch học tập tổng thể theo giai đoạn (PK: planId, FK: userId).
+Task : Hạng mục công việc cụ thể trong môn học và kế hoạch (PK: taskID, FK: planId, courseID).
+Reminder : Nhật ký thông báo gửi tới người dùng (PK: reminderId, FK: taskID ).
+Progress : Thực thể thống kê tiến độ học tập phụ thuộc 1-1 vào kế hoạch (PK: progressId, FK: planId).
+Role : Quản lý danh mục phân quyền của người dùng trong hệ thống (PK: roleId)
+PasswordResetToken: Quản lý mã xác thực khôi phục mật khẩu có thời hạn (PK: tokenId, FK: userID).
+c, Ràng buộc toàn vẹn dữ liệu
+Ràng buộc tham chiếu (Foreign Key -On Delete CasCade) đảm bảo tính thống nhất quán dữ liệu và tránh dữ liệu “mồ côi”:
+Khi xóa một Course hoặc một StudyPlan , hệ thống tự động xóa toàn bộ các Tasks liên quan
+Khi xóa một Task toàn bộ Reminders liên quan sẽ bị xóa bỏ.
+Đặc biệt, với quan hệ 1-1 : Khi xóa StudyPlan , bản ghi Progress tương ứng trong bảng bị xóa bỏ ngay lập tức .
+Việc xóa một Role sẽ bị chặn (On delete Restrict) nếu đang có User nào đó được gắn với Role này nhằm tránh lỗi mất quyền truy cập.
+Ràng buộc miền giá trị (Check / Enum):
+Task status: chỉ chấp nhận các giá trị : ‘TODO’, ‘IN_PROGRESS’, ‘DONE’ .
+Email Unique : Cột email trong bảng User là duy nhất không trùng lặp để phục vụ đăng nhập và khôi phục mật khẩu
+Progress Rate : Cột completeRate trong bảng Progress phải nằm trong khoảng [0,100].
+Data Consistency : kiểu dữ liệu của các khóa ngoại phải khớp hoàn toàn với khóa chính tương ứng
+Token Expiry : cột expiryDate phải là một mốc thời gian ở thì tương lai so với thời điểm tạo (createAt)
+Ràng buộc logic nghiệp vụ:
+Thời gian thực hiện nhiệm vụ (deadline) phải nằm trong khoảng thời gian startDate và endDate của kế hoạch học tập chủ quản.
+Số lượng nhiệm vụ đã hoàn thành (completeTask) trong bảng PROGRESS không bao giờ được phép lớn hơn tổng số nhiệm vụ (totalTask) thuộc kế hoạch đó .
+CHƯƠNG 6: TEST CASE
+6. Test Case
+6.1. Quản lý người dùng
+1. Test Case: Đăng nhập hệ thống - Thành công
+Test Case ID
+TC1-Login-1A
+Product Module
+User Management
+Purpose
+Verify login functionality
+Test Priority
+High
+Assumptions
+System is working normally
+Pre-conditions
+User has a valid account
+Expected Outcome
+Login successfully
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+User is logged into the system
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang login
+URL hệ thống
+Hiển thị form đăng nhập
+—
+Chrome
+Pass
+2
+Nhập email
+Email hợp lệ
+Dữ liệu hợp lệ
+—
+Chrome
+Pass
+3
+Nhập password
+Password đúng
+Dữ liệu hợp lệ
+—
+Chrome
+Pass
+4
+Nhấn Login
+—
+Chuyển đến Dashboard
+—
+Chrome
+Pass
+2. Test Case: Đăng nhập hệ thống - Không thành công
+Test Case ID
+TC1-Login-1B
+Product Module
+User Management
+Purpose
+Verify login with invalid credentials
+Test Priority
+High
+Assumptions
+User enters incorrect information
+Pre-conditions
+User has a valid account
+Expected Outcome
+Error message is displayed
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Login fail
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang login
+URL hệ thống
+Hiển thị form đăng nhập
+—
+Chrome
+Pass
+2
+Nhập email
+Email sai
+—
+—
+Chrome
+Pass
+3
+Nhập password
+Password sai
+—
+—
+Chrome
+Pass
+4
+Nhấn Login
+—
+Hiển thị lỗi
+—
+Chrome
+Pass
+3. Test Case: Đăng ký tài khoản
+Test Case ID
+TC1-Register-1A
+Product Module
+User Management
+Purpose
+Verify account creation
+Test Priority
+High
+Assumptions
+Email does not exist in system
+Pre-conditions
+User is not registered
+Expected Outcome
+Registration successful
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+New user created
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang đăng ký
+URL hệ thống
+Trang hiển thị
+—
+Chrome
+Pass
+2
+Nhập thông tin
+Email, Password
+Dữ liệu hợp lệ
+—
+Chrome
+Pass
+3
+Submit
+—
+Hiển thị đăng kí thành công quay lại trang đăng nhập
+—
+Chrome
+Pass
+4. Test Case: Đăng ký tài khoản - Thất bại
+Test Case ID
+TC1-Register-1B
+Product Module
+User Management
+Purpose
+Verify invalid registration
+Test Priority
+High
+Assumptions
+Email invalid or already exists
+Pre-conditions
+User is not registered
+Expected Outcome
+Registration fails
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+No account created
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang đăng ký
+URL hệ thống
+Trang hiển thị
+—
+Chrome
+Pass
+2
+Nhập thông tin
+Email sai hoặc đã tồn tại
+—
+—
+Chrome
+Pass
+3
+Submit
+—
+Hiển thị lỗi
+—
+Chrome
+Pass
+5. Test Case: Cập nhật hồ sơ
+Test Case ID
+TC1-Update-1A
+Product Module
+User Management
+Purpose
+Verify profile update
+Test Priority
+Low
+Assumptions
+User is logged in
+Pre-conditions
+Profile exists
+Expected Outcome
+Profile updated
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Data updated in DB
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang profile
+URL hệ thống
+Hiển thị thông tin
+—
+Chrome
+Pass
+2
+Sửa thông tin
+Các trường thông tin cá nhân
+Hợp lệ
+—
+Chrome
+Pass
+3
+Nhấn Save
+—
+Cập nhật thành công
+—
+Chrome
+Pass
+6. Test Case: Đổi mật khẩu
+Test Case ID
+TC1-ChangePass-1A
+Product Module
+User Management
+Purpose
+Verify password change
+Test Priority
+High
+Assumptions
+User remembers old password
+Pre-conditions
+User logged in
+Expected Outcome
+Password updated
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+New password is active
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang change password
+URL hệ thống
+Form hiển thị
+—
+Chrome
+Pass
+2
+Nhập mật khẩu cũ
+Old password
+Hợp lệ
+—
+Chrome
+Pass
+3
+Nhập mật khẩu mới
+New password
+Hợp lệ
+—
+Chrome
+Pass
+4
+Nhấn Save
+—
+Cập nhật thành công
+—
+Chrome
+Pass
+7. Test Case: Đổi mật khẩu - Sai mật khẩu cũ
+Test Case ID
+TC1-ChangePass-1B
+Product Module
+User Management
+Purpose
+Verify incorrect old password
+Test Priority
+High
+Assumptions
+User enters wrong old password
+Pre-conditions
+User logged in
+Expected Outcome
+Password not updated
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Password changed
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test
+Result
+1
+Mở trang change password
+URL hệ thống
+Form hiển thị
+—
+Chrome
+Pass
+2
+Nhập mật khẩu cũ
+Old password
+Không hợp lệ
+—
+Chrome
+Pass
+3
+Nhập mật khẩu mới
+New password
+Hợp lệ
+—
+Chrome
+Pass
+4
+Nhấn Save
+—
+Cập nhật không thành công
+—
+Chrome
+Pass
+8. Test Case: Quên mật khẩu - Thành công
+Test Case ID
+TC1-ForgotPass-1A
+Product Module
+User Management
+Purpose
+Verify forgot password flow: enter email → system validates → allow password reset
+Test Priority
+Medium
+Assumptions
+Email exists in system; running on local (no real email sent)
+Pre-conditions
+User is on Login page, has a valid registered email
+Expected Outcome
+System validates email, allows user to set new password
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+New password is active; user can log in with new password
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Mở trang Login, nhấn "Quên mật khẩu?"
+URL hệ thống
+Hệ thống hiển thị form nhập Email
+—
+Chrome
+Pass
+2
+Nhập email đã đăng ký
+Email: sv@ptit.edu.vn
+Email hợp lệ, hệ thống xác nhận tài khoản tồn tại
+—
+Chrome
+Pass
+3
+Nhập mật khẩu mới và xác nhận
+New password: newPass123 / Confirm: newPass123
+Dữ liệu hợp lệ
+—
+Chrome
+Pass
+4
+Nhấn "Xác nhận"
+—
+Hệ thống lưu mật khẩu mới, hiển thị thông báo thành công, chuyển về trang Login
+—
+Chrome
+Pass
+5
+Đăng nhập bằng mật khẩu mới
+Email: sv@ptit.edu.vn / Password: newPass123
+Đăng nhập thành công
+—
+Chrome
+Pass
+9. Test Case: Quên mật khẩu — Email không tồn tại
+Test Case ID
+TC-ForgotPass-2B
+Product Module
+User Management
+Purpose
+Verify that system rejects forgot password request when email does not exist
+Test Priority
+Medium
+Assumptions
+Email does not exist in DB
+Pre-conditions
+User is on Forgot Password page
+Expected Outcome
+System shows error: "Không tìm thấy tài khoản với email này"
+Actual Outcome
+—
+Post-conditions
+No data changes
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Mở trang Quên mật khẩu
+—
+Form nhập email hiển thị
+—
+Chrome
+Pass
+2
+Nhập email không tồn tại
+Email: khongtontai@email.com
+—
+—
+Chrome
+Pass
+3
+Nhấn "Xác nhận"
+—
+Hệ thống hiển thị lỗi: "Không tìm thấy tài khoản với email này"
+—
+Chrome
+Pass
+10. Test Case: Xóa tài khoản
+Test Case ID
+TC1-Delete-1A
+Product Module
+User Management
+Purpose
+Verify delete account
+Test Priority
+High
+Assumptions
+User logged in
+Pre-conditions
+Email exists
+Expected Outcome
+Account deleted
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+User cannot log in again
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Mở trang profile
+URL hệ thống
+Hiển thị thông tin
+—
+Chrome
+Pass
+2
+Nhấn Delete
+email
+Hiển thị confirm
+—
+Chrome
+Pass
+3
+Xác nhận
+Yes
+Tài khoản bị xóa
+—
+Chrome
+Pass
+10. Test Case: Đăng Xuất
+Test Case ID
+TC1-Logout-1A
+Product Module
+User Management
+Purpose
+Verify logout
+Test Priority
+Medium
+Assumptions
+System works normally
+Pre-conditions
+User is logged in
+Expected Outcome
+Logout successful
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Session terminated
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test
+Result
+1
+Nhấn nút Logout
+—
+Hệ thống xử lý logout
+—
+Chrome
+Pass
+2
+Hệ thống xóa session / token
+—
+Chuyển về trang login
+—
+Chrome
+Pass
+3
+Chuyển về trang login
+—
+Hiển thị trang đăng nhập
+—
+Chrome
+Pass
+11. Test Case: Xem danh sách người dùng — Thành công
+Test Case ID
+TC-ViewList-01
+Product Module
+User Management — Admin
+Purpose
+Verify that Admin can view the full list of student accounts
+Test Priority
+High
+Assumptions
+System is running normally; at least 1 student account exists
+Pre-conditions
+Admin is logged in with role ADMIN
+Expected Outcome
+Full user list is displayed in a table with correct columns
+Actual Outcome
+—
+Post-conditions
+No data changes
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Đăng nhập bằng tài khoản Admin
+Email: admin@ptit.edu.vn / Password: admin123
+Đăng nhập thành công, chuyển đến Admin Panel
+—
+Chrome
+Pass
+2
+Truy cập mục "Quản lý người dùng"
+—
+Hệ thống hiển thị bảng danh sách người dùng với cột: Họ tên, Email, Vai trò, Trạng thái
+—
+Chrome
+Pass
+3
+Kiểm tra dữ liệu hiển thị
+—
+Danh sách hiển thị đúng thông tin, không thiếu cột
+—
+Chrome
+Pass
+12. Test Case: Khóa tài khoản sinh viên — Thành công
+Test Case ID
+TC-LockUser-01
+Product Module
+User Management — Admin
+Purpose
+Verify that Admin can lock a student account
+Test Priority
+High
+Assumptions
+Target student account has status ACTIVE
+Pre-conditions
+Admin is on the User List page; target student account exists
+Expected Outcome
+Account status changes to LOCKED; student cannot log in
+Actual Outcome
+—
+Post-conditions
+Student account status = LOCKED in database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Chọn một tài khoản sinh viên từ danh sách
+Student email: sv@ptit.edu.vn
+Hệ thống hiển thị thông tin chi tiết tài khoản
+—
+Chrome
+Pass
+2
+Nhấn nút "Khóa tài khoản"
+—
+Hệ thống cập nhật status = LOCKED, danh sách tải lại
+—
+Chrome
+Pass
+3
+Kiểm tra trạng thái trong danh sách
+—
+Cột Trạng thái hiển thị "LOCKED"
+—
+Chrome
+Pass
+4
+Thử đăng nhập bằng tài khoản bị khóa
+Email: sv@ptit.edu.vn / Password đúng
+Hệ thống hiển thị lỗi: "Tài khoản đã bị khóa. Liên hệ Admin."
+—
+Chrome
+Pass
+13. Test Case: Mở khóa tài khoản sinh viên — Thành công
+Test Case ID
+TC-ADM-UnlockUser-01
+Product Module
+User Management — Admin
+Purpose
+Verify that Admin can unlock a previously locked student account
+Test Priority
+High
+Assumptions
+Target student account has status LOCKED
+Pre-conditions
+Admin is on the User List page; target account is LOCKED
+Expected Outcome
+Account status changes to ACTIVE; student can log in again
+Actual Outcome
+—
+Post-conditions
+Student account status = ACTIVE in database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Chọn tài khoản sinh viên đang bị khóa
+Student email: sv@ptit.edu.vn (status LOCKED)
+Hệ thống hiển thị thông tin tài khoản
+—
+Chrome
+Pass
+2
+Nhấn nút "Mở khóa"
+—
+Hệ thống cập nhật status = ACTIVE, danh sách tải lại
+—
+Chrome
+Pass
+3
+Kiểm tra trạng thái
+—
+Cột Trạng thái hiển thị "ACTIVE"
+—
+Chrome
+Pass
+4
+Thử đăng nhập bằng tài khoản vừa mở khóa
+Email: sv@ptit.edu.vn / Password đúng
+Đăng nhập thành công, chuyển đến Dashboard
+—
+Chrome
+Pass
+14. Test Case: Xóa tài khoản sinh viên — Thành công
+Test Case ID
+TC-ADM-DeleteUser-01
+Product Module
+User Management — Admin
+Purpose
+Verify that Admin can delete a student account and all related data is removed (Cascade Delete)
+Test Priority
+High
+Assumptions
+Target student has Study Plans, Courses, and Tasks linked in DB
+Pre-conditions
+Admin is on the User List page; target student account exists with data
+Expected Outcome
+Account and all related data (plans, courses, tasks, reminders) deleted from DB
+Actual Outcome
+—
+Post-conditions
+No orphaned records remain in database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Chọn tài khoản sinh viên cần xóa
+Target student ID
+Hệ thống hiển thị thông tin tài khoản
+—
+Chrome
+Pass
+2
+Nhấn nút "Xóa tài khoản"
+—
+Hệ thống hiển thị popup xác nhận: "Hành động này không thể hoàn tác"
+—
+Chrome
+Pass
+3
+Nhấn "Xác nhận" trên popup
+—
+Hệ thống xóa user khỏi CSDL, danh sách tải lại
+—
+Chrome
+Pass
+4
+Kiểm tra danh sách sau khi xóa
+—
+Tài khoản không còn xuất hiện trong danh sách
+—
+Chrome
+Pass
+5
+Kiểm tra CSDL (DB Browser)
+—
+Không còn bản ghi nào trong study_plans, courses, tasks, reminders của user này
+—
+Chrome
+Pass
+15. Test Case: Kiểm tra phân quyền — Student không được vào Admin Panel
+Test Case ID
+TC-ADM-Auth-01
+Product Module
+User Management — Authorization
+Purpose
+Verify that a Student account cannot access Admin routes
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student is logged in with role STUDENT
+Expected Outcome
+System blocks access and redirects to login or shows 403 error
+Actual Outcome
+—
+Post-conditions
+No unauthorized access granted
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Đăng nhập bằng tài khoản Student
+Email: sv@ptit.edu.vn
+Đăng nhập thành công, chuyển đến Dashboard
+—
+Chrome
+Pass
+2
+Trực tiếp nhập URL /admin/users vào thanh địa chỉ
+URL: http://localhost:8080/admin/users
+Hệ thống chặn truy cập, chuyển hướng về trang Login hoặc hiển thị lỗi 403
+—
+Chrome
+Pass
+16. Test Case: Admin đăng nhập được redirect đến Admin Panel
+Test Case ID
+TC-Auth-02
+Product Module
+User Management — Authorization
+Purpose
+Verify that Admin is redirected to Admin Panel after login, not to Student Dashboard
+Test Priority
+High
+Assumptions
+Admin account exists in DB with role ADMIN
+Pre-conditions
+Admin is on the Login page
+Expected Outcome
+After login, system redirects Admin to /admin/users, not /dashboard
+Actual Outcome
+—
+Post-conditions
+Admin is on Admin Panel
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Mở trang Login
+URL: http://localhost:8080/login
+Form đăng nhập hiển thị
+—
+Chrome
+Pass
+2
+Nhập thông tin Admin
+Email: admin@ptit.edu.vn / Password đúng
+Dữ liệu hợp lệ
+—
+Chrome
+Pass
+3
+Nhấn "Đăng nhập"
+—
+Hệ thống xác thực thành công, chuyển hướng đến /admin/users (Admin Panel), KHÔNG phải /dashboard
+—
+Chrome
+Pass
+6.2. Quản lý kế hoạch học tập
+Test Case: Create Study Plan – Create plan with all valid data
+Test Case ID
+TC_UC01_01
+Product Module
+Study Plan Management Module
+Purpose
+Verify that a student can successfully create a new study plan when all valid data is provided
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student is logged into the system
+Expected Outcome
+System validates data, saves the plan to the database, and displays a success message
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Delete the newly created study plan to restore the database to its initial state (Self-cleaning)
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in and select 'Create Plan' function
+Valid Student credentials
+System displays the study plan creation form
+—
+Chrome
+Pass
+2
+Enter required fields and click 'Save'
+Plan Name: "Semester 1", Start Date: 10/05/2026, End Date: 30/12/2026
+System validates data, saves to DB, and displays a success message
+—
+Chrome
+Pass
+Test Case: Create Study Plan – Creation fails due to missing Plan Name
+Test Case ID
+TC_UC01_02
+Product Module
+Study Plan Management Module
+Purpose
+Verify that the system prevents study plan creation when the mandatory Plan Name field is left blank
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student is logged into the system
+Expected Outcome
+System does not save and prompts the user to complete the Plan Name field
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+System state remains unchanged
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in and select 'Create Plan' function
+Valid Student credentials
+System displays the study plan creation form
+—
+Chrome
+Pass
+2
+Leave Plan Name blank, enter dates, and click 'Save'
+Plan Name: "", Start Date: 10/05/2026, End Date: 30/12/2026
+System prevents saving, displays a prompt to complete the Plan Name field
+—
+Chrome
+Pass
+Test Case: Create Study Plan – Creation fails due to logic error (End Date < Start Date)
+Test Case ID
+TC_UC01_04
+Product Module
+Study Plan Management Module
+Purpose
+Verify that the system prevents study plan creation when End Date is earlier than Start Date
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student is logged into the system
+Expected Outcome
+System prevents saving and displays an error message regarding invalid dates
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+System state remains unchanged
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in and select 'Create Plan' function
+Valid Student credentials
+System displays the study plan creation form
+—
+Chrome
+Pass
+2
+Enter valid name, invalid dates, and click 'Save'
+Plan Name: "SDN Project", Start Date: 20/05/2026, End Date: 10/05/2026
+System prevents saving, displays error message for invalid dates
+—
+Chrome
+Pass
+Test Case: View Study Plan – View details of an existing study plan
+Test Case ID
+TC_UC02_01
+Product Module
+Study Plan Management Module
+Purpose
+Verify that the system correctly displays the details and tasks of an existing study plan
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student is logged in and has at least 1 existing Study Plan record
+Expected Outcome
+System successfully displays detailed tasks and their current statuses for the selected plan
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+System state remains unchanged
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Navigate to 'Study Plan' section
+-
+System displays the list of created plans
+—
+Chrome
+Pass
+2
+Click on a specific plan from the list
+Selected Plan ID
+System fully loads and displays task details and statuses
+—
+Chrome
+Pass
+Test Case: Edit Study Plan – Update plan with valid information
+Test Case ID
+TC_UC03_01
+Product Module
+Study Plan Management Module
+Purpose
+Verify that the system successfully updates a study plan when valid information is provided
+Test Priority
+Medium
+Assumptions
+System is running normally
+Pre-conditions
+Student is viewing the details of an existing Study Plan
+Expected Outcome
+System updates the database and displays a success message
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Revert the study plan data back to its original state before the test
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click 'Edit' on a specific plan
+-
+System displays edit form with pre-filled old data
+—
+Chrome
+Pass
+2
+Update Plan Name and click 'Save'
+New Plan Name: "Semester 1 - Updated “
+System validates data, updates the record, and shows success message
+—
+Chrome
+Pass
+Test Case: Delete Study Plan – Confirm deletion of study plan
+Test Case ID
+TC_UC04_01
+Product Module
+Study Plan Management Module
+Purpose
+Verify that the system successfully deletes a study plan and its related tasks after user confirmation
+Test Priority
+Medium
+Assumptions
+System is running normally
+Pre-conditions
+Student is viewing the study plan list with an existing plan
+Expected Outcome
+System permanently deletes the data and refreshes the list interface
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Re-create the deleted plan via DB script (if future tests require this data)
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Select a plan and click 'Delete'
+Target Plan ID
+System displays a confirmation popup
+—
+Chrome
+Pass
+2
+Select 'Confirm' on popup
+-
+System deletes the plan and tasks, list refreshes
+—
+Chrome
+Pass
+Test Case: Add Task – Add valid task to study plan
+Test Case ID
+TC_UC05_01
+Product Module
+Study Plan Management Module
+Purpose
+Verify that a student can successfully add a valid task to a specific study plan
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student has opened a specific Study Plan
+Expected Outcome
+System records the task and displays it in the task list of that specific Study Plan
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Delete the newly added task to restore initial state
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Select 'Add Task'
+-
+System displays task creation form
+—
+Chrome
+Pass
+2
+Enter task data and click 'Save'
+Name: "Develop API", Course: "CS", Deadline: Valid, Priority: High
+System saves the task and displays it in the plan's task list
+—
+Chrome
+Pass
+Test Case: Add Task – Add task with Deadline outside plan duration
+Test Case ID
+TC_UC05_02
+Product Module
+Study Plan Management Module
+Purpose
+Verify that the system prevents adding a task with a deadline outside the study plan's defined timeframe
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Student has opened a specific Study Plan
+Expected Outcome
+System prevents saving and displays a warning regarding the invalid deadline
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+System state remains unchanged
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Select 'Add Task'
+-
+System displays task creation form
+—
+Chrome
+Pass
+2
+Enter data with invalid deadline and click 'Save'
+Name: "Config Server", Deadline: Outside plan duration
+System blocks save operation and shows date validation error
+—
+Chrome
+Pass
+6.3. Quản lý môn học và nhiệm vụ học tập
+1. Test Case: Add Valid Subject - Success
+Test Case ID
+TC3-SUB-1A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify that a student can successfully add a new subject with valid data
+Test Priority
+High
+Assumptions
+System is running normally; database connection is stable
+Pre-conditions
+Student is logged in and is on the Subject Management screen
+Expected Outcome
+Subject is saved and displayed in the list; success messenger appears
+Actual Outcome
+—
+Post-conditions
+Subject record exists in the database ; Ui updates correctly
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click “Add subject” button
+—
+Add form is displayed
+—
+Chrome
+Pass
+2
+Enter valid info
+Name: “ Software Engineering”, Code: “INT1340”,
+Credits: 3
+Data is accepted
+—
+Chrome
+Pass
+3
+Click “Save”
+—
+Success message “Subject added successfully”
+—
+Chrome
+Pass
+2. Test Case: Add Subject - Mandatory Fields validation
+Test Case ID
+TC3-SUB-1B
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify validation when leaving the “Subject Name” field blank
+Test Priority
+medium
+Assumptions
+Client-side validation is active
+Pre-conditions
+“Add subject “ form is open
+Expected Outcome
+System blocks saving and show a red error message
+Actual Outcome
+—
+Post-conditions
+No data is saved to the database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Leave Name blank
+Name: “”(Empty)
+System flags the empty field
+—
+Chrome
+Pass
+2
+Click “Save”
+—
+Error: “Subject name is required”
+—
+Chrome
+Pass
+3. Test Case: Add Subject - Duplicate Code Check
+Test Case ID
+TC3-SUB-1C
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Prevent adding a subject with a code that existed
+Test Priority
+High
+Assumptions
+Code “INT1340” is already in use
+Pre-conditions
+“Add subject” form is open
+Expected Outcome
+System rejects the duplicate code and display a warning
+Actual Outcome
+—
+Post-conditions
+Database rejects the transaction
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Enter an existing code
+code “INT1340”
+System detects duplicate
+—
+Chrome
+Pass
+2
+Click “Save”
+—
+Error: “ Subject code already exists”
+—
+Chrome
+Pass
+4. Test Case: Edit subject information - Update Name
+Test Case ID
+TC3-SUB-2A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify that existing details can be u[dated successfully
+Test Priority
+Medium
+Assumptions
+Target subject exists in the student’s list
+Pre-conditions
+User is viewing the SubjectList
+Expected Outcome
+Information in updated in the list and database immediately
+Actual Outcome
+—
+Post-conditions
+Database record is u[dated with new values
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click “Edit” icon
+—
+Edit form with current data appears
+—
+Chrome
+Pass
+2
+Modify the name
+New Name: “ Modern SE”
+Change is reflected in form
+—
+Chrome
+Pass
+3
+Click “Update”
+—
+Success message and list is updated
+—
+Chrome
+Pass
+5. Test Case: Delete Subject - Confirmation cancel
+Test Case ID
+TC3-SUB-3A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify that “Cancel: on the delete confirmation popup aborts the action
+Test Priority
+Low
+Assumptions
+User might have clicked delete by mistake
+Pre-conditions
+Subject list is displayed with at least one item
+Expected Outcome
+The deletion is cancelled and the subject remains in the list
+Actual Outcome
+—
+Post-conditions
+System state remain unchanged
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click “Delete” icon
+—
+Confirmation popup “Are you sure?”
+—
+Chrome
+Pass
+2
+Click “Cancel”
+—
+Popup closes; subject is still visible
+—
+Chrome
+Pass
+6. Test Case: Delete Subject - Cascade Delete Verification
+Test Case ID
+TC3-SUB-3B
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Ensure that deleting a subject also removes all its associated tasks
+Test Priority
+High
+Assumptions
+Selected subject has linked tasks
+Pre-conditions
+Database contain related records in the TASKS table
+Expected Outcome
+Both the subject and its tasks are purged from the system
+Actual Outcome
+—
+Post-conditions
+No orphaned tasks remain in the database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click “Delete” & “ Confirm”
+—
+Subject disappears
+—
+Chrome
+Pass
+2
+Open Task List
+—
+All linked tasks are also deleted
+—
+Chrome
+Pass
+7. Test Case: Search subject by name -  Dynamic Filter
+Test Case ID
+TC3-SUB-4A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify that the search bar correctly filters the subject list in real-time
+Test Priority
+Medium
+Assumptions
+Multiple subjects exist with different names
+Pre-conditions
+User is on the Subject list page
+Expected Outcome
+List only displays subjects that match the keyword
+Actual Outcome
+—
+Post-conditions
+UI view is filtered; no data changes
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Type
+keyword
+Keyword: “Software”
+List filters automatically
+—
+Chrome
+Pass
+2
+verify results
+—
+only “Software” courses are shown
+—
+Chrome
+Pass
+8. Test Case: Filter Subjects by Semester
+Test Case ID
+TC3-SUB-4B
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify filtering subject by academic semester
+Test Priority
+Medium
+Assumptions
+Subject are tagged with semester data
+Pre-conditions
+Filter dropdown is available
+Expected Outcome
+Only subjects of the chosen semester are visible
+Actual Outcome
+—
+Post-conditions
+View state is updated
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click Semester filter
+—
+Dropdown opens
+—
+Chrome
+Pass
+2
+Select “Semester 2”
+Choice: “Sem 2”
+List shows only Sem 2 courses
+—
+Chrome
+Pass
+9. Test Case: Add task - Success within Subject Context
+Test Case ID
+TC3-TASK-1A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify successfully adding a new task to a specific subject
+Test Priority
+High
+Assumptions
+Parent subject is valid and exists
+Pre-conditions
+Task addition form is open
+Expected Outcome
+Task is saved with TODO status
+Actual Outcome
+—
+Post-conditions
+New task record created in database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Enter task info
+Name : “Homework 1”
+Form validates input
+—
+Chrome
+Pass
+2
+Click “Save Task”
+—
+Task appears in the “To-do” list
+—
+Chrome
+Pass
+10. Test Case: Add Task - Past deadline prevention
+Test Case ID
+TC3-TASK-1B
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify prevention of setting a past deadline
+Test Priority
+High
+Assumptions
+System clock is accurate
+Pre-conditions
+Task form is open
+Expected Outcome
+System rejects the date and shows error
+Actual Outcome
+—
+Post-conditions
+No data is saved
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Select a past date
+Date: “01/01/2020”
+System flags the date
+—
+Chrome
+Pass
+2
+Click “Save”
+—
+Error: “Deadline must be in the future”
+—
+Chrome
+Pass
+11 . Test Case: Update Task Status - On time Completion
+Test Case ID
+TC3-TASK-2A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify marking a task as “ Done” before the deadline
+Test Priority
+High
+Assumptions
+task status is currently “To-do”
+Pre-conditions
+Current Date<= Task Deadline
+Expected Outcome
+Status changes to DONE; progress increases
+Actual Outcome
+—
+Post-conditions
+Task record updated in database
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Check the task checkbox
+—
+UI marks task as Done
+—
+Chrome
+Pass
+2
+Check Dashboard
+—
+Progress percentage increases
+—
+Chrome
+Pass
+12 . Test Case: Update Task Status - Late Completion Warning
+Test Case ID
+TC3-TASK-2B
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify late task completion ( Overdue status)
+Test Priority
+Medium
+Assumptions
+Task deadline has passed
+Pre-conditions
+Task is in “ Overdue” status
+Expected Outcome
+Task is marked DONE with a “Done Late” warning label
+Actual Outcome
+—
+Post-conditions
+Status updated with the “Late” flag
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click complete
+—
+Task status changes to Done
+—
+Chrome
+Pass
+2
+Observer UI
+—
+Label “Done late” is displayed
+—
+Chrome
+Pass
+13. Test Case: Undo Task Completion -  Progress Recalculation
+Test Case ID
+TC3-TASK-3A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify reverting a completed task
+Test Priority
+Medium
+Assumptions
+Task status is “Done”
+Pre-conditions
+Status=DONE
+Expected Outcome
+Status reverts to TODO; progress decreases
+Actual Outcome
+—
+Post-conditions
+Database status reverts to “To-do”
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Uncheck “Done”
+—
+Task name returns to normal
+—
+Chrome
+Pass
+2
+Check progress
+—
+Percentage decreases correctly
+—
+Chrome
+Pass
+14. Test Case: Sort Tasks by Priority - View Order
+Test Case ID
+TC3-TASK-4A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify sorting tasks by priority level
+Test Priority
+Low
+Assumptions
+Tasks with different priority levels exists
+Pre-conditions
+Multiple tasks are displayed
+Expected Outcome
+List re-orders showing High priority at the top
+Actual Outcome
+—
+Post-conditions
+UI view updated
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click “Sort”
+—
+Order of tasks changes
+—
+Chrome
+Pass
+2
+Verify top item
+—
+Top tasks is “ High” priority
+—
+Chrome
+Pass
+15 . Test Case: Delete Task - Individual Removal
+Test Case ID
+TC3-TASK-5A
+Product Module
+Module 3 - Subject & Task Management
+Purpose
+Verify successfully deleting a specific task
+Test Priority
+Medium
+Assumptions
+task is no longer needed
+Pre-conditions
+User is on the Task list view
+Expected Outcome
+Task is removed from UI and database
+Actual Outcome
+—
+Post-conditions
+Record deleted from TASKS table
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Click “Deleted”
+TaskID: 101
+Confirmation prompt appears
+—
+Chrome
+Pass
+2
+Confirm deletion
+—
+Task disappears from list
+—
+Chrome
+Pass
+6.4. Nhắc nhở và theo dõi tiến độ học tập
+1. Test Case: Reminder – Tự động gắn nhãn khi nhiệm vụ đến hạn trong 24h
+Test Case ID
+TC4-REM-1A
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the system automatically labels a task UPCOMING when its deadline is within 24 hours
+Test Priority
+High
+Assumptions
+System is running normally; server clock is accurate
+Pre-conditions
+Task "Submit CNPM Assignment" has a deadline 20 hours from now, status: Not Completed
+Expected Outcome
+Task is labeled UPCOMING and highlighted with a warning color on the Dashboard
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+UPCOMING label displayed correctly; system returns to pre-test state
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in to the system
+Email: sv@ptit.edu.vn / Password: 123456
+Login successful, Dashboard loaded
+—
+Chrome
+Pass
+2
+Open Dashboard / Task list
+—
+System displays task list
+—
+Chrome
+Pass
+3
+Observe task with deadline in 20 hours
+Task: "Submit CNPM Assignment"
+Task is labeled UPCOMING with warning color
+—
+Chrome
+Pass
+4
+Check a completed task
+Task status = Completed
+Completed task is NOT labeled Upcoming
+—
+Chrome
+Pass
+2. Test Case: Reminder – Không gán nhãn cho những nhiệm vụ có thời gian >24h
+Test Case ID
+TC4-REM-1B
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the system does NOT label a task Upcoming when its deadline is more than 24 hours away
+Test Priority
+Medium
+Assumptions
+System is running normally
+Pre-conditions
+Task "Read Reference Materials" has a deadline 48 hours from now
+Expected Outcome
+Task does NOT display the Upcoming label
+Actual Outcome
+Post-conditions
+No label change; system state unchanged
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in to the system
+Email: sv@ptit.edu.vn / Password: 123456
+Login successful
+—
+Chrome
+Pass
+2
+Open Dashboard / Task list
+—
+System displays task list
+—
+Chrome
+Pass
+3
+Observe task with deadline in 48 hours
+Task: "Read Reference Materials"
+Task does NOT display the Upcoming label
+—
+Chrome
+Pass
+3. Test Case: Reminder – Tự động gán nhãn quá hạn cho nhiệm vụ vượt qua hạn và chưa hoàn thành
+Test Case ID
+TC4-REM-2A
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the system automatically labels a task OVERDUE when its deadline has passed and it remains incomplete
+Test Priority
+High
+Assumptions
+System is running normally; server clock is accurate
+Pre-conditions
+Task "Submit Report" deadline passed 2 days ago, status: Not Completed
+Expected Outcome
+Task is highlighted in red and labeled OVERDUE
+Actual Outcome
+Post-conditions
+OVERDUE label displayed correctly; system state unchanged after test
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in to the system
+Email: sv@ptit.edu.vn / Password: 123456
+Login successful
+—
+Chrome
+Pass
+2
+Open Dashboard
+—
+Dashboard displays task list
+—
+Chrome
+Pass
+3
+Observe task past its deadline
+Task: "Submit Report" – 2 days overdue, not completed
+Task highlighted red, labeled OVERDUE
+—
+Chrome
+Pass
+4
+Check an OVERDUE task that is completed
+Task status = Completed despite being past deadline
+Task is NOT labeled Overdue
+—
+Chrome
+Pass
+4. Test Case: Push Notification – Gửi thông báo khi nhiệm vụ đến hạn trong vòng 24h
+Test Case ID
+TC4-PUSH-1A
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the system automatically creates an in-app notification when a task has less than 24 hours until its deadline
+Test Priority
+High
+Assumptions
+Spring @Scheduled timer is running; system clock is accurate
+Pre-conditions
+Task "Final Exam Revision" has deadline = current time + 23 hours, status: TODO
+Expected Outcome
+A new Reminder record is created in DB; it appears in Reminder List on the UI
+Actual Outcome
+-
+Post-conditions
+Reminder record visible in UI and in DB (is_read = 0)
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Create Task with deadline = current time + 23 hours
+Task: "Final Exam Revision", deadline = now + 23h, status = TODO
+Task is saved to Database
+—
+Chrome
+Pass
+2
+Activate or wait for SystemTimer to run (or call endpoint /api/reminder/trigger for testing)
+Timer trigger
+System scans for Tasks meeting the < 24h condition
+—
+Chrome
+Pass
+3
+Open the Reminder List page on the UI
+—
+List displays a new Reminder for Task "Final Exam Revision" "
+—
+Chrome
+Pass
+4
+Check Database (DB Browser)
+reminders table
+New record exists with correct task_id and is_read = 0
+—
+Chrome
+Pass
+5. Test Case: Push Notification – Không gửi quá 2 thông báo cho mỗi nhiệm vụ trong vòng 24h
+Test Case ID
+TC4-PUSH-1B
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the system does NOT create more than 2 reminders for the same task within a 24-hour window
+Test Priority
+Medium
+Assumptions
+Timer is running; Task X already has 2 reminders sent in past 24h
+Pre-conditions
+DB has 2 reminder records for Task X within last 24 hours; Task X still TODO
+Expected Outcome
+System does NOT generate a 3rd notification for Task X
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Reminder count for Task X remains at 2 in DB
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Browser
+Result
+1
+Confirm DB already has 2 Reminders for Task X in the past 24h
+DB Browser: SELECT COUNT(*) FROM reminders WHERE task_id = X AND sent_at > now - 24h
+Result = 2
+—
+Chrome
+Pass
+2
+Reactivate SystemTimer
+Timer trigger or endpoint /api/reminder/trigger
+System checks limit conditions
+—
+Chrome
+Pass
+3
+Check DB after Timer runs
+SELECT COUNT(*) FROM reminders WHERE task_id = X AND sent_at > now - 24h
+Result remains = 2
+—
+Chrome
+Pass
+4
+Check Reminder List on UI
+—
+No new Reminder for Task X
+—
+Chrome
+Pass
+6. Test Case: Progress Tracking – Tính toán chính xác phần trăm tiến độ khi nhiệm vụ được đánh dấu là Hoàn thành.
+Test Case ID
+TC4-PROG-1A
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the system correctly recalculates progress percentage when a student marks a task as Completed
+Test Priority
+High
+Assumptions
+System is running normally
+Pre-conditions
+Study plan "Semester 1 - 2025" has 4 tasks; 1 task already completed (Progress = 25%)
+Expected Outcome
+After completing a 2nd task, Progress automatically updates to 50%
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Progress chart updated correctly; completing all 4 tasks shows Progress = 100%
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Open study plan with 4 tasks (1 completed)
+Plan: "Semester 1 - 2025", 4 tasks
+Dashboard displays Progress = 25%
+—
+Chrome
+Pass
+2
+Mark 2nd task as Completed
+Task: "Math Assignment" → Completed
+System accepts the update
+—
+Chrome
+Pass
+3
+Observe progress chart update
+—
+Progress bar / chart instantly updates to 50%
+—
+Chrome
+Pass
+4
+Complete all 4 tasks
+4/4 tasks = Completed
+Progress = 100%, study plan marked as finished
+—
+Chrome
+Pass
+7. Test Case: Progress Tracking – Tỷ lệ phần trăm không tăng khi tác vụ được đặt ở trạng thái Đang tiến hành.
+Test Case ID
+TC4-PROG-1B
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that progress percentage does NOT change when a task is updated to "In Progress" (only Completed tasks count)
+Test Priority
+Medium
+Assumptions
+System is running normally
+Pre-conditions
+Study plan has 4 tasks, all Not Started; Progress = 0%
+Expected Outcome
+Progress remains 0% even after a task is set to In Progress
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Progress chart unchanged; system returns to pre-test state
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Open study plan with 4 Not Started tasks
+Plan: "Semester 1 - 2025", 4 tasks, Progress = 0%
+Dashboard displays Progress = 0%
+—
+Chrome
+Pass
+2
+Update 1 task to "In Progress"
+Task: "Read Materials" → In Progress
+System accepts the update
+—
+Chrome
+Pass
+3
+Observe progress chart
+—
+Progress remains = 0%, no change
+—
+Chrome
+Pass
+8. Test Case: Dashboard – Hiển thị số liệu thống kê tiến độ đầy đủ và chính xác
+Test Case ID
+TC4-DASH-1A
+Product Module
+Module 4 – Reminder & Progress Tracking
+Purpose
+Verify that the Dashboard correctly and fully displays progress statistics for all study plans
+Test Priority
+High
+Assumptions
+System is running normally; at least 2 study plans with tasks exist
+Pre-conditions
+Student logged in, has plans "Semester 1 - 2025" and "Semester 2 - 2025" with multiple tasks
+Expected Outcome
+Dashboard loads all progress charts, Upcoming/Overdue labels are correct, loads within 3 seconds (UR-33)
+Actual Outcome
+— (fill in after running test)
+Post-conditions
+Dashboard data accurately reflects the real-time status of all tasks
+Test Execution Steps:
+S.No
+Action
+Inputs
+Expected Output
+Actual Output
+Test Browser
+Test Result
+1
+Log in and open Dashboard
+Email: sv@ptit.edu.vn / Password: 123456
+Dashboard loads successfully
+—
+Chrome
+Pass
+2
+Observe progress for each study plan
+—
+Each plan shows its own % completion via progress bar or chart
+—
+Chrome
+Pass
+3
+Measure page load time
+Time from page open to full render
+Dashboard fully loads within 3 seconds (UR-33)
+—
+Chrome
+Pass
+4
+Check Upcoming / Overdue task list
+—
+Correct tasks shown with appropriate labels (Upcoming / Overdue)
+—
+Chrome
+Pass
+CHƯƠNG 7: THIẾT KẾ HỆ THỐNG
+7. Thiết kế và cài đặt hệ thống
+7.1. Môi trường phát triển
+Hệ thống được phát triển dưới dạng ứng dụng Desktop chạy trên nền tảng Java, sử dụng thư viện Java Swing kết hợp với FlatLaf để xây dựng giao diện người dùng. Cơ sở dữ liệu sử dụng SQLite.
+Bảng 7.1. Môi trường phát triển hệ thống
+Thành phần
+Công cụ / Phiên bản
+Ghi chú
+Ngôn ngữ lập trình
+Java 17 (LTS)
+Yêu cầu tối thiểu JDK 17
+Giao diện người dùng
+Java Swing + FlatLaf 3.x
+Thư viện UI hiện đại cho desktop
+Cơ sở dữ liệu
+SQLite 3.x
+File .db, không cần cài server DB
+Driver kết nối DB
+sqlite-jdbc 3.47.x
+Thêm vào classpath dưới dạng .jar
+Kiến trúc
+MVC (Model - View - Controller)
+Bổ sung tầng Service và DAO
+IDE
+VS Code + Extension Pack for Java
+Hoặc IntelliJ IDEA / Eclipse
+Hệ điều hành
+Windows 10/11
+Chạy được trên macOS / Linux
+Lý do lựa chọn Java Swing + SQLite cho phiên bản demo:
+Không phụ thuộc vào server hay kết nối mạng — chạy hoàn toàn offline trên máy tính cá nhân.
+File cơ sở dữ liệu SQLite (.db) có thể sao chép sang máy khác và chạy ngay lập tức.
+Java Swing tích hợp sẵn trong JDK, không cần cài thêm framework phức tạp.
+FlatLaf cung cấp giao diện hiện đại, chuyên nghiệp hơn so với Swing thuần túy.
+7.2. Cấu trúc project
+Hệ thống được tổ chức theo kiến trúc MVC (Model – View – Controller) với bổ sung tầng Service và DAO, đảm bảo tách biệt rõ ràng giữa logic nghiệp vụ, truy vấn cơ sở dữ liệu và giao diện người dùng.
+7.3. Cài đặt cơ sở dữ liệu
+7.4. Demo chức năng từng module
+7.4.1. Module 1 - Quản lý người dùng
+7.4.2. Module 2 - Quản lý kế hoạch học tập
+7.4.3. Module 3 - Quản lý môn học & nhiệm vụ
+7.4.4. Module 4 - Nhắc nhở & theo dõi tiến độ
+7.5. Kết quả kiểm thử (đối chiếu Test Case)

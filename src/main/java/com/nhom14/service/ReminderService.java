@@ -17,4 +17,8 @@ public class ReminderService {
     public boolean markAsRead(int reminderId) {
         return reminderDAO.markAsRead(reminderId);
     }
+
+    public void markAllRead(int userId) {
+        reminderDAO.markAllRead(userId);
+    }
 }

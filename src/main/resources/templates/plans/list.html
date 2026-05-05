@@ -16,9 +16,9 @@
         <a th:href="@{/plans}" class="nav-btn active">📅 Kế hoạch</a>
 
         <div class="nav-right">
-            <button class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative">
-                🔔 <span class="badge" id="notif-badge" style="display:none">0</span>
-            </button>
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative;text-decoration:none">
+                🔔 Thông báo
+            </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
@@ -43,6 +43,11 @@
             </a>
             <a th:href="@{/plans}" class="sidebar-item active">
                 <span class="icon">📅</span>Kế hoạch
+            </a>
+
+            <div class="sidebar-section">Thông báo</div>
+            <a th:href="@{/reminders}" class="sidebar-item">
+                <span class="icon">🔔</span>Nhắc nhở
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
