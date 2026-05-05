@@ -42,6 +42,23 @@ public class AuthService {
         return userDAO.updatePassword(userId, hash(newPwd)) ? null : "Lỗi hệ thống.";
     }
 
+    public String updateProfile(int userId, String fullName) {
+        if (fullName == null || fullName.isBlank()) return "Vui lòng nhập họ tên.";
+        return userDAO.updateProfile(userId, fullName.trim()) ? null : "Lỗi hệ thống.";
+    }
+
+    public String forgotPassword(String email, String newPwd) {
+        if (email == null || email.isBlank()) return "Vui lòng nhập email.";
+        User u = userDAO.findByEmail(email.toLowerCase());
+        if (u == null) return "Email không tồn tại trong hệ thống.";
+        if (newPwd == null || newPwd.length() < 6) return "Mật khẩu mới phải có ít nhất 6 ký tự.";
+        return userDAO.updatePassword(u.getUserId(), hash(newPwd)) ? null : "Lỗi hệ thống.";
+    }
+
+    public boolean deleteAccount(int userId) {
+        return userDAO.delete(userId);
+    }
+
     public static String hash(String plain) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

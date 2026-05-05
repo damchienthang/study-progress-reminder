@@ -58,6 +58,14 @@ public class UserDAO {
         } catch (SQLException e) { return false; }
     }
 
+    public boolean updateProfile(int userId, String fullName) {
+        try (PreparedStatement ps = conn().prepareStatement(
+                "UPDATE users SET full_name=? WHERE user_id=?")) {
+            ps.setString(1, fullName); ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { return false; }
+    }
+
     public boolean updatePassword(int userId, String hashed) {
         try (PreparedStatement ps = conn().prepareStatement(
                 "UPDATE users SET password=? WHERE user_id=?")) {

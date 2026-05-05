@@ -16,13 +16,23 @@
 <div class="container">
     <h2>Hồ sơ cá nhân</h2>
     <div class="card" style="max-width:480px;margin-top:20px;">
-        <p><b>Họ tên:</b> <span th:text="${session.user.fullName}"></span></p>
-        <p><b>Email:</b>  <span th:text="${session.user.email}"></span></p>
-        <p><b>Vai trò:</b><span th:text="${session.user.role}"></span></p>
-        <hr style="margin:20px 0;">
-        <h3 style="margin-bottom:16px;">Đổi mật khẩu</h3>
         <div th:if="${error}"   class="alert alert-error"   th:text="${error}"></div>
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        
+        <form method="post" th:action="@{/profile/update}" style="margin-bottom: 15px;">
+            <div class="form-group">
+                <label>Họ tên</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" name="fullName" th:value="${session.user.fullName}" required style="flex: 1;">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </div>
+        </form>
+
+        <p><b>Email:</b>  <span th:text="${session.user.email}"></span></p>
+        <p><b>Vai trò:</b> <span th:text="${session.user.role}"></span></p>
+        <hr style="margin:20px 0;">
+        <h3 style="margin-bottom:16px;">Đổi mật khẩu</h3>
         <form method="post" th:action="@{/profile/change-password}">
             <div class="form-group">
                 <label>Mật khẩu cũ</label>
@@ -32,7 +42,16 @@
                 <label>Mật khẩu mới</label>
                 <input type="password" name="newPassword" required>
             </div>
-            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <button type="submit" class="btn btn-primary">Lưu mật khẩu mới</button>
+        </form>
+
+        <hr style="margin:20px 0; border-color: #fca5a5;">
+        <h3 style="margin-bottom:8px; color: var(--danger);">Xóa tài khoản</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 15px;">
+            Thao tác này không thể hoàn tác. Mọi dữ liệu học tập của bạn sẽ bị xóa vĩnh viễn khỏi hệ thống.
+        </p>
+        <form method="post" th:action="@{/profile/delete}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không? Tất cả dữ liệu của bạn sẽ bị mất!');">
+            <button type="submit" class="btn btn-danger">🗑️ Xóa tài khoản vĩnh viễn</button>
         </form>
     </div>
 </div>

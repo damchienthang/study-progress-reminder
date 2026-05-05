@@ -18,6 +18,12 @@
         <div th:if="${param.registered}" class="alert alert-success">
             Đăng ký thành công! Vui lòng đăng nhập.
         </div>
+        <div th:if="${param.reset}" class="alert alert-success">
+            Khôi phục mật khẩu thành công! Vui lòng đăng nhập lại.
+        </div>
+        <div th:if="${param.deleted}" class="alert alert-success">
+            Tài khoản đã được xóa vĩnh viễn khỏi hệ thống.
+        </div>
 
         <form method="post" th:action="@{/login}">
             <div class="form-group">
@@ -27,6 +33,9 @@
             <div class="form-group">
                 <label>Mật khẩu</label>
                 <input type="password" name="password" required placeholder="Nhập mật khẩu">
+            </div>
+            <div style="text-align: right; margin-top: 5px; margin-bottom: 15px;">
+                <a th:href="@{/forgot-password}" style="font-size: 14px; color: var(--primary);">Quên mật khẩu?</a>
             </div>
             <button type="submit" class="btn btn-primary btn-full">Đăng nhập</button>
         </form>
