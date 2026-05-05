@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Môn học — StudyReminder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav id="main-nav">
+    <div class="logo">📚 StudyReminder</div>
+    <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+    <a th:href="@{/courses}" class="nav-btn active">📖 Môn học</a>
+    <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
+    <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+    <div class="nav-right">
+        <a th:href="@{/profile}" class="avatar" th:title="${session.user.fullName}"
+           th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+        <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+    </div>
+</nav>
+<div class="app">
+    <div class="sidebar">
+        <div class="sidebar-section">Tổng quan</div>
+        <a th:href="@{/dashboard}" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
+        <div class="sidebar-section">Học tập</div>
+        <a th:href="@{/courses}" class="sidebar-item active"><span class="icon">📖</span>Môn học</a>
+        <a th:href="@{/tasks}" class="sidebar-item"><span class="icon">✅</span>Nhiệm vụ</a>
+        <a th:href="@{/plans}" class="sidebar-item"><span class="icon">📅</span>Kế hoạch</a>
+        <div class="sidebar-section">Tài khoản</div>
+        <a th:href="@{/profile}" class="sidebar-item"><span class="icon">👤</span>Hồ sơ</a>
+        <a th:href="@{/logout}" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
+    </div>
+    <div class="main">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">📖 Danh sách môn học</h1>
+                <div class="page-subtitle">Quản lý các môn học của bạn</div>
+            </div>
+            <a th:href="@{/courses/new}" class="btn btn-primary" id="btn-add-course">+ Thêm môn học</a>
+        </div>
+
+        <!-- Filter + Search -->
+        <div class="card" style="padding:16px;margin-bottom:16px">
+            <form method="get" th:action="@{/courses}" style="display:flex;gap:12px;align-items:flex-end">
+                <div class="form-group" style="margin-bottom:0;flex:1">
+                    <label class="form-label">Tìm kiếm môn học</label>
+                    <input id="search-input" type="text" class="form-input" placeholder="Nhập tên môn học để lọc nhanh...">
+                </div>
+                <div class="form-group" style="margin-bottom:0;flex:1">
+                    <label class="form-label">Lọc theo học kỳ</label>
+                    <input name="semester" type="text" class="form-input" id="input-filter-semester"
+                           th:value="${semester}" placeholder="VD: HK1-2025">
+                </div>
+                <button type="submit" class="btn btn-secondary btn-sm">🔍 Lọc HK</button>
+                <a th:href="@{/courses}" class="btn btn-secondary btn-sm">✕ Xóa lọc</a>
+            </form>
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${param.msg != null}" style="margin-bottom:12px;padding:10px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px">
+            <span th:if="${param.msg[0] == 'created'}">✅ Thêm môn học thành công!</span>
+            <span th:if="${param.msg[0] == 'updated'}">✅ Cập nhật môn học thành công!</span>
+            <span th:if="${param.msg[0] == 'deleted'}">✅ Đã xóa môn học và toàn bộ nhiệm vụ liên quan!</span>
+        </div>
+
+        <!-- Bảng môn học -->
+        <div class="card">
+            <div th:if="${courses != null and !courses.isEmpty()}">
+                <table style="width:100%;border-collapse:collapse;font-size:13px">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--bg3)">
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Tên môn</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Mã môn</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Giảng viên</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Tín chỉ</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Học kỳ</th>
+                            <th style="padding:12px 16px;text-align:center;color:var(--text2);font-weight:600">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="c : ${courses}" style="border-bottom:1px solid var(--bg3)">
+                            <td style="padding:12px 16px;font-weight:600" th:text="${c.courseName}">Môn học</td>
+                            <td style="padding:12px 16px;color:var(--text2);font-family:monospace" th:text="${c.courseCode}">CODE</td>
+                            <td style="padding:12px 16px;color:var(--text2)" th:text="${c.lecturer ?: '—'}">Giảng viên</td>
+                            <td style="padding:12px 16px;color:var(--accent)" th:text="${c.credits + ' TC'}">0 TC</td>
+                            <td style="padding:12px 16px;color:var(--text2)" th:text="${c.semester != null ? c.semester : '—'}">—</td>
+                            <td style="padding:12px 16px;text-align:center;display:flex;gap:8px;justify-content:center">
+                                <a th:href="@{/courses/{id}/edit(id=${c.courseId})}" class="btn btn-secondary btn-sm">✏️ Sửa</a>
+                                <form th:action="@{/courses/{id}/delete(id=${c.courseId})}" method="post"
+                                      onsubmit="return confirm('Xóa môn học này? Toàn bộ nhiệm vụ liên quan sẽ bị xóa theo.')">
+                                    <button type="submit" class="btn btn-danger btn-sm">🗑️ Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${courses == null or courses.isEmpty()}"
+                 style="padding:40px;text-align:center;color:var(--text2)">
+                <div style="font-size:40px;margin-bottom:10px">📖</div>
+                <div>Chưa có môn học nào. <a th:href="@{/courses/new}" style="color:var(--accent)">Thêm môn học →</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('search-input').addEventListener('input', function(e) {
+        const val = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const name = row.querySelector('td:first-child').textContent.toLowerCase();
+            const code = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            if (name.includes(val) || code.includes(val)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>

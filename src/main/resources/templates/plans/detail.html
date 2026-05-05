@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${plan.planName} + ' — StudyReminder'">Chi tiết kế hoạch</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav id="main-nav">
+    <div class="logo">📚 StudyReminder</div>
+    <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+    <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
+    <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
+    <a th:href="@{/plans}" class="nav-btn active">📅 Kế hoạch</a>
+    <div class="nav-right">
+        <a th:href="@{/profile}" class="avatar" th:title="${session.user.fullName}"
+           th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+        <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+    </div>
+</nav>
+<div class="app">
+    <div class="sidebar">
+        <div class="sidebar-section">Tổng quan</div>
+        <a th:href="@{/dashboard}" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
+        <div class="sidebar-section">Học tập</div>
+        <a th:href="@{/courses}" class="sidebar-item"><span class="icon">📖</span>Môn học</a>
+        <a th:href="@{/tasks}" class="sidebar-item"><span class="icon">✅</span>Nhiệm vụ</a>
+        <a th:href="@{/plans}" class="sidebar-item active"><span class="icon">📅</span>Kế hoạch</a>
+        <div class="sidebar-section">Tài khoản</div>
+        <a th:href="@{/profile}" class="sidebar-item"><span class="icon">👤</span>Hồ sơ</a>
+        <a th:href="@{/logout}" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
+    </div>
+    <div class="main">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title" th:text="${plan.planName}">Kế hoạch</h1>
+                <div class="page-subtitle" th:text="${'📅 ' + plan.startDate + ' → ' + plan.endDate}"></div>
+            </div>
+            <div style="display:flex;gap:8px">
+                <a th:href="@{/plans/{id}/edit(id=${plan.planId})}" class="btn btn-secondary btn-sm">✏️ Sửa</a>
+                <form th:action="@{/plans/{id}/delete(id=${plan.planId})}" method="post"
+                      onsubmit="return confirm('Xóa kế hoạch và toàn bộ nhiệm vụ?')">
+                    <button type="submit" class="btn btn-danger btn-sm">🗑️ Xóa</button>
+                </form>
+                <a th:href="@{/plans}" class="btn btn-secondary btn-sm">← Danh sách</a>
+            </div>
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${param.msg != null}" style="margin-bottom:12px;padding:10px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px">
+            <span th:if="${param.msg[0] == 'taskAdded'}">✅ Thêm nhiệm vụ thành công!</span>
+            <span th:if="${param.msg[0] == 'taskDeleted'}">✅ Xóa nhiệm vụ thành công!</span>
+            <span th:if="${param.msg[0] == 'updated'}">✅ Cập nhật kế hoạch thành công!</span>
+        </div>
+
+        <div th:if="${error}" style="margin-bottom:12px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px" th:text="${error}"></div>
+
+        <!-- Progress card -->
+        <div class="card" style="padding:20px;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <span style="font-weight:600">Tiến độ hoàn thành</span>
+                <span style="color:var(--green);font-family:monospace;font-size:18px;font-weight:700" th:text="${plan.completeRate + '%'}">0%</span>
+            </div>
+            <div class="progress-wrap" style="height:14px">
+                <div class="progress-bar blue" th:style="'width:' + ${plan.completeRate} + '%'"></div>
+            </div>
+            <div style="font-size:12px;color:var(--text2);margin-top:6px"
+                 th:text="${plan.completeTask + ' / ' + plan.totalTask + ' nhiệm vụ đã hoàn thành'}"></div>
+        </div>
+
+        <!-- Form thêm task -->
+        <div class="card" style="padding:20px;margin-bottom:16px">
+            <div class="card-header" style="padding:0 0 14px 0"><div class="card-title">➕ Thêm nhiệm vụ mới</div></div>
+            <form th:action="@{/plans/{id}/tasks/new(id=${plan.planId})}" method="post">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Tên nhiệm vụ *</label>
+                        <input name="taskName" type="text" class="form-input" id="input-task-name"
+                               placeholder="VD: Làm bài tập chương 1" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Môn học</label>
+                        <select name="courseId" class="form-input" id="select-course">
+                            <option value="0">— Không chọn —</option>
+                            <option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.courseName}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Deadline *</label>
+                        <input name="deadline" type="datetime-local" class="form-input" id="input-deadline"
+                               required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Ưu tiên</label>
+                        <select name="priority" class="form-input" id="select-priority">
+                            <option value="HIGH">🔴 Cao</option>
+                            <option value="MEDIUM" selected>🟡 Trung bình</option>
+                            <option value="LOW">🟢 Thấp</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                        <label class="form-label">Mô tả</label>
+                        <input name="description" type="text" class="form-input" placeholder="Mô tả ngắn (tuỳ chọn)">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" style="margin-top:14px" id="btn-add-task">➕ Thêm nhiệm vụ</button>
+            </form>
+        </div>
+
+        <!-- Danh sách task -->
+        <div class="card">
+            <div class="card-header"><div class="card-title">📋 Danh sách nhiệm vụ</div></div>
+            <div style="padding:8px 16px 16px">
+                <div th:if="${tasks == null or tasks.isEmpty()}" style="color:var(--text2);font-size:13px;padding:12px 0">Chưa có nhiệm vụ nào. Hãy thêm nhiệm vụ ở trên!</div>
+                <div th:each="t : ${tasks}" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg3)">
+                    <!-- Checkbox status -->
+                    <form th:action="@{/tasks/{id}/status(id=${t.taskId})}" method="post" style="display:flex;align-items:center">
+                        <input type="hidden" name="redirectUrl" th:value="${'/plans/' + plan.planId}">
+                        <input type="hidden" name="status" th:value="${t.status == 'DONE' ? 'TODO' : 'DONE'}">
+                        <button type="submit" style="background:none;border:none;cursor:pointer;font-size:18px;padding:0"
+                                th:text="${t.status == 'DONE' ? '✅' : (t.status == 'IN_PROGRESS' ? '🔄' : '⬜')}">⬜</button>
+                    </form>
+                    <div style="flex:1">
+                        <div style="font-size:13px;font-weight:600"
+                             th:style="${t.status == 'DONE' ? 'text-decoration:line-through;color:var(--text2)' : ''}"
+                             th:text="${t.taskName}">Task</div>
+                        <div style="font-size:11px;color:var(--text2);margin-top:2px">
+                            <span th:if="${t.courseName != null}" th:text="${t.courseName + ' · '}"></span>
+                            <span th:text="${'⏰ ' + t.deadline}"></span>
+                            <span th:if="${t.priority == 'HIGH'}" style="color:var(--red);margin-left:4px">🔴 Cao</span>
+                            <span th:if="${t.priority == 'MEDIUM'}" style="color:var(--orange);margin-left:4px">🟡 TB</span>
+                            <span th:if="${t.priority == 'LOW'}" style="color:var(--green);margin-left:4px">🟢 Thấp</span>
+                            <span th:if="${t.doneLate}" style="color:var(--orange);margin-left:4px">⚠️ Hoàn thành trễ</span>
+                        </div>
+                    </div>
+                    <!-- Update status dropdown -->
+                    <form th:action="@{/tasks/{id}/status(id=${t.taskId})}" method="post">
+                        <input type="hidden" name="redirectUrl" th:value="${'/plans/' + plan.planId}">
+                        <select name="status" class="form-input" style="width:auto;font-size:12px;padding:4px 8px"
+                                onchange="this.form.submit()" th:id="${'status-' + t.taskId}">
+                            <option value="TODO" th:selected="${t.status == 'TODO'}">Chưa bắt đầu</option>
+                            <option value="IN_PROGRESS" th:selected="${t.status == 'IN_PROGRESS'}">Đang thực hiện</option>
+                            <option value="DONE" th:selected="${t.status == 'DONE'}">Đã hoàn thành</option>
+                        </select>
+                    </form>
+                    <!-- Xóa -->
+                    <form th:action="@{/tasks/{id}/delete(id=${t.taskId})}" method="post"
+                          onsubmit="return confirm('Xóa nhiệm vụ này?')">
+                        <input type="hidden" name="redirectUrl" th:value="${'/plans/' + plan.planId}">
+                        <button type="submit" class="btn btn-danger btn-sm" style="padding:4px 8px">🗑️</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fix datetime-local value format -->
+<script>
+    document.querySelector('input[name="deadline"]').min =
+        new Date().toISOString().slice(0,16);
+</script>
+</body>
+</html>

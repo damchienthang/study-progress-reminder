@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhiệm vụ — StudyReminder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav id="main-nav">
+        <div class="logo">📚 StudyReminder</div>
+        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
+        <a th:href="@{/tasks}" class="nav-btn active">✅ Nhiệm vụ</a>
+        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+        <div class="nav-right">
+            <a th:href="@{/profile}" class="avatar" th:title="${session.user.fullName}" th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+            <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+        </div>
+    </nav>
+
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-section">Tổng quan</div>
+            <a th:href="@{/dashboard}" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
+            <div class="sidebar-section">Học tập</div>
+            <a th:href="@{/courses}" class="sidebar-item"><span class="icon">📖</span>Môn học</a>
+            <a th:href="@{/tasks}" class="sidebar-item active"><span class="icon">✅</span>Nhiệm vụ</a>
+            <a th:href="@{/plans}" class="sidebar-item"><span class="icon">📅</span>Kế hoạch</a>
+            <div class="sidebar-section">Tài khoản</div>
+            <a th:href="@{/profile}" class="sidebar-item"><span class="icon">👤</span>Hồ sơ</a>
+            <a th:href="@{/logout}" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
+        </div>
+
+        <div class="main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">✅ Tất cả nhiệm vụ</h1>
+                    <div class="page-subtitle">Quản lý toàn bộ nhiệm vụ từ các kế hoạch của bạn</div>
+                </div>
+            </div>
+
+            <!-- Bộ lọc -->
+            <div class="card" style="padding:16px;margin-bottom:16px">
+                <form method="get" th:action="@{/tasks}" style="display:flex;gap:12px;align-items:flex-end">
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Trạng thái</label>
+                        <select name="status" class="form-input" style="width:160px">
+                            <option value="ALL">Tất cả</option>
+                            <option value="TODO" th:selected="${status == 'TODO'}">Chưa bắt đầu</option>
+                            <option value="IN_PROGRESS" th:selected="${status == 'IN_PROGRESS'}">Đang thực hiện</option>
+                            <option value="DONE" th:selected="${status == 'DONE'}">Đã hoàn thành</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Độ ưu tiên</label>
+                        <select name="priority" class="form-input" style="width:160px">
+                            <option value="ALL">Tất cả</option>
+                            <option value="HIGH" th:selected="${priority == 'HIGH'}">🔴 Cao</option>
+                            <option value="MEDIUM" th:selected="${priority == 'MEDIUM'}">🟡 Trung bình</option>
+                            <option value="LOW" th:selected="${priority == 'LOW'}">🟢 Thấp</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-sm">🔍 Lọc</button>
+                    <a th:href="@{/tasks}" class="btn btn-secondary btn-sm">✕ Xóa lọc</a>
+                </form>
+            </div>
+
+            <div th:if="${param.msg != null}" style="margin-bottom:12px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px">
+                <span th:if="${param.msg[0] == 'deleted'}">🗑️ Đã xóa nhiệm vụ!</span>
+            </div>
+
+            <!-- Danh sách nhiệm vụ -->
+            <div class="card">
+                <div th:if="${tasks != null and !tasks.isEmpty()}">
+                    <table style="width:100%;border-collapse:collapse;font-size:13px">
+                        <thead>
+                            <tr style="border-bottom:1px solid var(--border)">
+                                <th style="padding:12px 16px;text-align:left;color:var(--text2)">Nhiệm vụ</th>
+                                <th style="padding:12px 16px;text-align:left;color:var(--text2)">Môn học</th>
+                                <th style="padding:12px 16px;text-align:left;color:var(--text2)">Hạn chót</th>
+                                <th style="padding:12px 16px;text-align:left;color:var(--text2)">Ưu tiên</th>
+                                <th style="padding:12px 16px;text-align:left;color:var(--text2)">Trạng thái</th>
+                                <th style="padding:12px 16px;text-align:center;color:var(--text2)">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="t : ${tasks}" style="border-bottom:1px solid var(--border)">
+                                <td style="padding:12px 16px">
+                                    <div style="font-weight:600" th:style="${t.status == 'DONE' ? 'text-decoration:line-through;color:var(--text2)' : ''}" th:text="${t.taskName}"></div>
+                                    <div style="font-size:11px;color:var(--text2)" th:text="${t.description}"></div>
+                                </td>
+                                <td style="padding:12px 16px;color:var(--accent)" th:text="${t.courseName ?: '—'}">Môn học</td>
+                                <td style="padding:12px 16px">
+                                    <span th:text="${t.deadline}"></span>
+                                    <div th:if="${t.overdue and t.status != 'DONE'}" style="color:var(--red);font-size:10px;font-weight:700">⚠️ QUÁ HẠN</div>
+                                    <div th:if="${t.doneLate}" style="color:var(--orange);font-size:10px;font-weight:700">⚠️ HOÀN THÀNH TRỄ</div>
+                                </td>
+                                <td style="padding:12px 16px">
+                                    <span th:if="${t.priority == 'HIGH'}" class="tag tag-high">Cao</span>
+                                    <span th:if="${t.priority == 'MEDIUM'}" class="tag tag-medium">Trung bình</span>
+                                    <span th:if="${t.priority == 'LOW'}" class="tag tag-low">Thấp</span>
+                                </td>
+                                <td style="padding:12px 16px">
+                                    <form th:action="@{/tasks/{id}/status(id=${t.taskId})}" method="post">
+                                        <select name="status" class="form-input" style="width:auto;font-size:12px;padding:4px 8px" onchange="this.form.submit()">
+                                            <option value="TODO" th:selected="${t.status == 'TODO'}">Chưa bắt đầu</option>
+                                            <option value="IN_PROGRESS" th:selected="${t.status == 'IN_PROGRESS'}">Đang thực hiện</option>
+                                            <option value="DONE" th:selected="${t.status == 'DONE'}">Đã hoàn thành</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td style="padding:12px 16px;text-align:center">
+                                    <form th:action="@{/tasks/{id}/delete(id=${t.taskId})}" method="post" onsubmit="return confirm('Xóa nhiệm vụ này?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${tasks == null or tasks.isEmpty()}" style="padding:40px;text-align:center;color:var(--text2)">
+                    <div style="font-size:40px;margin-bottom:12px">✅</div>
+                    <div>Không tìm thấy nhiệm vụ nào.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

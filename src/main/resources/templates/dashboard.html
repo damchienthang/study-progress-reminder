@@ -17,7 +17,7 @@
         <a th:href="@{/dashboard}" class="nav-btn active">🏠 Dashboard</a>
         <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
         <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
-        <a th:href="@{/study-plans}" class="nav-btn">📅 Kế hoạch</a>
+        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
 
         <div class="nav-right">
             <button class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative">
@@ -45,7 +45,7 @@
             <a th:href="@{/tasks}" class="sidebar-item">
                 <span class="icon">✅</span>Nhiệm vụ
             </a>
-            <a th:href="@{/study-plans}" class="sidebar-item">
+            <a th:href="@{/plans}" class="sidebar-item">
                 <span class="icon">📅</span>Kế hoạch
             </a>
 
@@ -159,7 +159,7 @@
             <div class="card" style="margin-top:16px">
                 <div class="card-header">
                     <div class="card-title">📅 Kế hoạch học tập</div>
-                    <a th:href="@{/study-plans}" class="btn btn-secondary btn-sm">Xem tất cả</a>
+                    <a th:href="@{/plans}" class="btn btn-secondary btn-sm">Xem tất cả</a>
                 </div>
                 <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
                     <div th:if="${dashPlans != null and !dashPlans.isEmpty()}" th:each="p : ${dashPlans}"
@@ -181,7 +181,7 @@
                     <div th:if="${dashPlans == null or dashPlans.isEmpty()}"
                         style="color:var(--text2);font-size:13px;padding:12px">
                         Chưa có kế hoạch học tập.
-                        <a th:href="@{/study-plans}" style="color:var(--accent)">Tạo kế hoạch ngay →</a>
+                        <a th:href="@{/plans}" style="color:var(--accent)">Tạo kế hoạch ngay →</a>
                     </div>
                 </div>
             </div>

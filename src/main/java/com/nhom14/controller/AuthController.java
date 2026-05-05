@@ -68,9 +68,11 @@ public class AuthController {
     }
 
     @GetMapping("/profile")
-    public String profilePage(HttpSession session) {
-        if (session.getAttribute("user") == null)
+    public String profilePage(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user == null)
             return "redirect:/login";
+        model.addAttribute("user", user);
         return "auth/profile";
     }
 
@@ -84,9 +86,11 @@ public class AuthController {
         String err = authService.changePassword(user.getUserId(), oldPassword, newPassword);
         if (err != null) {
             model.addAttribute("error", err);
+            model.addAttribute("user", user);
             return "auth/profile";
         }
         model.addAttribute("success", "Đổi mật khẩu thành công.");
+        model.addAttribute("user", user);
         return "auth/profile";
     }
 
@@ -121,6 +125,7 @@ public class AuthController {
             session.setAttribute("user", user);
             model.addAttribute("success", "Cập nhật hồ sơ thành công.");
         }
+        model.addAttribute("user", user);
         return "auth/profile";
     }
 
