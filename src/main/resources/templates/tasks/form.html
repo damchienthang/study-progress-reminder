@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa nhiệm vụ — StudyReminder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav id="main-nav">
+        <div class="logo">📚 StudyReminder</div>
+        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+        <a th:href="@{/tasks}" class="nav-btn active">✅ Nhiệm vụ</a>
+        <div class="nav-right">
+            <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+        </div>
+    </nav>
+
+    <div class="app">
+        <div class="main" style="max-width:520px;margin:0 auto">
+            <div class="page-header">
+                <h1 class="page-title">✏️ Chỉnh sửa nhiệm vụ</h1>
+            </div>
+
+            <div class="card" style="padding:28px">
+                <div th:if="${error}" class="form-error show" style="margin-bottom:20px;padding:12px;background:rgba(248,81,73,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px" th:text="${error}"></div>
+                
+                <form th:action="@{/tasks/{id}/edit(id=${task.taskId})}" method="post">
+                    <!-- Giữ lại URL để redirect về đúng nơi (list tổng hoặc chi tiết kế hoạch) -->
+                    <input type="hidden" name="redirectUrl" th:value="${#ctx.request.getHeader('Referer')}">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tên nhiệm vụ *</label>
+                        <input type="text" name="taskName" class="form-input" th:value="${task.taskName}" required autofocus>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Mô tả</label>
+                        <textarea name="description" class="form-input" rows="3" style="resize:vertical" th:text="${task.description}"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Hạn chót *</label>
+                            <input type="datetime-local" name="deadline" class="form-input" th:value="${task.deadline}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Độ ưu tiên</label>
+                            <select name="priority" class="form-input">
+                                <option value="HIGH" th:selected="${task.priority == 'HIGH'}">🔴 Cao</option>
+                                <option value="MEDIUM" th:selected="${task.priority == 'MEDIUM'}">🟡 Trung bình</option>
+                                <option value="LOW" th:selected="${task.priority == 'LOW'}">🟢 Thấp</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex;gap:12px;margin-top:24px">
+                        <button type="submit" class="btn btn-primary btn-full">Lưu thay đổi</button>
+                        <a href="javascript:history.back()" class="btn btn-secondary" style="width:120px;justify-content:center">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

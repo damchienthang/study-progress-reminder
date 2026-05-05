@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kế hoạch học tập — StudyReminder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav id="main-nav">
+    <div class="logo">📚 StudyReminder</div>
+    <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+    <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
+    <a th:href="@{/plans}" class="nav-btn active">📅 Kế hoạch</a>
+    <div class="nav-right">
+        <a th:href="@{/profile}" class="avatar" th:title="${session.user.fullName}"
+           th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+        <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+    </div>
+</nav>
+<div class="app">
+    <div class="sidebar">
+        <div class="sidebar-section">Tổng quan</div>
+        <a th:href="@{/dashboard}" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
+        <div class="sidebar-section">Học tập</div>
+        <a th:href="@{/courses}" class="sidebar-item"><span class="icon">📖</span>Môn học</a>
+        <a th:href="@{/plans}" class="sidebar-item active"><span class="icon">📅</span>Kế hoạch</a>
+        <div class="sidebar-section">Tài khoản</div>
+        <a th:href="@{/profile}" class="sidebar-item"><span class="icon">👤</span>Hồ sơ</a>
+        <a th:href="@{/logout}" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
+    </div>
+    <div class="main">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">📅 Kế hoạch học tập</h1>
+                <div class="page-subtitle">Quản lý các kế hoạch học tập của bạn</div>
+            </div>
+            <a th:href="@{/plans/new}" class="btn btn-primary" id="btn-create-plan">+ Tạo kế hoạch mới</a>
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${param.msg != null}" class="alert alert-success" style="margin-bottom:16px;padding:12px 16px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green)">
+            <span th:switch="${param.msg[0]}">
+                <span th:case="'created'">✅ Tạo kế hoạch thành công!</span>
+                <span th:case="'updated'">✅ Cập nhật kế hoạch thành công!</span>
+                <span th:case="'deleted'">✅ Đã xóa kế hoạch!</span>
+            </span>
+        </div>
+
+        <!-- Danh sách kế hoạch -->
+        <div th:if="${plans != null and !plans.isEmpty()}" style="display:flex;flex-direction:column;gap:12px">
+            <div th:each="p : ${plans}" class="card" style="padding:20px">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                    <div style="flex:1">
+                        <a th:href="@{/plans/{id}(id=${p.planId})}"
+                           style="font-size:16px;font-weight:700;color:var(--text1);text-decoration:none"
+                           th:text="${p.planName}">Kế hoạch</a>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+                            <span style="font-size:12px;color:var(--text2)" th:text="${'📅 ' + p.startDate + ' → ' + p.endDate}"></span>
+                            <span th:if="${p.courseName != null}"
+                                  style="font-size:10px;padding:2px 6px;background:var(--bg3);color:var(--accent);border-radius:4px"
+                                  th:text="${p.courseName}">Môn học</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:8px">
+                        <a th:href="@{/plans/{id}/edit(id=${p.planId})}" class="btn btn-secondary btn-sm">✏️ Sửa</a>
+                        <form th:action="@{/plans/{id}/delete(id=${p.planId})}" method="post"
+                              onsubmit="return confirm('Xóa kế hoạch này và toàn bộ nhiệm vụ liên quan?')">
+                            <button type="submit" class="btn btn-danger btn-sm">🗑️ Xóa</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Progress bar -->
+                <div style="margin-top:14px">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                        <span style="color:var(--text2)" th:text="${p.completeTask + '/' + p.totalTask + ' nhiệm vụ hoàn thành'}"></span>
+                        <span style="color:var(--green);font-family:monospace" th:text="${p.completeRate + '%'}">0%</span>
+                    </div>
+                    <div class="progress-wrap">
+                        <div class="progress-bar blue" th:style="'width:' + ${p.completeRate} + '%'"></div>
+                    </div>
+                </div>
+                <div style="margin-top:10px">
+                    <a th:href="@{/plans/{id}(id=${p.planId})}" class="btn btn-secondary btn-sm">📋 Xem chi tiết & nhiệm vụ →</a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${plans == null or plans.isEmpty()}"
+             class="card" style="padding:40px;text-align:center;color:var(--text2)">
+            <div style="font-size:48px;margin-bottom:12px">📅</div>
+            <div style="font-size:16px;margin-bottom:8px">Chưa có kế hoạch học tập nào</div>
+            <a th:href="@{/plans/new}" class="btn btn-primary">Tạo kế hoạch đầu tiên →</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

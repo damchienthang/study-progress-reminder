@@ -2,39 +2,120 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Hồ sơ — Study Reminder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ — StudyReminder</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<nav class="navbar">
-    <span class="navbar-brand">📚 Study Reminder</span>
-    <div class="navbar-menu">
-        <a th:href="@{/dashboard}">Dashboard</a>
-        <a th:href="@{/logout}" class="btn-logout">Đăng xuất</a>
-    </div>
-</nav>
-<div class="container">
-    <h2>Hồ sơ cá nhân</h2>
-    <div class="card" style="max-width:480px;margin-top:20px;">
-        <p><b>Họ tên:</b> <span th:text="${session.user.fullName}"></span></p>
-        <p><b>Email:</b>  <span th:text="${session.user.email}"></span></p>
-        <p><b>Vai trò:</b><span th:text="${session.user.role}"></span></p>
-        <hr style="margin:20px 0;">
-        <h3 style="margin-bottom:16px;">Đổi mật khẩu</h3>
-        <div th:if="${error}"   class="alert alert-error"   th:text="${error}"></div>
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <form method="post" th:action="@{/profile/change-password}">
-            <div class="form-group">
-                <label>Mật khẩu cũ</label>
-                <input type="password" name="oldPassword" required>
+    <nav id="main-nav">
+        <div class="logo">📚 StudyReminder</div>
+        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
+        <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
+        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+        <div class="nav-right">
+            <a th:href="@{/profile}" class="avatar active" th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+            <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+        </div>
+    </nav>
+
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-section">Tổng quan</div>
+            <a th:href="@{/dashboard}" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
+            <div class="sidebar-section">Học tập</div>
+            <a th:href="@{/courses}" class="sidebar-item"><span class="icon">📖</span>Môn học</a>
+            <a th:href="@{/tasks}" class="sidebar-item"><span class="icon">✅</span>Nhiệm vụ</a>
+            <a th:href="@{/plans}" class="sidebar-item"><span class="icon">📅</span>Kế hoạch</a>
+            <div class="sidebar-section">Tài khoản</div>
+            <a th:href="@{/profile}" class="sidebar-item active"><span class="icon">👤</span>Hồ sơ</a>
+            <a th:href="@{/logout}" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
+        </div>
+
+        <div class="main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">👤 Hồ sơ cá nhân</h1>
+                    <div class="page-subtitle">Quản lý thông tin tài khoản và bảo mật</div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Mật khẩu mới</label>
-                <input type="password" name="newPassword" required>
+
+            <div th:if="${success}" class="alert alert-success" style="margin-bottom:16px;padding:12px;background:rgba(63,185,80,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-error" style="margin-bottom:16px;padding:12px;background:rgba(248,81,73,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px" th:text="${error}"></div>
+
+            <div class="two-col">
+                <!-- Thông tin cơ bản -->
+                <div class="card">
+                    <div class="card-header"><div class="card-title">📝 Thông tin cơ bản</div></div>
+                    <div style="padding:24px">
+                        <form th:action="@{/profile/update}" method="post">
+                            <div class="form-group">
+                                <label class="form-label">Email (Không thể thay đổi)</label>
+                                <input type="text" class="form-input" th:value="${session.user.email}" disabled style="opacity:0.6;cursor:not-allowed">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" name="fullName" class="form-input" th:value="${user.fullName}" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Mã sinh viên</label>
+                                    <input type="text" name="studentId" class="form-input" th:value="${user.studentId}" placeholder="VD: B21DCCN000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tên hiển thị</label>
+                                    <input type="text" name="username" class="form-input" th:value="${user.username}" placeholder="VD: linh_nd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Vai trò</label>
+                                <div style="display:flex;gap:8px;align-items:center">
+                                    <span th:if="${session.user.isAdmin()}" class="tag role-admin">ADMIN</span>
+                                    <span th:if="${!session.user.isAdmin()}" class="tag role-student">STUDENT</span>
+                                    <span style="font-size:12px;color:var(--text2)" th:text="'Ngày tạo: ' + ${session.user.createdAt}"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Lưu thông tin</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Đổi mật khẩu -->
+                <div class="card">
+                    <div class="card-header"><div class="card-title">🔒 Đổi mật khẩu</div></div>
+                    <div style="padding:24px">
+                        <form th:action="@{/profile/change-password}" method="post">
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu cũ</label>
+                                <input type="password" name="oldPassword" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu mới</label>
+                                <input type="password" name="newPassword" class="form-input" required minlength="6">
+                            </div>
+                            <button type="submit" class="btn btn-secondary btn-full">Cập nhật mật khẩu</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-        </form>
+
+            <!-- Vùng nguy hiểm -->
+            <div class="card" style="margin-top:24px;border-color:rgba(248,81,73,0.4)">
+                <div class="card-header" style="background:rgba(248,81,73,0.05)">
+                    <div class="card-title" style="color:var(--red)">⚠️ Vùng nguy hiểm</div>
+                </div>
+                <div style="padding:20px;display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div style="font-weight:700;font-size:14px">Xóa tài khoản</div>
+                        <div style="font-size:12px;color:var(--text2);margin-top:2px">Một khi bạn xóa tài khoản, tất cả dữ liệu kế hoạch, môn học và nhiệm vụ sẽ bị xóa vĩnh viễn.</div>
+                    </div>
+                    <form th:action="@{/profile/delete}" method="post" onsubmit="return confirm('BẠN CÓ CHẮC CHẮN MUỐN XÓA TÀI KHOẢN? Hành động này không thể hoàn tác.')">
+                        <button type="submit" class="btn btn-danger">Xóa tài khoản của tôi</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 </body>
 </html>

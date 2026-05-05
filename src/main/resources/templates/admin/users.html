@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản trị — StudyReminder</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav id="main-nav">
+    <div class="logo">📚 StudyReminder [ADMIN]</div>
+    <a th:href="@{/admin/users}" class="nav-btn active">👥 Người dùng</a>
+    <div class="nav-right">
+        <span style="color:var(--text2);font-size:13px" th:text="${session.user.fullName}">Admin</span>
+        <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
+    </div>
+</nav>
+<div class="app">
+    <div class="main">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">👥 Quản lý người dùng</h1>
+                <div class="page-subtitle">Xem và quản lý tài khoản trong hệ thống</div>
+            </div>
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${param.msg != null}" style="margin-bottom:12px;padding:10px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px">
+            <span th:if="${param.msg[0] == 'locked'}">🔒 Đã khóa tài khoản!</span>
+            <span th:if="${param.msg[0] == 'unlocked'}">🔓 Đã mở khóa tài khoản!</span>
+            <span th:if="${param.msg[0] == 'deleted'}">🗑️ Đã xóa tài khoản!</span>
+        </div>
+
+        <div class="card">
+            <div th:if="${users != null and !users.isEmpty()}">
+                <table style="width:100%;border-collapse:collapse;font-size:13px">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--bg3)">
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">ID</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Họ tên</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Mã SV</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Email</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Vai trò</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Trạng thái</th>
+                            <th style="padding:12px 16px;text-align:left;color:var(--text2);font-weight:600">Ngày tạo</th>
+                            <th style="padding:12px 16px;text-align:center;color:var(--text2);font-weight:600">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${users}" style="border-bottom:1px solid var(--bg3)">
+                            <td style="padding:12px 16px;color:var(--text2);font-family:monospace" th:text="${u.userId}">1</td>
+                            <td style="padding:12px 16px;font-weight:600" th:text="${u.fullName}">Tên</td>
+                            <td style="padding:12px 16px;color:var(--text2)" th:text="${u.studentId ?: '—'}">MSV</td>
+                            <td style="padding:12px 16px;color:var(--text2)" th:text="${u.email}">email</td>
+                            <td style="padding:12px 16px">
+                                <span th:text="${u.roleName}"
+                                      th:style="${u.isAdmin() ? 'color:var(--orange);font-weight:600' : 'color:var(--text2)'}">STUDENT</span>
+                            </td>
+                            <td style="padding:12px 16px">
+                                <span th:if="${u.status == 'ACTIVE'}" style="color:var(--green)">● Hoạt động</span>
+                                <span th:if="${u.status == 'LOCKED'}" style="color:var(--red)">🔒 Đã khóa</span>
+                            </td>
+                            <td style="padding:12px 16px;color:var(--text2);font-size:12px" th:text="${u.createdAt}"></td>
+                            <td style="padding:12px 16px">
+                                <div style="display:flex;gap:6px;justify-content:center" th:if="${!u.isAdmin()}">
+                                    <form th:if="${u.status == 'ACTIVE'}"
+                                          th:action="@{/admin/users/{id}/lock(id=${u.userId})}" method="post">
+                                        <button type="submit" class="btn btn-secondary btn-sm">🔒 Khóa</button>
+                                    </form>
+                                    <form th:if="${u.status == 'LOCKED'}"
+                                          th:action="@{/admin/users/{id}/unlock(id=${u.userId})}" method="post">
+                                        <button type="submit" class="btn btn-secondary btn-sm">🔓 Mở khóa</button>
+                                    </form>
+                                    <form th:action="@{/admin/users/{id}/delete(id=${u.userId})}" method="post"
+                                          onsubmit="return confirm('Xóa tài khoản này? Toàn bộ dữ liệu của họ sẽ bị xóa.')">
+                                        <button type="submit" class="btn btn-danger btn-sm">🗑️ Xóa</button>
+                                    </form>
+                                </div>
+                                <span th:if="${u.isAdmin()}" style="color:var(--text2);font-size:12px">Admin</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${users == null or users.isEmpty()}" style="padding:40px;text-align:center;color:var(--text2)">
+                Chưa có người dùng nào.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

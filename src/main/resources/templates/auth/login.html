@@ -2,40 +2,62 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng nhập — Study Reminder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập — StudyReminder</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #1a2332, var(--bg));
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+        .auth-card {
+            width: 400px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: slideUp 0.4s ease;
+        }
+        .auth-logo {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 32px;
+        }
+    </style>
 </head>
-<body class="auth-page">
-<div class="auth-card">
-    <div class="auth-header">
-        <h1>📚 Study Reminder</h1>
-        <p>Quản lý tiến trình học tập</p>
-    </div>
-    <div class="auth-body">
-        <h2>Đăng nhập</h2>
+<body>
+    <div class="auth-card">
+        <div class="auth-logo">📚 StudyReminder</div>
+        <h2 style="font-size:20px;text-align:center;margin-bottom:8px">Chào mừng trở lại</h2>
+        <p style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:32px">Đăng nhập để quản lý tiến độ học tập của bạn</p>
 
-        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-        <div th:if="${param.registered}" class="alert alert-success">
-            Đăng ký thành công! Vui lòng đăng nhập.
-        </div>
+        <div th:if="${error}" style="margin-bottom:20px;padding:12px;background:rgba(248,81,73,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px;text-align:center" th:text="${error}"></div>
+        <div th:if="${param.registered}" style="margin-bottom:20px;padding:12px;background:rgba(63,185,80,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px;text-align:center">✅ Đăng ký thành công! Hãy đăng nhập.</div>
+        <div th:if="${param.deleted}" style="margin-bottom:20px;padding:12px;background:rgba(139,148,158,0.1);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;text-align:center">Tài khoản đã được xóa.</div>
 
-        <form method="post" th:action="@{/login}">
+        <form th:action="@{/login}" method="post">
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required placeholder="example@email.com">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" placeholder="name@example.com" required autofocus>
             </div>
-            <div class="form-group">
-                <label>Mật khẩu</label>
-                <input type="password" name="password" required placeholder="Nhập mật khẩu">
+            <div class="form-group" style="margin-bottom:24px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                    <label class="form-label" style="margin-bottom:0">Mật khẩu</label>
+                    <a href="#" style="font-size:11px">Quên mật khẩu?</a>
+                </div>
+                <input type="password" name="password" class="form-input" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-full">Đăng nhập</button>
+            <button type="submit" class="btn btn-primary btn-full" style="padding:12px;font-size:14px">Đăng nhập</button>
         </form>
 
-        <p class="auth-link">
-            Chưa có tài khoản?
-            <a th:href="@{/register}">Đăng ký ngay</a>
+        <p style="text-align:center;font-size:13px;color:var(--text2);margin-top:32px">
+            Chưa có tài khoản? <a th:href="@{/register}" style="font-weight:700">Đăng ký ngay</a>
         </p>
     </div>
-</div>
 </body>
 </html>
