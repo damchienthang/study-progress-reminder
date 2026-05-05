@@ -13,84 +13,110 @@ public class UserDAO {
 
     public boolean insert(User u) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "INSERT INTO users(full_name,email,password,role,status) VALUES(?,?,?,?,?)")) {
-            ps.setString(1, u.getFullName()); ps.setString(2, u.getEmail());
-            ps.setString(3, u.getPassword()); ps.setString(4, u.getRole());
-            ps.setString(5, u.getStatus());
+                "INSERT INTO users(fullName, email, password, roleId, status) VALUES(?,?,?,?,?)")) {
+            ps.setString(1, u.getFullName());
+            ps.setString(2, u.getEmail());
+            ps.setString(3, u.getPassword());
+            ps.setInt(4, "ADMIN".equalsIgnoreCase(u.getRole()) ? 2 : 1);
+            ps.setString(5, u.getStatus() != null ? u.getStatus() : "ACTIVE");
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public User findByEmail(String email) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "SELECT * FROM users WHERE email=?")) {
+                "SELECT u.*, r.roleName as role FROM users u JOIN roles r ON u.roleId = r.roleId WHERE u.email=?")) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return map(rs);
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     public User findById(int id) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "SELECT * FROM users WHERE user_id=?")) {
+                "SELECT u.*, r.roleName as role FROM users u JOIN roles r ON u.roleId = r.roleId WHERE u.userId=?")) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return map(rs);
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     public List<User> findAll() {
         List<User> list = new ArrayList<>();
         try (Statement st = conn().createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM users ORDER BY created_at DESC")) {
+             ResultSet rs = st.executeQuery("SELECT u.*, r.roleName as role FROM users u JOIN roles r ON u.roleId = r.roleId ORDER BY u.createdAt DESC")) {
             while (rs.next()) list.add(map(rs));
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return list;
     }
 
     public boolean updateStatus(int userId, String status) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "UPDATE users SET status=? WHERE user_id=?")) {
-            ps.setString(1, status); ps.setInt(2, userId);
+                "UPDATE users SET status=? WHERE userId=?")) {
+            ps.setString(1, status);
+            ps.setInt(2, userId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean updateProfile(int userId, String fullName) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "UPDATE users SET full_name=? WHERE user_id=?")) {
-            ps.setString(1, fullName); ps.setInt(2, userId);
+                "UPDATE users SET fullName=? WHERE userId=?")) {
+            ps.setString(1, fullName);
+            ps.setInt(2, userId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean updatePassword(int userId, String hashed) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "UPDATE users SET password=? WHERE user_id=?")) {
-            ps.setString(1, hashed); ps.setInt(2, userId);
+                "UPDATE users SET password=? WHERE userId=?")) {
+            ps.setString(1, hashed);
+            ps.setInt(2, userId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean delete(int userId) {
         try (PreparedStatement ps = conn().prepareStatement(
-                "DELETE FROM users WHERE user_id=?")) {
+                "DELETE FROM users WHERE userId=?")) {
             ps.setInt(1, userId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private User map(ResultSet rs) throws SQLException {
         User u = new User();
-        u.setUserId(rs.getInt("user_id"));
-        u.setFullName(rs.getString("full_name"));
+        u.setUserId(rs.getInt("userId"));
+        u.setFullName(rs.getString("fullName"));
         u.setEmail(rs.getString("email"));
         u.setPassword(rs.getString("password"));
-        u.setRole(rs.getString("role"));
+        u.setRole(rs.getString("role")); // From JOIN
         u.setStatus(rs.getString("status"));
-        u.setCreatedAt(rs.getString("created_at"));
+        u.setCreatedAt(rs.getString("createdAt"));
         return u;
     }
 }

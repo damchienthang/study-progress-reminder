@@ -18,14 +18,13 @@ public class App {
     public void onReady() {
         // Seed tài khoản admin mặc định nếu chưa tồn tại
         UserDAO userDAO = new UserDAO();
-        String adminEmail = "admin@studyreminder.com";
+        String adminEmail = "admin@gmail.com";
+
         if (userDAO.findByEmail(adminEmail) == null) {
-            User admin = new User("Administrator", adminEmail,
-                    AuthService.hash("Admin@123"), "ADMIN");
+            User admin = new User("Hệ thống Admin", adminEmail,
+                    AuthService.hash("admin123"), "ADMIN");
             userDAO.insert(admin);
-            System.out.println("[SEED] Admin created   :");
-            System.out.println("       Email   : " + adminEmail);
-            System.out.println("       Password: Admin@123");
+            System.out.println("[SEED] Admin account created successfully!");
         }
 
         System.out.println();
