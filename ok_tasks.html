@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhiệm vụ — StudyReminder</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav id="main-nav">
+        <div class="logo">📚 StudyReminder</div>
+        <a href="/dashboard" class="nav-btn">🏠 Dashboard</a>
+        <a href="/courses" class="nav-btn">📖 Môn học</a>
+        <a href="/tasks" class="nav-btn active">✅ Nhiệm vụ</a>
+        <a href="/plans" class="nav-btn">📅 Kế hoạch</a>
+        <div class="nav-right">
+            <a href="/profile" class="avatar" title="Hệ thống Admin">H</a>
+            <a href="/logout" class="btn btn-secondary btn-sm">Đăng xuất</a>
+        </div>
+    </nav>
+
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-section">Tổng quan</div>
+            <a href="/dashboard" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
+            <div class="sidebar-section">Học tập</div>
+            <a href="/courses" class="sidebar-item"><span class="icon">📖</span>Môn học</a>
+            <a href="/tasks" class="sidebar-item active"><span class="icon">✅</span>Nhiệm vụ</a>
+            <a href="/plans" class="sidebar-item"><span class="icon">📅</span>Kế hoạch</a>
+            <div class="sidebar-section">Tài khoản</div>
+            <a href="/profile" class="sidebar-item"><span class="icon">👤</span>Hồ sơ</a>
+            <a href="/logout" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
+        </div>
+
+        <div class="main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">✅ Tất cả nhiệm vụ</h1>
+                    <div class="page-subtitle">Quản lý toàn bộ nhiệm vụ từ các kế hoạch của bạn</div>
+                </div>
+            </div>
+
+            <!-- Bộ lọc -->
+            <div class="card" style="padding:16px;margin-bottom:16px">
+                <form method="get" action="/tasks" style="display:flex;gap:12px;align-items:flex-end">
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Trạng thái</label>
+                        <select name="status" class="form-input" style="width:160px">
+                            <option value="ALL">Tất cả</option>
+                            <option value="TODO">Chưa bắt đầu</option>
+                            <option value="IN_PROGRESS">Đang thực hiện</option>
+                            <option value="DONE">Đã hoàn thành</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0">
+                        <label class="form-label">Độ ưu tiên</label>
+                        <select name="priority" class="form-input" style="width:160px">
+                            <option value="ALL">Tất cả</option>
+                            <option value="HIGH">🔴 Cao</option>
+                            <option value="MEDIUM">🟡 Trung bình</option>
+                            <option value="LOW">🟢 Thấp</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-sm">🔍 Lọc</button>
+                    <a href="/tasks" class="btn btn-secondary btn-sm">✕ Xóa lọc</a>
+                </form>
+            </div>
+
+            
+
+            <!-- Danh sách nhiệm vụ -->
+            <div class="card">
+                
+                <div style="padding:40px;text-align:center;color:var(--text2)">
+                    <div style="font-size:40px;margin-bottom:12px">✅</div>
+                    <div>Không tìm thấy nhiệm vụ nào.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

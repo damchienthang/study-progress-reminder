@@ -6,30 +6,52 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<nav id="main-nav">
-    <div class="logo">📚 StudyReminder</div>
-    <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
-    <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
-    <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
-    <a th:href="@{/plans}" class="nav-btn active">📅 Kế hoạch</a>
-    <div class="nav-right">
-        <a th:href="@{/profile}" class="avatar" th:title="${session.user.fullName}"
-           th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
-        <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
-    </div>
-</nav>
-<div class="app">
-    <div class="sidebar">
-        <div class="sidebar-section">Tổng quan</div>
-        <a th:href="@{/dashboard}" class="sidebar-item"><span class="icon">🏠</span>Dashboard</a>
-        <div class="sidebar-section">Học tập</div>
-        <a th:href="@{/courses}" class="sidebar-item"><span class="icon">📖</span>Môn học</a>
-        <a th:href="@{/tasks}" class="sidebar-item"><span class="icon">✅</span>Nhiệm vụ</a>
-        <a th:href="@{/plans}" class="sidebar-item active"><span class="icon">📅</span>Kế hoạch</a>
-        <div class="sidebar-section">Tài khoản</div>
-        <a th:href="@{/profile}" class="sidebar-item"><span class="icon">👤</span>Hồ sơ</a>
-        <a th:href="@{/logout}" class="sidebar-item"><span class="icon">🚪</span>Đăng xuất</a>
-    </div>
+    <!-- ════ NAV ════ -->
+    <nav id="main-nav">
+        <div class="logo">📚 StudyReminder</div>
+        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
+        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
+        <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
+        <a th:href="@{/plans}" class="nav-btn active">📅 Kế hoạch</a>
+
+        <div class="nav-right">
+            <button class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative">
+                🔔 <span class="badge" id="notif-badge" style="display:none">0</span>
+            </button>
+            <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
+                th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
+        </div>
+    </nav>
+
+    <!-- ════ APP ════ -->
+    <div class="app" id="main-app">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="main-sidebar">
+            <div class="sidebar-section">Tổng quan</div>
+            <a th:href="@{/dashboard}" class="sidebar-item">
+                <span class="icon">🏠</span>Dashboard
+            </a>
+
+            <div class="sidebar-section">Học tập</div>
+            <a th:href="@{/courses}" class="sidebar-item">
+                <span class="icon">📖</span>Môn học
+            </a>
+            <a th:href="@{/tasks}" class="sidebar-item">
+                <span class="icon">✅</span>Nhiệm vụ
+            </a>
+            <a th:href="@{/plans}" class="sidebar-item active">
+                <span class="icon">📅</span>Kế hoạch
+            </a>
+
+            <div class="sidebar-section">Tài khoản</div>
+            <a th:href="@{/profile}" class="sidebar-item">
+                <span class="icon">👤</span>Hồ sơ
+            </a>
+            <a th:href="@{/logout}" class="sidebar-item">
+                <span class="icon">🚪</span>Đăng xuất
+            </a>
+        </div>
     <div class="main">
         <!-- Header -->
         <div class="page-header">
