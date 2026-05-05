@@ -29,68 +29,140 @@ public class DatabaseConnection {
     private void initSchema() throws SQLException {
         Statement st = connection.createStatement();
 
+        // Bảng 1: roles — Quản lý danh mục phân quyền (PK: roleId)
+        st.execute("""
+            CREATE TABLE IF NOT EXISTS roles (
+                roleId    INTEGER PRIMARY KEY AUTOINCREMENT,
+                roleName  TEXT NOT NULL UNIQUE
+            )
+        """);
+
+        st.execute("INSERT OR IGNORE INTO roles(roleId, roleName) VALUES (1, 'STUDENT')");
+        st.execute("INSERT OR IGNORE INTO roles(roleId, roleName) VALUES (2, 'ADMIN')");
+
+        // Seed tài khoản Admin mặc định (Pass: admin123)
+        st.execute("""
+            INSERT OR IGNORE INTO users(fullName, email, password, roleId, status)
+            VALUES ('Hệ thống Admin', 'admin@gmail.com', 'admin123', 2, 'ACTIVE')
+        """);
+
+        // Bảng 2: users — Tài khoản người dùng (PK: userId, FK: roleId)
         st.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                user_id    INTEGER PRIMARY KEY AUTOINCREMENT,
-                full_name  TEXT NOT NULL,
-                email      TEXT NOT NULL UNIQUE,
-                password   TEXT NOT NULL,
-                role       TEXT NOT NULL DEFAULT 'STUDENT',
-                status     TEXT NOT NULL DEFAULT 'ACTIVE',
-                created_at TEXT DEFAULT (datetime('now'))
+                userId    INTEGER PRIMARY KEY AUTOINCREMENT,
+                fullName  TEXT NOT NULL,
+                studentId TEXT,
+                username  TEXT,
+                email     TEXT NOT NULL UNIQUE,
+                password  TEXT NOT NULL,
+                roleId    INTEGER NOT NULL DEFAULT 1,
+                status    TEXT NOT NULL DEFAULT 'ACTIVE',
+                createdAt TEXT DEFAULT (datetime('now')),
+                FOREIGN KEY (roleId) REFERENCES roles(roleId) ON DELETE RESTRICT
             )
         """);
 
+        // Bảng 3: passwordResetTokens — Token khôi phục mật khẩu (PK: tokenId, FK: userId)
         st.execute("""
-            CREATE TABLE IF NOT EXISTS study_plans (
-                plan_id    INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id    INTEGER NOT NULL,
-                plan_name  TEXT NOT NULL,
-                start_date TEXT NOT NULL,
-                end_date   TEXT NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+            CREATE TABLE IF NOT EXISTS passwordResetTokens (
+                tokenId    INTEGER PRIMARY KEY AUTOINCREMENT,
+                userId     INTEGER NOT NULL,
+                token      TEXT NOT NULL UNIQUE,
+                createdAt  TEXT DEFAULT (datetime('now')),
+                expiryDate TEXT NOT NULL,
+                FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE
             )
         """);
 
+        // Bảng 4: studyPlans — Kế hoạch học tập (PK: planId, FK: userId)
+        st.execute("""
+            CREATE TABLE IF NOT EXISTS studyPlans (
+                planId    INTEGER PRIMARY KEY AUTOINCREMENT,
+                userId    INTEGER NOT NULL,
+                courseId  INTEGER,
+                planName  TEXT NOT NULL,
+                startDate TEXT NOT NULL,
+                endDate   TEXT NOT NULL,
+                FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+                FOREIGN KEY (courseId) REFERENCES courses(courseId) ON DELETE SET NULL
+            )
+        """);
+
+        // Bảng 5: courses — Môn học (PK: courseId, FK: userId)
         st.execute("""
             CREATE TABLE IF NOT EXISTS courses (
-                course_id   INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id     INTEGER NOT NULL,
-                course_name TEXT NOT NULL,
-                course_code TEXT,
-                credits     INTEGER DEFAULT 0,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+                courseId   INTEGER PRIMARY KEY AUTOINCREMENT,
+                userId     INTEGER NOT NULL,
+                courseName TEXT NOT NULL,
+                courseCode TEXT,
+                lecturer   TEXT,
+                credits    INTEGER DEFAULT 0,
+                semester   TEXT,
+                FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE
             )
         """);
 
+        // Bảng 6: tasks — Nhiệm vụ học tập (PK: taskId, FK: planId, courseId)
         st.execute("""
             CREATE TABLE IF NOT EXISTS tasks (
-                task_id     INTEGER PRIMARY KEY AUTOINCREMENT,
-                plan_id     INTEGER NOT NULL,
-                course_id   INTEGER,
-                task_name   TEXT NOT NULL,
+                taskId      INTEGER PRIMARY KEY AUTOINCREMENT,
+                planId      INTEGER NOT NULL,
+                courseId    INTEGER,
+                taskName    TEXT NOT NULL,
                 description TEXT,
                 deadline    TEXT NOT NULL,
-                priority    TEXT NOT NULL DEFAULT 'MEDIUM',
-                status      TEXT NOT NULL DEFAULT 'TODO',
-                FOREIGN KEY (plan_id)   REFERENCES study_plans(plan_id) ON DELETE CASCADE,
-                FOREIGN KEY (course_id) REFERENCES courses(course_id)   ON DELETE SET NULL
+                priority    TEXT NOT NULL DEFAULT 'MEDIUM'
+                                CHECK (priority IN ('LOW','MEDIUM','HIGH')),
+                status      TEXT NOT NULL DEFAULT 'TODO'
+                                CHECK (status IN ('TODO','IN_PROGRESS','DONE')),
+                completedAt TEXT,
+                FOREIGN KEY (planId)   REFERENCES studyPlans(planId)  ON DELETE CASCADE,
+                FOREIGN KEY (courseId) REFERENCES courses(courseId)    ON DELETE SET NULL
             )
         """);
 
+        // Bảng 7: reminders — Nhắc nhở (PK: reminderId, FK: taskId, userId)
         st.execute("""
             CREATE TABLE IF NOT EXISTS reminders (
-                reminder_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                task_id     INTEGER NOT NULL,
-                user_id     INTEGER NOT NULL,
-                message     TEXT NOT NULL,
-                sent_at     TEXT DEFAULT (datetime('now')),
-                is_read     INTEGER NOT NULL DEFAULT 0,
-                FOREIGN KEY (task_id) REFERENCES tasks(task_id)   ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES users(user_id)   ON DELETE CASCADE
+                reminderId INTEGER PRIMARY KEY AUTOINCREMENT,
+                taskId     INTEGER NOT NULL,
+                userId     INTEGER NOT NULL,
+                message    TEXT NOT NULL,
+                sentAt     TEXT DEFAULT (datetime('now')),
+                isRead     INTEGER NOT NULL DEFAULT 0,
+                FOREIGN KEY (taskId)  REFERENCES tasks(taskId)   ON DELETE CASCADE,
+                FOREIGN KEY (userId)  REFERENCES users(userId)   ON DELETE CASCADE
             )
         """);
 
+        // Bảng 8: progress — Tiến độ học tập (PK: progressId, FK: planId, quan hệ 1-1)
+        st.execute("""
+            CREATE TABLE IF NOT EXISTS progress (
+                progressId   INTEGER PRIMARY KEY AUTOINCREMENT,
+                planId       INTEGER NOT NULL UNIQUE,
+                totalTask    INTEGER NOT NULL DEFAULT 0,
+                completeTask INTEGER NOT NULL DEFAULT 0
+                                 CHECK (completeTask >= 0),
+                completeRate REAL NOT NULL DEFAULT 0
+                                 CHECK (completeRate >= 0 AND completeRate <= 100),
+                FOREIGN KEY (planId) REFERENCES studyPlans(planId) ON DELETE CASCADE
+            )
+        """);
+
+        // Cập nhật schema (Migration)
+        addColumnIfNotExists(st, "users", "studentId", "TEXT");
+        addColumnIfNotExists(st, "users", "username", "TEXT");
+        addColumnIfNotExists(st, "courses", "lecturer", "TEXT");
+        addColumnIfNotExists(st, "studyPlans", "courseId", "INTEGER");
+
         st.close();
+    }
+
+    private void addColumnIfNotExists(Statement st, String table, String column, String type) {
+        try {
+            st.execute("ALTER TABLE " + table + " ADD COLUMN " + column + " " + type);
+        } catch (SQLException e) {
+            // Cột đã tồn tại hoặc lỗi khác, bỏ qua
+        }
     }
 }
