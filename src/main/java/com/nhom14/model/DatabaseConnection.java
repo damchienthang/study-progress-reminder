@@ -29,6 +29,18 @@ public class DatabaseConnection {
     private void initSchema() throws SQLException {
         Statement st = connection.createStatement();
 
+        // 1. ROLES
+        st.execute("""
+            CREATE TABLE IF NOT EXISTS roles (
+                role_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                role_name TEXT UNIQUE NOT NULL
+            )
+        """);
+
+        st.execute("INSERT OR IGNORE INTO roles (role_name) VALUES ('STUDENT')");
+        st.execute("INSERT OR IGNORE INTO roles (role_name) VALUES ('ADMIN')");
+
+        // 2. USERS
         st.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 user_id    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,6 +53,18 @@ public class DatabaseConnection {
             )
         """);
 
+        // 3. PASSWORD_RESET_TOKENS
+        st.execute("""
+            CREATE TABLE IF NOT EXISTS password_reset_tokens (
+                token_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                token TEXT NOT NULL,
+                expiry_date DATETIME NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+            )
+        """);
+
+        // 4. STUDY_PLANS
         st.execute("""
             CREATE TABLE IF NOT EXISTS study_plans (
                 plan_id    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,6 +76,7 @@ public class DatabaseConnection {
             )
         """);
 
+        // 5. COURSES
         st.execute("""
             CREATE TABLE IF NOT EXISTS courses (
                 course_id   INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,6 +88,7 @@ public class DatabaseConnection {
             )
         """);
 
+        // 6. TASKS
         st.execute("""
             CREATE TABLE IF NOT EXISTS tasks (
                 task_id     INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,6 +104,19 @@ public class DatabaseConnection {
             )
         """);
 
+        // 7. PROGRESS
+        st.execute("""
+            CREATE TABLE IF NOT EXISTS progress (
+                progress_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                plan_id INTEGER NOT NULL UNIQUE,
+                total_tasks INTEGER DEFAULT 0,
+                completed_tasks INTEGER DEFAULT 0,
+                complete_rate REAL DEFAULT 0.0,
+                FOREIGN KEY(plan_id) REFERENCES study_plans(plan_id) ON DELETE CASCADE
+            )
+        """);
+
+        // 8. REMINDERS
         st.execute("""
             CREATE TABLE IF NOT EXISTS reminders (
                 reminder_id INTEGER PRIMARY KEY AUTOINCREMENT,
