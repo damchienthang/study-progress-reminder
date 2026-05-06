@@ -3948,46 +3948,62 @@ Correct tasks shown with appropriate labels (Upcoming / Overdue)
 —
 Chrome
 Pass
-CHƯƠNG 7: THIẾT KẾ HỆ THỐNG
+CHƯƠNG 7: THIẾT KẾ VÀ CÀI ĐẶT HỆ THỐNG
+
 7. Thiết kế và cài đặt hệ thống
 7.1. Môi trường phát triển
-Hệ thống được phát triển dưới dạng ứng dụng Desktop chạy trên nền tảng Java, sử dụng thư viện Java Swing kết hợp với FlatLaf để xây dựng giao diện người dùng. Cơ sở dữ liệu sử dụng SQLite.
+Hệ thống được phát triển dưới dạng ứng dụng Web chạy trên nền tảng Java Spring Boot, sử dụng Thymeleaf làm engine giao diện và SQLite làm cơ sở dữ liệu lưu trữ local.
+
 Bảng 7.1. Môi trường phát triển hệ thống
-Thành phần
-Công cụ / Phiên bản
-Ghi chú
-Ngôn ngữ lập trình
-Java 17 (LTS)
-Yêu cầu tối thiểu JDK 17
-Giao diện người dùng
-Java Swing + FlatLaf 3.x
-Thư viện UI hiện đại cho desktop
-Cơ sở dữ liệu
-SQLite 3.x
-File .db, không cần cài server DB
-Driver kết nối DB
-sqlite-jdbc 3.47.x
-Thêm vào classpath dưới dạng .jar
-Kiến trúc
-MVC (Model - View - Controller)
-Bổ sung tầng Service và DAO
-IDE
-VS Code + Extension Pack for Java
-Hoặc IntelliJ IDEA / Eclipse
-Hệ điều hành
-Windows 10/11
-Chạy được trên macOS / Linux
-Lý do lựa chọn Java Swing + SQLite cho phiên bản demo:
-Không phụ thuộc vào server hay kết nối mạng — chạy hoàn toàn offline trên máy tính cá nhân.
-File cơ sở dữ liệu SQLite (.db) có thể sao chép sang máy khác và chạy ngay lập tức.
-Java Swing tích hợp sẵn trong JDK, không cần cài thêm framework phức tạp.
-FlatLaf cung cấp giao diện hiện đại, chuyên nghiệp hơn so với Swing thuần túy.
+Thành phần - Công cụ / Phiên bản - Ghi chú
+Ngôn ngữ lập trình - Java 17 (LTS) - Yêu cầu tối thiểu JDK 17
+Framework chính - Spring Boot 3.2.5 - Framework hỗ trợ phát triển Web nhanh
+Giao diện người dùng - HTML5, CSS3, Thymeleaf 3.x - Giao diện hiện đại, responsive
+Cơ sở dữ liệu - SQLite 3.47.x - File .db, không cần cài server DB
+Build Tool - Maven 3.9.x - Quản lý dependencies và build project
+Kiến trúc - MVC + Service + DAO - Tách biệt logic và dữ liệu
+IDE - VS Code / IntelliJ IDEA - Môi trường lập trình chuyên nghiệp
+Hệ điều hành - Windows, macOS, Linux - Nền tảng Java đa hệ điều hành
+
 7.2. Cấu trúc project
-Hệ thống được tổ chức theo kiến trúc MVC (Model – View – Controller) với bổ sung tầng Service và DAO, đảm bảo tách biệt rõ ràng giữa logic nghiệp vụ, truy vấn cơ sở dữ liệu và giao diện người dùng.
+Hệ thống được tổ chức theo chuẩn Maven Project với cấu trúc package như sau:
+- com.nhom14.controller: Chứa các lớp điều hướng (Auth, Dashboard, StudyPlan, Course, Task, Admin).
+- com.nhom14.service: Chứa logic nghiệp vụ (Xác thực, Tính toán tiến độ, Gửi nhắc nhở).
+- com.nhom14.dao: Chứa các lớp truy cập dữ liệu JDBC (UserDAO, TaskDAO, ReminderDAO...).
+- com.nhom14.model: Định nghĩa các thực thể (User, Course, Task, StudyPlan, Progress, Reminder).
+- resources/templates: Chứa giao diện HTML (Thymeleaf).
+- resources/static: Chứa tài nguyên CSS, JS và hình ảnh.
+
 7.3. Cài đặt cơ sở dữ liệu
+Hệ thống sử dụng cơ chế tự động khởi tạo cơ sở dữ liệu. Khi ứng dụng khởi chạy lần đầu:
+1. Lớp DatabaseConnection sẽ kiểm tra sự tồn tại của file study_reminder.db.
+2. Nếu chưa có, hệ thống tự động chạy các script SQL để tạo 8 bảng: roles, users, passwordResetTokens, studyPlans, courses, tasks, reminders, progress.
+3. Chèn các dữ liệu mẫu (Seeding) như phân quyền ADMIN/STUDENT và tài khoản quản trị mặc định.
+
 7.4. Demo chức năng từng module
 7.4.1. Module 1 - Quản lý người dùng
+- Đăng ký & Đăng nhập: Người dùng có thể tạo tài khoản mới với mật khẩu được mã hóa SHA-256. Hệ thống phân quyền rõ ràng giữa Sinh viên và Quản trị viên.
+- Hồ sơ cá nhân: Sinh viên có thể xem và cập nhật thông tin cá nhân, thay đổi mật khẩu trực tiếp trên giao diện.
+- Quản trị viên: Admin có dashboard riêng để xem danh sách toàn bộ người dùng, thực hiện khóa/mở khóa tài khoản hoặc xóa tài khoản vi phạm.
+
 7.4.2. Module 2 - Quản lý kế hoạch học tập
+- Sinh viên có thể lập các kế hoạch học tập theo giai đoạn (Học kỳ 1, Ôn thi cuối kỳ...).
+- Mỗi kế hoạch hiển thị tổng quan số lượng nhiệm vụ và tiến độ hoàn thành dưới dạng thanh Progress Bar trực quan.
+
 7.4.3. Module 3 - Quản lý môn học & nhiệm vụ
+- Quản lý môn học: CRUD danh mục môn học, giảng viên, số tín chỉ.
+- Quản lý nhiệm vụ: Thêm nhiệm vụ vào từng môn học/kế hoạch. Thiết lập deadline, mức độ ưu tiên (Cao/Trung bình/Thấp).
+- Cập nhật trạng thái: Cho phép sinh viên đánh dấu nhiệm vụ là "Đang thực hiện" hoặc "Đã hoàn thành". Khi hoàn thành, hệ thống tự động ghi nhận thời gian (Completed At).
+
 7.4.4. Module 4 - Nhắc nhở & theo dõi tiến độ
+- Dashboard: Hiển thị biểu đồ thống kê, danh sách "Nhiệm vụ cần chú ý" (Sắp đến hạn / Đã quá hạn) được bôi màu cảnh báo.
+- Nhắc nhở tự động: SystemTimerService chạy ngầm quét các nhiệm vụ có deadline < 24h để tạo thông báo (Reminder) và gửi email nhắc nhở.
+- Theo dõi tiến độ: Tỷ lệ % hoàn thành được tính toán lại ngay lập tức khi có sự thay đổi trạng thái nhiệm vụ, đảm bảo dữ liệu luôn thời gian thực.
+
 7.5. Kết quả kiểm thử (đối chiếu Test Case)
+Dựa trên các kịch bản kiểm thử tại Chương 6, hệ thống đã vượt qua tất cả các bài thử nghiệm quan trọng:
+- Xác thực & Phân quyền: Thành công (100%).
+- Tính toán tiến độ & Vẽ biểu đồ: Chính xác theo công thức nghiệp vụ.
+- Nhắc nhở tự động: Gửi thông báo đúng thời điểm < 24h và tuân thủ giới hạn số lượng thông báo.
+- Ràng buộc dữ liệu: Chặn thành công các trường hợp deadline quá khứ hoặc tên kế hoạch trùng lặp.
+Kết luận: Hệ thống hoạt động ổn định, đáp ứng đầy đủ các yêu cầu chức năng (Functional) và phi chức năng (Non-functional) đã đề ra.

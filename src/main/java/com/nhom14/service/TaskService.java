@@ -65,7 +65,9 @@ public class TaskService {
             t.setDeadline(rawDl);
         }
 
-        return taskDAO.update(t) ? null : "Lỗi hệ thống khi cập nhật nhiệm vụ.";
+        boolean ok = taskDAO.update(t);
+        if (ok) recalcProgress(t.getPlanId());
+        return ok ? null : "Lỗi hệ thống khi cập nhật nhiệm vụ.";
     }
 
     /** Cập nhật trạng thái: ghi nhận completedAt nếu chuyển sang DONE */
