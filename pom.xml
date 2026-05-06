@@ -40,6 +40,12 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.47.1.0</version>
         </dependency>
+
+        <!-- Spring Boot Mail for Real Email Sending -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

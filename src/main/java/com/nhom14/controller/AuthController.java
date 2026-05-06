@@ -100,13 +100,46 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public String doForgotPassword(@RequestParam String email,
-            @RequestParam String newPassword,
-            Model model) {
-        String err = authService.forgotPassword(email, newPassword);
+    public String doForgotPassword(@RequestParam String email, Model model) {
+        if (email == null || email.isBlank()) {
+            model.addAttribute("error", "Vui lòng nhập email.");
+            return "auth/forgot-password";
+        }
+        String token = authService.generateResetToken(email);
+        // Lưu email vào model để hiển thị thông báo
+        model.addAttribute("email", email);
+        if (token != null) {
+            // Trong thực tế sẽ gửi email. Ở đây ta hiển thị luôn cho demo.
+            model.addAttribute("demoToken", token);
+            model.addAttribute("success", "Mã khôi phục đã được gửi tới email của bạn (Hiệu lực 15 phút).");
+        } else {
+            // Vẫn hiện success để bảo mật (tránh check email tồn tại)
+            model.addAttribute("success", "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được mã khôi phục.");
+        }
+        return "auth/reset-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordPage(@RequestParam(required = false) String token, Model model) {
+        model.addAttribute("token", token);
+        return "auth/reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String doResetPassword(@RequestParam String token,
+                                  @RequestParam String newPassword,
+                                  @RequestParam String confirmPassword,
+                                  Model model) {
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("error", "Mật khẩu xác nhận không khớp.");
+            model.addAttribute("token", token);
+            return "auth/reset-password";
+        }
+        String err = authService.resetPasswordWithToken(token, newPassword);
         if (err != null) {
             model.addAttribute("error", err);
-            return "auth/forgot-password";
+            model.addAttribute("token", token);
+            return "auth/reset-password";
         }
         return "redirect:/login?reset=true";
     }

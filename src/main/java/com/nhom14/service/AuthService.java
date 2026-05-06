@@ -1,15 +1,25 @@
 package com.nhom14.service;
 
+import com.nhom14.dao.TokenDAO;
 import com.nhom14.dao.UserDAO;
+import com.nhom14.model.PasswordResetToken;
 import com.nhom14.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 public class AuthService {
 
-    private final UserDAO userDAO = new UserDAO();
+    @Autowired private EmailService emailService;
+
+    private final UserDAO  userDAO  = new UserDAO();
+    private final TokenDAO tokenDAO = new TokenDAO();
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public String register(String fullName, String email, String password) {
         if (fullName == null || fullName.isBlank()) return "Vui lòng nhập họ tên.";
@@ -47,12 +57,49 @@ public class AuthService {
         return userDAO.updateProfile(userId, fullName.trim()) ? null : "Lỗi hệ thống.";
     }
 
-    public String forgotPassword(String email, String newPwd) {
-        if (email == null || email.isBlank()) return "Vui lòng nhập email.";
+    /**
+     * Bước 1: Tạo token khôi phục và trả về token (giả lập gửi email)
+     */
+    public String generateResetToken(String email) {
         User u = userDAO.findByEmail(email.toLowerCase());
-        if (u == null) return "Email không tồn tại trong hệ thống.";
+        if (u == null) return null; // Không báo lỗi cụ thể để tránh lộ email tồn tại (Security best practice)
+
+        // Xóa token cũ nếu có
+        tokenDAO.deleteByUser(u.getUserId());
+
+        String token = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        String expiry = LocalDateTime.now().plusMinutes(15).format(FMT);
+
+        PasswordResetToken t = new PasswordResetToken(u.getUserId(), token, expiry);
+        boolean saved = tokenDAO.insert(t);
+        if (saved) {
+            emailService.sendOtp(email, token); // Gửi OTP thật
+            return token;
+        }
+        return null;
+    }
+
+    /**
+     * Bước 2: Xác thực token và đặt lại mật khẩu
+     */
+    public String resetPasswordWithToken(String token, String newPwd) {
+        PasswordResetToken t = tokenDAO.findByToken(token);
+        if (t == null) return "Mã khôi phục không hợp lệ.";
+
+        // Kiểm tra hết hạn
+        LocalDateTime expiry = LocalDateTime.parse(t.getExpiryDate(), FMT);
+        if (expiry.isBefore(LocalDateTime.now())) {
+            return "Mã khôi phục đã hết hạn (hiệu lực 15 phút).";
+        }
+
         if (newPwd == null || newPwd.length() < 6) return "Mật khẩu mới phải có ít nhất 6 ký tự.";
-        return userDAO.updatePassword(u.getUserId(), hash(newPwd)) ? null : "Lỗi hệ thống.";
+
+        boolean ok = userDAO.updatePassword(t.getUserId(), hash(newPwd));
+        if (ok) {
+            tokenDAO.deleteByUser(t.getUserId()); // Dùng xong thì xóa
+            return null;
+        }
+        return "Lỗi hệ thống khi cập nhật mật khẩu.";
     }
 
     public boolean deleteAccount(int userId) {

@@ -82,7 +82,7 @@ public class DatabaseConnection {
                         startDate TEXT NOT NULL,
                         endDate   TEXT NOT NULL,
                         FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
-                        FOREIGN KEY (courseId) REFERENCES courses(courseId) ON DELETE SET NULL
+                        FOREIGN KEY (courseId) REFERENCES courses(courseId) ON DELETE CASCADE
                     )
                 """);
 
@@ -115,7 +115,7 @@ public class DatabaseConnection {
                                         CHECK (status IN ('TODO','IN_PROGRESS','DONE')),
                         completedAt TEXT,
                         FOREIGN KEY (planId)   REFERENCES studyPlans(planId)  ON DELETE CASCADE,
-                        FOREIGN KEY (courseId) REFERENCES courses(courseId)    ON DELETE SET NULL
+                        FOREIGN KEY (courseId) REFERENCES courses(courseId)    ON DELETE CASCADE
                     )
                 """);
 

@@ -15,6 +15,9 @@ import java.util.List;
 @Service
 public class SystemTimerService {
 
+    @org.springframework.beans.factory.annotation.Autowired
+    private EmailService emailService;
+
     private final TaskDAO     taskDAO     = new TaskDAO();
     private final ReminderDAO reminderDAO = new ReminderDAO();
 
@@ -31,6 +34,12 @@ public class SystemTimerService {
             String msg = "⚠️ Nhắc nhở: Nhiệm vụ \"" + t.getTaskName()
                     + "\" sẽ đến hạn lúc " + t.getDeadline() + ". Hãy hoàn thành sớm!";
             reminderDAO.insert(new Reminder(t.getTaskId(), userId, msg));
+            
+            // Gửi cả Email nếu có email người dùng
+            String userEmail = getUserEmailById(userId);
+            if (userEmail != null) {
+                emailService.sendTaskReminder(userEmail, t.getTaskName(), t.getDeadline()); 
+            }
         }
     }
 
@@ -41,6 +50,20 @@ public class SystemTimerService {
             ps.setInt(1, planId);
             var rs = ps.executeQuery();
             return rs.next() ? rs.getInt(1) : 0;
-        } catch (Exception e) { return 0; }
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /** Lấy email từ userId */
+    private String getUserEmailById(int userId) {
+        try (var ps = com.nhom14.model.DatabaseConnection.getInstance().getConnection()
+                .prepareStatement("SELECT email FROM users WHERE userId=?")) {
+            ps.setInt(1, userId);
+            var rs = ps.executeQuery();
+            return rs.next() ? rs.getString(1) : null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

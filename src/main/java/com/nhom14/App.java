@@ -9,6 +9,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
+@org.springframework.scheduling.annotation.EnableScheduling
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
