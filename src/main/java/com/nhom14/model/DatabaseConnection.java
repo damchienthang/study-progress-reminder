@@ -49,7 +49,6 @@ public class DatabaseConnection {
                         userId    INTEGER PRIMARY KEY AUTOINCREMENT,
                         fullName  TEXT NOT NULL,
                         studentId TEXT,
-                        username  TEXT,
                         email     TEXT NOT NULL UNIQUE,
                         password  TEXT NOT NULL,
                         roleId    INTEGER NOT NULL DEFAULT 1,
@@ -148,8 +147,8 @@ public class DatabaseConnection {
                 """);
 
         // Cập nhật schema (Migration)
+        // Cập nhật schema (Migration) nếu cần
         addColumnIfNotExists(st, "users", "studentId", "TEXT");
-        addColumnIfNotExists(st, "users", "username", "TEXT");
         addColumnIfNotExists(st, "courses", "lecturer", "TEXT");
         addColumnIfNotExists(st, "studyPlans", "courseId", "INTEGER");
 

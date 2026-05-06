@@ -50,19 +50,32 @@ public class Task {
 
     // Kiểm tra nhiệm vụ sắp đến hạn (< 24 giờ)
     public boolean isUpcoming() {
-        if ("DONE".equals(status) || deadline == null) return false;
+        if ("DONE".equals(status) || deadline == null || deadline.isBlank()) return false;
         try {
-            LocalDateTime dl = LocalDateTime.parse(deadline, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            // Hỗ trợ cả định dạng "yyyy-MM-dd HH:mm:ss" và "yyyy-MM-ddTHH:mm"
+            String cleanDeadline = deadline.replace("T", " ");
+            if (cleanDeadline.length() == 16) cleanDeadline += ":00"; // Thêm giây nếu thiếu
+            
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dl = LocalDateTime.parse(cleanDeadline, fmt);
             LocalDateTime now = LocalDateTime.now();
-            return !now.isAfter(dl) && now.plusHours(24).isAfter(dl);
-        } catch (Exception e) { return false; }
+            
+            return dl.isAfter(now) && dl.isBefore(now.plusHours(24));
+        } catch (Exception e) { 
+            e.printStackTrace();
+            return false; 
+        }
     }
 
     // Kiểm tra nhiệm vụ quá hạn
     public boolean isOverdue() {
-        if ("DONE".equals(status) || deadline == null) return false;
+        if ("DONE".equals(status) || deadline == null || deadline.isBlank()) return false;
         try {
-            LocalDateTime dl = LocalDateTime.parse(deadline, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            String cleanDeadline = deadline.replace("T", " ");
+            if (cleanDeadline.length() == 16) cleanDeadline += ":00";
+            
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dl = LocalDateTime.parse(cleanDeadline, fmt);
             return LocalDateTime.now().isAfter(dl);
         } catch (Exception e) { return false; }
     }

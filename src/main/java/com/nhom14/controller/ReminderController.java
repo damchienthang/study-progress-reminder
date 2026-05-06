@@ -65,10 +65,10 @@ public class ReminderController {
 
     // ── Manual trigger cho testing (TC4-PUSH-1A) ─────────────────────────
     @PostMapping("/api/reminder/trigger")
-    @ResponseBody
-    public String triggerReminder(HttpSession session) {
-        if (currentUser(session) == null) return "Unauthorized";
+    public String triggerReminder(HttpSession session, RedirectAttributes ra) {
+        if (currentUser(session) == null) return "redirect:/login";
         timerService.checkAndSendReminders();
-        return "Reminder check triggered successfully. Check /reminders page.";
+        ra.addFlashAttribute("success", "Hệ thống đã quét xong các nhiệm vụ sắp đến hạn.");
+        return "redirect:/reminders";
     }
 }

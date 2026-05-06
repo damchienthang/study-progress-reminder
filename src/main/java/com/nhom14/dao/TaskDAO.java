@@ -124,8 +124,8 @@ public class TaskDAO {
             SELECT t.*, c.courseName FROM tasks t
             LEFT JOIN courses c ON t.courseId = c.courseId
             WHERE t.status != 'DONE'
-              AND t.deadline > datetime('now')
-              AND t.deadline <= datetime('now', '+24 hours')
+              AND datetime(replace(t.deadline, 'T', ' ')) > datetime('now', 'localtime')
+              AND datetime(replace(t.deadline, 'T', ' ')) <= datetime('now', 'localtime', '+24 hours')
         """;
         try (Statement st = conn().createStatement();
              ResultSet rs = st.executeQuery(sql)) {

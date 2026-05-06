@@ -25,20 +25,33 @@ public class SystemTimerService {
     @Scheduled(fixedDelay = 5 * 60 * 1000)
     public void checkAndSendReminders() {
         List<Task> upcoming = taskDAO.findUpcomingForAll();
+        System.out.println("[Timer] Đang quét nhiệm vụ sắp đến hạn... Tìm thấy: " + upcoming.size());
+        
         for (Task t : upcoming) {
-            // Lấy userId qua join studyPlans (đã có planId trên task)
             int userId = getUserIdByPlanId(t.getPlanId());
             if (userId <= 0) continue;
+
             // Giới hạn 2 thông báo / task / 24h
-            if (reminderDAO.countSentLast24h(t.getTaskId()) >= 2) continue;
+            int sentCount = reminderDAO.countSentLast24h(t.getTaskId());
+            if (sentCount >= 2) {
+                System.out.println("[Timer] Bỏ qua task " + t.getTaskId() + " vì đã gửi " + sentCount + " thông báo trong 24h.");
+                continue;
+            }
+
+            String displayDeadline = t.getDeadline() != null ? t.getDeadline().replace("T", " ") : "";
+            if (displayDeadline.length() > 16) displayDeadline = displayDeadline.substring(0, 16);
+
             String msg = "⚠️ Nhắc nhở: Nhiệm vụ \"" + t.getTaskName()
-                    + "\" sẽ đến hạn lúc " + t.getDeadline() + ". Hãy hoàn thành sớm!";
-            reminderDAO.insert(new Reminder(t.getTaskId(), userId, msg));
+                    + "\" sẽ đến hạn lúc " + displayDeadline + ". Hãy hoàn thành sớm!";
             
-            // Gửi cả Email nếu có email người dùng
-            String userEmail = getUserEmailById(userId);
-            if (userEmail != null) {
-                emailService.sendTaskReminder(userEmail, t.getTaskName(), t.getDeadline()); 
+            boolean inserted = reminderDAO.insert(new Reminder(t.getTaskId(), userId, msg));
+            if (inserted) {
+                System.out.println("[Timer] Đã tạo thông báo cho user " + userId + ": " + t.getTaskName());
+                // Gửi cả Email nếu có email người dùng
+                String userEmail = getUserEmailById(userId);
+                if (userEmail != null) {
+                    emailService.sendTaskReminder(userEmail, t.getTaskName(), displayDeadline); 
+                }
             }
         }
     }
