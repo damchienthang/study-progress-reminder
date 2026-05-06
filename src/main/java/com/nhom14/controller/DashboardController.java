@@ -55,9 +55,7 @@ public class DashboardController {
         model.addAttribute("progressPct",  progressPct);
 
         // ── Unread reminders badge ────────────────────────────────────
-        long unreadCount = reminderService.findByUser(uid).stream()
-                .filter(r -> !r.isRead()).count();
-        model.addAttribute("unreadReminders", unreadCount);
+
 
         // ── Course progress list ──────────────────────────────────────
         List<Map<String, Object>> courseProgressList = new ArrayList<>();

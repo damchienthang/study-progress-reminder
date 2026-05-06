@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title th:text="${plan != null ? 'Sửa kế hoạch' : 'Tạo kế hoạch'} + ' — StudyReminder'">Form kế hoạch</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
@@ -15,9 +17,13 @@
         <a th:href="@{/plans}" class="nav-btn active">📅 Kế hoạch</a>
 
         <div class="nav-right">
-            <button class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative">
-                🔔 <span class="badge" id="notif-badge" style="display:none">0</span>
-            </button>
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
+                style="position:relative;text-decoration:none">
+                🔔 Thông báo
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
+                    th:text="${unreadReminders}"
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
+            </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
@@ -51,53 +57,61 @@
             <a th:href="@{/logout}" class="sidebar-item">
                 <span class="icon">🚪</span>Đăng xuất
             </a>
-        </div>
-    <div class="main" style="max-width:560px;margin:0 auto">
-        <div class="page-header">
-            <h1 class="page-title" th:text="${plan != null ? '✏️ Chỉnh sửa kế hoạch' : '📅 Tạo kế hoạch mới'}">Form</h1>
-        </div>
 
-        <div class="card" style="padding:28px">
-            <div th:if="${error}" class="form-error" style="margin-bottom:16px;padding:10px 14px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red)" th:text="${error}"></div>
+            <div class="sidebar-section">Thông báo</div>
+            <a th:href="@{/reminders}" class="sidebar-item">
+                <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
+            </a>
 
-            <form th:action="${plan != null ? '/plans/' + plan.planId + '/edit' : '/plans/new'}" method="post">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="planName">Tên kế hoạch *</label>
-                        <input id="planName" name="planName" type="text" class="form-input"
-                               th:value="${plan != null ? plan.planName : ''}"
-                               placeholder="VD: Học kỳ 1 - 2025" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="courseId">Môn học</label>
-                        <select id="courseId" name="courseId" class="form-input">
-                            <option value="">— Chọn môn (Không bắt buộc) —</option>
-                            <option th:each="c : ${courses}"
-                                    th:value="${c.courseId}"
-                                    th:text="${c.courseName}"
+        </div>
+        <div class="main" style="max-width:560px;margin:0 auto">
+            <div class="page-header">
+                <h1 class="page-title" th:text="${plan != null ? '✏️ Chỉnh sửa kế hoạch' : '📅 Tạo kế hoạch mới'}">Form
+                </h1>
+            </div>
+
+            <div class="card" style="padding:28px">
+                <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+                <form th:action="${plan != null ? '/plans/' + plan.planId + '/edit' : '/plans/new'}" method="post">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="planName">Tên kế hoạch *</label>
+                            <input id="planName" name="planName" type="text" class="form-input"
+                                th:value="${plan != null ? plan.planName : ''}" placeholder="VD: Học kỳ 1 - 2025"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="courseId">Môn học</label>
+                            <select id="courseId" name="courseId" class="form-input">
+                                <option value="">— Chọn môn (Không bắt buộc) —</option>
+                                <option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.courseName}"
                                     th:selected="${plan != null and plan.courseId == c.courseId}"></option>
-                        </select>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="startDate">Ngày bắt đầu *</label>
-                    <input id="startDate" name="startDate" type="date" class="form-input"
-                           th:value="${plan != null ? plan.startDate : ''}" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="endDate">Ngày kết thúc *</label>
-                    <input id="endDate" name="endDate" type="date" class="form-input"
-                           th:value="${plan != null ? plan.endDate : ''}" required>
-                </div>
-                <div style="display:flex;gap:12px;margin-top:24px">
-                    <button type="submit" class="btn btn-primary" id="btn-save-plan">
-                        <span th:text="${plan != null ? '💾 Lưu thay đổi' : '✅ Tạo kế hoạch'}">Lưu</span>
-                    </button>
-                    <a th:href="@{/plans}" class="btn btn-secondary">Hủy</a>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label class="form-label" for="startDate">Ngày bắt đầu *</label>
+                        <input id="startDate" name="startDate" type="date" class="form-input"
+                            th:value="${plan != null ? plan.startDate : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="endDate">Ngày kết thúc *</label>
+                        <input id="endDate" name="endDate" type="date" class="form-input"
+                            th:value="${plan != null ? plan.endDate : ''}" required>
+                    </div>
+                    <div style="display:flex;gap:12px;margin-top:24px">
+                        <button type="submit" class="btn btn-primary" id="btn-save-plan">
+                            <span th:text="${plan != null ? '💾 Lưu thay đổi' : '✅ Tạo kế hoạch'}">Lưu</span>
+                        </button>
+                        <a th:href="@{/plans}" class="btn btn-secondary">Hủy</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>

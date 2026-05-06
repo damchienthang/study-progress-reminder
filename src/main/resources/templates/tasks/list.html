@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhiệm vụ — StudyReminder</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
@@ -16,8 +18,12 @@
         <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
 
         <div class="nav-right">
-            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative;text-decoration:none">
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
+                style="position:relative;text-decoration:none">
                 🔔 Thông báo
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
+                    th:text="${unreadReminders}"
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
             </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
@@ -48,6 +54,8 @@
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item">
                 <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
@@ -69,7 +77,8 @@
 
             <!-- Bộ lọc + Sort -->
             <div class="card" style="padding:16px;margin-bottom:16px">
-                <form method="get" th:action="@{/tasks}" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+                <form method="get" th:action="@{/tasks}"
+                    style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
                     <div class="form-group" style="margin-bottom:0">
                         <label class="form-label">Trạng thái</label>
                         <select name="status" class="form-input" style="width:160px">
@@ -83,9 +92,9 @@
                         <label class="form-label">Độ ưu tiên</label>
                         <select name="priority" class="form-input" style="width:160px">
                             <option value="ALL">Tất cả</option>
-                            <option value="HIGH"   th:selected="${priority == 'HIGH'}">🔴 Cao</option>
+                            <option value="HIGH" th:selected="${priority == 'HIGH'}">🔴 Cao</option>
                             <option value="MEDIUM" th:selected="${priority == 'MEDIUM'}">🟡 Trung bình</option>
-                            <option value="LOW"    th:selected="${priority == 'LOW'}">🟢 Thấp</option>
+                            <option value="LOW" th:selected="${priority == 'LOW'}">🟢 Thấp</option>
                         </select>
                     </div>
                     <div class="form-group" style="margin-bottom:0">
@@ -101,7 +110,8 @@
                 </form>
             </div>
 
-            <div th:if="${param.msg != null}" style="margin-bottom:12px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px">
+            <div th:if="${param.msg != null}"
+                style="margin-bottom:12px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px">
                 <span th:if="${param.msg[0] == 'deleted'}">🗑️ Đã xóa nhiệm vụ!</span>
             </div>
 
@@ -122,14 +132,20 @@
                         <tbody>
                             <tr th:each="t : ${tasks}" style="border-bottom:1px solid var(--border)">
                                 <td style="padding:12px 16px">
-                                    <div style="font-weight:600" th:style="${t.status == 'DONE' ? 'text-decoration:line-through;color:var(--text2)' : ''}" th:text="${t.taskName}"></div>
+                                    <div style="font-weight:600"
+                                        th:style="${t.status == 'DONE' ? 'text-decoration:line-through;color:var(--text2)' : ''}"
+                                        th:text="${t.taskName}"></div>
                                     <div style="font-size:11px;color:var(--text2)" th:text="${t.description}"></div>
                                 </td>
-                                <td style="padding:12px 16px;color:var(--accent)" th:text="${t.courseName ?: '—'}">Môn học</td>
+                                <td style="padding:12px 16px;color:var(--accent)" th:text="${t.courseName ?: '—'}">Môn
+                                    học</td>
                                 <td style="padding:12px 16px">
                                     <span th:text="${t.deadline}"></span>
-                                    <div th:if="${t.overdue and t.status != 'DONE'}" style="color:var(--red);font-size:10px;font-weight:700">⚠️ QUÁ HẠN</div>
-                                    <div th:if="${t.doneLate}" style="color:var(--orange);font-size:10px;font-weight:700">⚠️ HOÀN THÀNH TRỄ</div>
+                                    <div th:if="${t.overdue and t.status != 'DONE'}"
+                                        style="color:var(--red);font-size:10px;font-weight:700">⚠️ QUÁ HẠN</div>
+                                    <div th:if="${t.doneLate}"
+                                        style="color:var(--orange);font-size:10px;font-weight:700">⚠️ HOÀN THÀNH TRỄ
+                                    </div>
                                 </td>
                                 <td style="padding:12px 16px">
                                     <span th:if="${t.priority == 'HIGH'}" class="tag tag-high">Cao</span>
@@ -138,15 +154,21 @@
                                 </td>
                                 <td style="padding:12px 16px">
                                     <form th:action="@{/tasks/{id}/status(id=${t.taskId})}" method="post">
-                                        <select name="status" class="form-input" style="width:auto;font-size:12px;padding:4px 8px" onchange="this.form.submit()">
-                                            <option value="TODO" th:selected="${t.status == 'TODO'}">Chưa bắt đầu</option>
-                                            <option value="IN_PROGRESS" th:selected="${t.status == 'IN_PROGRESS'}">Đang thực hiện</option>
-                                            <option value="DONE" th:selected="${t.status == 'DONE'}">Đã hoàn thành</option>
+                                        <select name="status" class="form-input"
+                                            style="width:auto;font-size:12px;padding:4px 8px"
+                                            onchange="this.form.submit()">
+                                            <option value="TODO" th:selected="${t.status == 'TODO'}">Chưa bắt đầu
+                                            </option>
+                                            <option value="IN_PROGRESS" th:selected="${t.status == 'IN_PROGRESS'}">Đang
+                                                thực hiện</option>
+                                            <option value="DONE" th:selected="${t.status == 'DONE'}">Đã hoàn thành
+                                            </option>
                                         </select>
                                     </form>
                                 </td>
                                 <td style="padding:12px 16px;text-align:center">
-                                    <form th:action="@{/tasks/{id}/delete(id=${t.taskId})}" method="post" onsubmit="return confirm('Xóa nhiệm vụ này?')">
+                                    <form th:action="@{/tasks/{id}/delete(id=${t.taskId})}" method="post"
+                                        onsubmit="return confirm('Xóa nhiệm vụ này?')">
                                         <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
                                     </form>
                                 </td>
@@ -154,7 +176,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div th:if="${tasks == null or tasks.isEmpty()}" style="padding:40px;text-align:center;color:var(--text2)">
+                <div th:if="${tasks == null or tasks.isEmpty()}"
+                    style="padding:40px;text-align:center;color:var(--text2)">
                     <div style="font-size:40px;margin-bottom:12px">✅</div>
                     <div>Không tìm thấy nhiệm vụ nào.</div>
                 </div>
@@ -162,4 +185,5 @@
         </div>
     </div>
 </body>
+
 </html>

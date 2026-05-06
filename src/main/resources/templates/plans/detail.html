@@ -20,6 +20,9 @@
             <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
                 style="position:relative;text-decoration:none">
                 🔔 Thông báo
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
+                    th:text="${unreadReminders}"
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
             </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
@@ -50,6 +53,8 @@
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item">
                 <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
@@ -81,13 +86,12 @@
             <div th:if="${param.msg != null}"
                 style="margin-bottom:12px;padding:10px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px">
                 <span th:if="${param.msg[0] == 'taskAdded'}">✅ Thêm nhiệm vụ thành công!</span>
-                <span th:if="${param.msg[0] == 'taskDeleted'}">✅ Xóa nhiệm vụ thành công!</span>
+                <span th:if="${param.msg[0] == 'taskDeleted' or param.msg[0] == 'deleted'}">✅ Xóa nhiệm vụ thành
+                    công!</span>
                 <span th:if="${param.msg[0] == 'updated'}">✅ Cập nhật kế hoạch thành công!</span>
             </div>
 
-            <div th:if="${error}"
-                style="margin-bottom:12px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px"
-                th:text="${error}"></div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
             <!-- Progress card -->
             <div class="card" style="padding:20px;margin-bottom:16px">
@@ -118,7 +122,7 @@
                         <div class="form-group" style="margin-bottom:0">
                             <label class="form-label">Môn học</label>
                             <select name="courseId" class="form-input" id="select-course">
-                                <option value="0">— Không chọn —</option>
+                                <option value="0">— Chọn môn học —</option>
                                 <option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.courseName}">
                                 </option>
                             </select>
@@ -152,12 +156,12 @@
                 <div class="card-header">
                     <div class="card-title">📋 Danh sách nhiệm vụ</div>
                 </div>
-                <div style="padding:8px 16px 16px">
+                <div style="padding:16px 24px 24px">
                     <div th:if="${tasks == null or tasks.isEmpty()}"
                         style="color:var(--text2);font-size:13px;padding:12px 0">Chưa có nhiệm vụ nào. Hãy thêm nhiệm vụ
                         ở trên!</div>
                     <div th:each="t : ${tasks}"
-                        style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg3)">
+                        style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--bg3)">
                         <!-- Checkbox status -->
                         <form th:action="@{/tasks/{id}/status(id=${t.taskId})}" method="post"
                             style="display:flex;align-items:center">
@@ -168,7 +172,7 @@
                                 th:text="${t.status == 'DONE' ? '✅' : (t.status == 'IN_PROGRESS' ? '🔄' : '⬜')}">⬜</button>
                         </form>
                         <div style="flex:1">
-                            <div style="font-size:13px;font-weight:600"
+                            <div style="font-size:15px;font-weight:600"
                                 th:style="${t.status == 'DONE' ? 'text-decoration:line-through;color:var(--text2)' : ''}"
                                 th:text="${t.taskName}">Task</div>
                             <div style="font-size:11px;color:var(--text2);margin-top:2px">

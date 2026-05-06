@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sửa nhiệm vụ — StudyReminder</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
@@ -16,7 +18,8 @@
         <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
 
         <div class="nav-right">
-            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative;text-decoration:none">
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
+                style="position:relative;text-decoration:none">
                 🔔 Thông báo
             </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
@@ -48,6 +51,8 @@
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item">
                 <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
@@ -64,26 +69,29 @@
             </div>
 
             <div class="card" style="padding:28px">
-                <div th:if="${error}" class="form-error show" style="margin-bottom:20px;padding:12px;background:rgba(248,81,73,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px" th:text="${error}"></div>
-                
+                <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
                 <form th:action="@{/tasks/{id}/edit(id=${task.taskId})}" method="post">
                     <!-- Giữ lại URL để redirect về đúng nơi (list tổng hoặc chi tiết kế hoạch) -->
                     <input type="hidden" name="redirectUrl" th:value="${#ctx.request.getHeader('Referer')}">
-                    
+
                     <div class="form-group">
                         <label class="form-label">Tên nhiệm vụ *</label>
-                        <input type="text" name="taskName" class="form-input" th:value="${task.taskName}" required autofocus>
+                        <input type="text" name="taskName" class="form-input" th:value="${task.taskName}" required
+                            autofocus>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="form-label">Mô tả</label>
-                        <textarea name="description" class="form-input" rows="3" style="resize:vertical" th:text="${task.description}"></textarea>
+                        <textarea name="description" class="form-input" rows="3" style="resize:vertical"
+                            th:text="${task.description}"></textarea>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Hạn chót *</label>
-                            <input type="datetime-local" name="deadline" class="form-input" th:value="${task.deadline}" required>
+                            <input type="datetime-local" name="deadline" class="form-input" th:value="${task.deadline}"
+                                required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Độ ưu tiên</label>
@@ -94,14 +102,16 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div style="display:flex;gap:12px;margin-top:24px">
                         <button type="submit" class="btn btn-primary btn-full">Lưu thay đổi</button>
-                        <a href="javascript:history.back()" class="btn btn-secondary" style="width:120px;justify-content:center">Hủy</a>
+                        <a href="javascript:history.back()" class="btn btn-secondary"
+                            style="width:120px;justify-content:center">Hủy</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
+
 </html>

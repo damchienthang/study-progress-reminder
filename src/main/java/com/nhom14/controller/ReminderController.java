@@ -38,10 +38,7 @@ public class ReminderController {
         if (u == null) return "redirect:/login";
 
         List<Reminder> reminders = reminderService.findByUser(u.getUserId());
-        long unread = reminders.stream().filter(r -> !r.isRead()).count();
-
-        model.addAttribute("reminders",    reminders);
-        model.addAttribute("unreadCount",  unread);
+        model.addAttribute("reminders", reminders);
         return "reminders/list";
     }
 

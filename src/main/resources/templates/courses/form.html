@@ -15,9 +15,13 @@
         <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
 
         <div class="nav-right">
-            <button class="btn btn-secondary btn-sm" id="notif-toggle-btn" style="position:relative">
-                🔔 <span class="badge" id="notif-badge" style="display:none">0</span>
-            </button>
+            <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
+                style="position:relative;text-decoration:none">
+                🔔 Thông báo
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
+                    th:text="${unreadReminders}"
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
+            </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
@@ -43,6 +47,13 @@
             <a th:href="@{/plans}" class="sidebar-item">
                 <span class="icon">📅</span>Kế hoạch
             </a>
+            
+            <div class="sidebar-section">Thông báo</div>
+            <a th:href="@{/reminders}" class="sidebar-item">
+                <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
+            </a>
 
             <div class="sidebar-section">Tài khoản</div>
             <a th:href="@{/profile}" class="sidebar-item">
@@ -57,7 +68,7 @@
             <h1 class="page-title" th:text="${course != null ? '✏️ Sửa môn học' : '📖 Thêm môn học mới'}">Form</h1>
         </div>
         <div class="card" style="padding:28px">
-            <div th:if="${error}" style="margin-bottom:16px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px" th:text="${error}"></div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
             <form th:action="${course != null ? '/courses/' + course.courseId + '/edit' : '/courses/new'}" method="post">
                 <div class="form-group">
                     <label class="form-label" for="courseName">Tên môn học *</label>

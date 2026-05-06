@@ -119,19 +119,19 @@
                     <div class="card-header">
                         <div class="card-title">📊 Tiến độ theo môn học</div>
                     </div>
-                    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+                    <div style="padding:24px;display:flex;flex-direction:column;gap:16px">
                         <!-- Dynamic: render per course -->
                         <div th:if="${courseProgressList != null and !courseProgressList.isEmpty()}"
                             th:each="cp : ${courseProgressList}">
-                            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
-                                <span th:text="${cp.courseName}">Môn học</span>
-                                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)"
+                            <div style="display:flex;justify-content:space-between;font-size:15px;margin-bottom:6px">
+                                <span th:text="${cp.courseName}" style="font-weight:600">Môn học</span>
+                                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--green)"
                                     th:text="${cp.pct + '%'}">0%</span>
                             </div>
                             <div class="progress-wrap">
                                 <div class="progress-bar" th:style="'width:' + ${cp.pct} + '%'"></div>
                             </div>
-                            <div style="font-size:11px;color:var(--text2)"
+                             <div style="font-size:12px;color:var(--text2);margin-top:4px"
                                 th:text="${cp.done + '/' + cp.total + ' nhiệm vụ hoàn thành'}">0/0 nhiệm vụ hoàn thành
                             </div>
                         </div>
@@ -146,11 +146,11 @@
                         <div class="card-title">⚠️ Nhiệm vụ cần chú ý</div>
                     </div>
                     <div
-                        style="padding:16px;display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto">
+                        style="padding:24px;display:flex;flex-direction:column;gap:12px;max-height:320px;overflow-y:auto">
                         <div th:if="${attentionTasks != null and !attentionTasks.isEmpty()}"
                             th:each="t : ${attentionTasks}" style="border-radius:6px;padding:10px 12px;"
                             th:style="'border-radius:6px;padding:10px 12px;background:var(--bg3);border-left:3px solid ' + (${t.overdue} ? 'var(--red)' : 'var(--orange)')">
-                            <div style="font-size:13px;font-weight:600" th:text="${t.name}">Nhiệm vụ</div>
+                            <div style="font-size:15px;font-weight:600" th:text="${t.name}">Nhiệm vụ</div>
                             <div style="font-size:11px;color:var(--text2);margin-top:2px">
                                 <span th:text="${t.courseName}">Môn học</span> ·
                                 <span th:if="${t.overdue}" style="color:var(--red)">Quá hạn</span>
@@ -172,7 +172,7 @@
                     <div class="card-title">📅 Kế hoạch học tập</div>
                     <a th:href="@{/plans}" class="btn btn-secondary btn-sm">Xem tất cả</a>
                 </div>
-                <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="padding:24px;display:flex;flex-direction:column;gap:12px">
                     <div th:if="${dashPlans != null and !dashPlans.isEmpty()}" th:each="p : ${dashPlans}"
                         class="plan-card" style="margin-bottom:0">
                         <div class="plan-info">

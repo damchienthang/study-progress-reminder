@@ -20,6 +20,9 @@
             <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
                 style="position:relative;text-decoration:none">
                 🔔 Thông báo
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
+                    th:text="${unreadReminders}"
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
             </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
@@ -50,6 +53,8 @@
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item">
                 <span class="icon">🔔</span>Nhắc nhở
+                <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
