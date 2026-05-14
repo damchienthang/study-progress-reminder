@@ -1501,153 +1501,59 @@ Thông qua hàm isNearDeadline(hours) của lớp Task, Service kiểm tra xem c
 Nếu phát hiện công việc sắp đến hạn hoặc đã trễ hạn, ReminderService sẽ khởi tạo các đối tượng Reminder mới (với NotificationType tương ứng là REMINDER hoặc NOTIFICATION) và gọi ReminderDAO.save() để lưu thông báo mới này vào cơ sở dữ liệu, chờ người dùng mở app lên để xem.
 5.2. Detailed Sequence Diagram
 Sequence diagram thiết kế chi tiết thể hiện rõ tên phương thức gọi giữa các lớp/object cụ thể trong hệ thống. Các sơ đồ dưới đây đại diện cho các luồng xử lý quan trọng nhất, bao phủ toàn bộ các chức năng chính của hệ thống.
+
 SD-01: Đăng nhập hệ thống (UC-M1-01):
-Actors/Objects: Student (Actor), AuthController, AuthService, UserRepository, Database
-Bước
-Đối tượng gọi → nhận
-Phương thức / Mô tả
-1
-Student→ AuthController
-POST /api/auth/login ({email, password})
-2
-AuthController → AuthService
-login(email, passwo;rd)
-3
-AuthService → UserRepository
-findByEmail(email)
-4
-UserRepository → Database
-SELECT * FROM users WHERE email = ?
-5
-Database → UserRepository
-Return: user
-6
-AuthService → AuthService
-comparePassword(password, hashedPwd)
-7
-AuthService → AuthService
-generateJWT(userId)
-8
-AuthController → Student
-Return 200: {token, userInfo}
-SD-02: Tạo kế hoạch học tập (UC-M2-01)
-Actors/Objects: Student (Actor), PlanController, PlanService, PlanRepository, ProgressService, Database
-Bước
-Đối tượng gọi → nhận
-Phương thức / Mô tả
-1
-Student → PlanController
-POST /api/plans ({planName, startDate, endDate})
-2
-PlanController → PlanService
-createPlan(userId, planName, startDate, endDate)
-3
-PlanService → PlanService
-validate(startDate, endDate)
-4
-PlanService → PlanRepository
-save({planId, userId, planName, startDate, endDate})
-5
-PlanRepository → Database
-INSERT INTO study_plans VALUES (...)
-6
-PlanService → ProgressService
-initProgress(planId)
-7
-PlanController → Student
-Return 201: {plan, message}
-SD-03: Xem Dashboard (UC-M4-01)
-Actors/Objects: Student (Actor), DashboardView, ProgressController, ProgressService, TaskRepository, ProgressRepository, Database
-Bước
-Đối tượng gọi → nhận
-Phương thức / Mô tả
-1
-Student → ProgressController
-requestDashboard()
-2
-DashboardView → ProgressController
-GET /api/dashboard
-3
-ProgressController → ProgressService
-getProgress(userId)
-4
-ProgressService → TaskRepository
-findTasksByUser(userId)
-5
-TaskRepository → Database
-SELECT * FROM tasks
-6
-Database → TaskRepository
-Return: taskList
-6.1
-TaskRepository → ProgressService
-Return: taskList
-7
-ProgressService → ProgressService
-calculateProgress(taskList)
-8
-ProgressService → ProgressRepository
-save(progressData)
-9
-ProgressRepository → Database
-UPDATE progress
-9.1
-Database → ProgressRepository
-Return: confirmation
-9.2
-ProgressRepository → ProgressService
-Return: saved ok
-9.3
-ProgressService → ProgressController
-Return: progressData
-10
-ProgressController → DashboardView
-Return: progressData
-11
-DashboardView → StudentdisplayResult()
-displayResult()
-SD-04: Gửi thông báo nhắc nhở (UC-M4-03)
-Actors/Objects: System Timer (Actor), ReminderService, TaskRepository, NotificationService, Database
-Bước
-Đối tượng gọi → nhận
-Phương thức / Mô tả
-1
-System Timer → ReminderService
-triggerScheduledJob()
-2
-ReminderService → TaskRepository
-findUpcomingTasks()
-3
-TaskRepository → Database
-SELECT tasks WHERE deadline gần
-4
-Database → TaskRepository
-Return: taskList
-4.1
-TaskRepository → ReminderService
-Return: taskList
-5
-ReminderService → ReminderService
-isNearDeadline(task)
-6
-ReminderService → ReminderService
-createReminder(task)
-7
-ReminderService → NotificationService
-sendNotification(reminderData)
-8
-NotificationService → External Service
-push notification
-8.1
-Notification → ReminderService
-push ok
-9
-ReminderService → ReminderRepository
-saveReminder(reminderData, status="sent")
-9.1
-ReminderRepository → Database
-INSERT INTO reminders ...
-9.2
+Actors/Objects: Student (Actor), AuthController, AuthService, UserDAO, Database
+Bước - Đối tượng gọi → nhận - Phương thức / Mô tả
+1 - Student → AuthController - POST /login (email, password)
+2 - AuthController → AuthService - login(email, password, error[])
+3 - AuthService → UserDAO - findByEmail(email)
+4 - UserDAO → Database - SELECT * FROM users WHERE email = ?
+5 - Database → UserDAO - ResultSet (user data)
+6 - AuthService → AuthService - hash(password) & compare with stored hash
+7 - AuthController → HttpSession - setAttribute("user", user)
+8 - AuthController → Student - Redirect to Dashboard
+
+SD-04: Tạo kế hoạch học tập (UC-M2-01)
+Actors/Objects: Student (Actor), StudyPlanController, StudyPlanService, StudyPlanDAO, ProgressDAO, Database
+Bước - Đối tượng gọi → nhận - Phương thức / Mô tả
+1 - Student → StudyPlanController - POST /plans/new (form data)
+2 - StudyPlanController → StudyPlanService - create(StudyPlan object)
+3 - StudyPlanService → StudyPlanDAO - existsName(userId, planName) - Kiểm tra trùng tên
+4 - StudyPlanService → StudyPlanDAO - insert(plan) - Lưu thông tin kế hoạch mới
+5 - StudyPlanDAO → Database - INSERT INTO study_plans (...)
+6 - StudyPlanService → ProgressDAO - init(planId) - Khởi tạo bảng tiến độ cho kế hoạch
+7 - ProgressDAO → Database - INSERT INTO progress (planId, total, complete, rate)
+8 - StudyPlanController → Student - Redirect to /plans với thông báo thành công
+
+SD-02: Xem Dashboard & Thống kê (UC-M4-01)
+Actors/Objects: Student (Actor), DashboardController, TaskDAO, CourseDAO, StudyPlanDAO, ProgressDAO, SQLite
+Bước - Đối tượng gọi → nhận - Phương thức / Mô tả
+1 - Student → DashboardController - GET /dashboard
+2 - DashboardController → TaskDAO - findByUser(uid)
+3 - TaskDAO → SQLite - SELECT * FROM tasks WHERE userId = ?
+4 - DashboardController → CourseDAO - findByUser(uid)
+5 - CourseDAO → SQLite - SELECT * FROM courses WHERE userId = ?
+6 - DashboardController → StudyPlanDAO - findByUser(uid)
+7 - StudyPlanDAO → SQLite - SELECT * FROM studyPlans WHERE userId = ?
+8 - DashboardController → ProgressDAO - findByPlan(planId)
+9 - ProgressDAO → SQLite - SELECT * FROM progress WHERE planId = ?
+10 - DashboardController → DashboardController - Tính toán % tiến độ (Java Stream)
+11 - DashboardController → Student - Trả về view dashboard.html với dữ liệu thống kê
+
+SD-03: Gửi nhắc nhở tự động (UC-M4-02)
+Actors/Objects: System Timer (Actor), SystemTimerService, TaskDAO, ReminderDAO, EmailService, SQLite
+Bước - Đối tượng gọi → nhận - Phương thức / Mô tả
+1 - System Timer → SystemTimerService - checkAndSendReminders() (via @Scheduled)
+2 - SystemTimerService → TaskDAO - findUpcomingForAll()
+3 - TaskDAO → SQLite - SELECT * FROM tasks WHERE deadline < 24h
+4 - SQLite → TaskDAO - ResultSet (upcoming tasks)
+5 - SystemTimerService → ReminderDAO - countSentLast24h(taskId)
+6 - ReminderDAO → SQLite - SELECT COUNT(*) FROM reminders WHERE taskId = ?
+7 - SystemTimerService → ReminderDAO - insert(new Reminder)
+8 - ReminderDAO → SQLite - INSERT INTO reminders (...)
+9 - SystemTimerService → EmailService - sendTaskReminder(email, task, deadline)
+10 - EmailService → Student - Send Email (SMTP)
 Database → ReminderRepository
 Return: confirmation
 5.3. ERD — Entity Relationship Diagram

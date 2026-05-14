@@ -13,14 +13,34 @@
 
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
-        <div class="logo">🛡️ Admin Panel</div>
-        <a th:href="@{/admin/users}" class="nav-btn active">👥 Người dùng</a>
+        <div class="nav-left">
+            <div class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo">Admin Panel</div>
+        </div>
 
         <div class="nav-right">
-            <span style="font-size:12px;color:var(--text2)" th:text="'👤 ' + ${session.user.fullName}">Admin</span>
-            <a th:href="@{/logout}" class="btn btn-secondary btn-sm">🚪 Đăng xuất</a>
+            <span style="font-size:14px;color:var(--text2);margin-right:15px" th:text="${session.user.fullName}">Admin</span>
+            <a th:href="@{/logout}" class="btn btn-secondary btn-sm">Đăng xuất</a>
         </div>
     </nav>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            sidebar.classList.toggle('hidden');
+            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden'));
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const isHidden = localStorage.getItem('sidebarHidden') === 'true';
+            if (isHidden) {
+                document.getElementById('main-sidebar').classList.add('hidden');
+            }
+        });
+    </script>
 
     <!-- ════ APP ════ -->
     <div class="app" id="main-app">
@@ -29,13 +49,13 @@
         <div class="sidebar" id="main-sidebar">
             <div class="sidebar-section">Quản trị</div>
             <a th:href="@{/admin/users}" class="sidebar-item active">
-                <span class="icon">👥</span>Người dùng
+                Người dùng
                 <span class="sidebar-count" th:text="${totalUsers}">0</span>
             </a>
 
             <div class="sidebar-section">Hệ thống</div>
             <a th:href="@{/logout}" class="sidebar-item">
-                <span class="icon">🚪</span>Đăng xuất
+                Đăng xuất
             </a>
         </div>
 
@@ -45,7 +65,7 @@
             <!-- PAGE HEADER -->
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">👥 Quản lý người dùng</h1>
+                    <h1 class="page-title">Quản lý người dùng</h1>
                     <div class="page-subtitle">Xem, khóa, mở khóa và xóa tài khoản trong hệ thống</div>
                 </div>
             </div>
@@ -76,18 +96,18 @@
 
             <!-- FLASH MESSAGES -->
             <div th:if="${success}" class="toast-container">
-                <div class="toast success" id="flash-toast">✅ <span th:text="${success}"></span></div>
+                <div class="toast success" id="flash-toast"><span th:text="${success}"></span></div>
             </div>
             <div th:if="${error}" class="toast-container">
-                <div class="toast error" id="flash-toast-err">❌ <span th:text="${error}"></span></div>
+                <div class="toast error" id="flash-toast-err"><span th:text="${error}"></span></div>
             </div>
 
             <!-- FILTERS + TABLE -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">📋 Danh sách tài khoản</div>
+                    <div class="card-title">Danh sách tài khoản</div>
                     <form th:action="@{/admin/users}" method="get" class="filters" id="filter-form">
-                        <input type="text" name="search" class="search-box" placeholder="🔍 Tìm tên / email..."
+                        <input type="text" name="search" class="search-box" placeholder="Tìm tên / email..."
                             th:value="${search}" id="search-input">
                         <select name="role" class="filter-select" id="role-filter"
                             onchange="document.getElementById('filter-form').submit()">
@@ -121,33 +141,33 @@
                         </thead>
                         <tbody>
                             <tr th:each="u, stat : ${users}" th:id="'row-' + ${u.userId}">
-                                <td style="color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:12px"
+                                <td style="color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:14px"
                                     th:text="${stat.index + 1}">1</td>
                                 <td>
                                     <div style="font-weight:600" th:text="${u.fullName}">Tên</div>
                                 </td>
-                                <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2)"
+                                <td style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text2)"
                                     th:text="${u.email}">email@example.com</td>
                                 <td>
                                     <span class="tag"
                                         th:classappend="${u.role == 'ADMIN' ? 'role-admin' : 'role-student'}"
-                                        th:text="${u.role == 'ADMIN' ? '🛡️ Admin' : '🎓 Student'}">Role</span>
+                                        th:text="${u.role == 'ADMIN' ? 'Admin' : 'Student'}">Role</span>
                                 </td>
                                 <td>
                                     <span class="tag"
                                         th:classappend="${u.status == 'LOCKED' ? 'tag-overdue' : 'tag-done'}"
-                                        th:text="${u.status == 'LOCKED' ? '🔒 Bị khóa' : '✅ Hoạt động'}">Status</span>
+                                        th:text="${u.status == 'LOCKED' ? 'Bị khóa' : 'Hoạt động'}">Status</span>
                                 </td>
-                                <td style="font-size:12px;color:var(--text2)" th:text="${u.createdAt}">2024-01-01</td>
+                                <td style="font-size:14px;color:var(--text2)" th:text="${u.createdAt}">2024-01-01</td>
                                 <td style="text-align:right">
                                     <div style="display:flex;gap:6px;justify-content:flex-end">
 
                                         <!-- Reset mật khẩu -->
                                         <button class="btn btn-secondary btn-sm"
-                                            th:unless="${u.userId == currentUserId}"
-                                            th:data-id="${u.userId}" th:data-name="${u.fullName}"
+                                            th:unless="${u.userId == currentUserId}" th:data-id="${u.userId}"
+                                            th:data-name="${u.fullName}"
                                             onclick="openResetModal(this.getAttribute('data-id'), this.getAttribute('data-name'))">
-                                            🔑 Reset
+                                            Reset
                                         </button>
 
                                         <!-- Khóa / Mở khóa -->
@@ -156,7 +176,7 @@
                                             style="display:inline">
                                             <button type="submit"
                                                 th:class="${u.status == 'LOCKED' ? 'btn btn-success btn-sm' : 'btn btn-secondary btn-sm'}"
-                                                th:text="${u.status == 'LOCKED' ? '🔓 Mở khóa' : '🔒 Khóa'}">
+                                                th:text="${u.status == 'LOCKED' ? 'Mở khóa' : 'Khóa'}">
                                             </button>
                                         </form>
 
@@ -164,12 +184,12 @@
                                         <button class="btn btn-danger btn-sm" th:unless="${u.userId == currentUserId}"
                                             th:data-id="${u.userId}" th:data-name="${u.fullName}"
                                             onclick="confirmDelete(this.getAttribute('data-id'), this.getAttribute('data-name'))">
-                                            🗑️ Xóa
+                                            Xóa
                                         </button>
 
                                         <!-- Chính mình -->
                                         <span th:if="${u.userId == currentUserId}"
-                                            style="font-size:11px;color:var(--text2);padding:4px 8px">(Bạn)</span>
+                                            style="font-size:13px;color:var(--text2);padding:4px 8px">(Bạn)</span>
                                     </div>
                                 </td>
                             </tr>
@@ -189,7 +209,7 @@
     <!-- ════ MODAL: Confirm Delete ════ -->
     <div class="modal-backdrop" id="delete-modal">
         <div class="modal">
-            <h2 class="modal-title">🗑️ Xác nhận xóa</h2>
+            <h2 class="modal-title">Xác nhận xóa</h2>
             <p style="color:var(--text2);font-size:14px;margin-bottom:20px">
                 Bạn có chắc muốn xóa tài khoản <strong id="delete-name" style="color:var(--text)"></strong> không?
                 Hành động này <span style="color:var(--red);font-weight:600">không thể hoàn tác</span>.
@@ -197,7 +217,7 @@
             <form id="delete-form" method="post">
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('delete-modal')">Hủy</button>
-                    <button type="submit" class="btn btn-danger">🗑️ Xóa tài khoản</button>
+                    <button type="submit" class="btn btn-danger">Xóa tài khoản</button>
                 </div>
             </form>
         </div>
@@ -206,8 +226,8 @@
     <!-- ════ MODAL: Reset Password ════ -->
     <div class="modal-backdrop" id="reset-modal">
         <div class="modal">
-            <h2 class="modal-title">🔑 Đặt lại mật khẩu</h2>
-            <p style="color:var(--text2);font-size:13px;margin-bottom:16px">
+            <h2 class="modal-title">Đặt lại mật khẩu</h2>
+            <p style="color:var(--text2);font-size:15px;margin-bottom:16px">
                 Đặt lại mật khẩu mới cho <strong id="reset-name" style="color:var(--text)"></strong>
             </p>
             <form id="reset-form" method="post">
@@ -218,7 +238,7 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('reset-modal')">Hủy</button>
-                    <button type="submit" class="btn btn-primary">🔑 Đặt lại</button>
+                    <button type="submit" class="btn btn-primary">Đặt lại</button>
                 </div>
             </form>
         </div>

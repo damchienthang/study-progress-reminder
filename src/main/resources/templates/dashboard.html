@@ -13,24 +13,48 @@
 
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
-        <div class="logo">📚 StudyReminder</div>
-        <a th:href="@{/dashboard}" class="nav-btn active">🏠 Dashboard</a>
-        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
-        <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
-        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+        <div class="nav-left">
+            <div class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo">StudyReminder</div>
+        </div>
 
         <div class="nav-right">
+            <a th:href="@{/dashboard}" class="nav-btn active">Dashboard</a>
+            <a th:href="@{/courses}" class="nav-btn">Môn học</a>
+            <a th:href="@{/tasks}" class="nav-btn">Nhiệm vụ</a>
+            <a th:href="@{/plans}" class="nav-btn">Kế hoạch</a>
+
+            <div style="width: 1px; height: 30px; background: var(--border); margin: 0 10px;"></div>
+
             <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
-                style="position:relative;text-decoration:none">
-                🔔 Thông báo
+                style="position:relative;text-decoration:none; min-width: 100px;">
+                Thông báo
                 <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
                     th:text="${unreadReminders}"
-                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:12px;margin-left:4px">•</span>
             </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
     </nav>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            sidebar.classList.toggle('hidden');
+            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden'));
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const isHidden = localStorage.getItem('sidebarHidden') === 'true';
+            if (isHidden) {
+                document.getElementById('main-sidebar').classList.add('hidden');
+            }
+        });
+    </script>
 
     <!-- ════ APP ════ -->
     <div class="app" id="main-app">
@@ -39,33 +63,33 @@
         <div class="sidebar" id="main-sidebar">
             <div class="sidebar-section">Tổng quan</div>
             <a th:href="@{/dashboard}" class="sidebar-item active">
-                <span class="icon">🏠</span>Dashboard
+                Dashboard
             </a>
 
             <div class="sidebar-section">Học tập</div>
             <a th:href="@{/courses}" class="sidebar-item">
-                <span class="icon">📖</span>Môn học
+                Môn học
             </a>
             <a th:href="@{/tasks}" class="sidebar-item">
-                <span class="icon">✅</span>Nhiệm vụ
+                Nhiệm vụ
             </a>
             <a th:href="@{/plans}" class="sidebar-item">
-                <span class="icon">📅</span>Kế hoạch
+                Kế hoạch
             </a>
 
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item">
-                <span class="icon">🔔</span>Nhắc nhở
+                Nhắc nhở
                 <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
-                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:12px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
             <a th:href="@{/profile}" class="sidebar-item">
-                <span class="icon">👤</span>Hồ sơ
+                Hồ sơ
             </a>
             <a th:href="@{/logout}" class="sidebar-item">
-                <span class="icon">🚪</span>Đăng xuất
+                Đăng xuất
             </a>
         </div>
 
@@ -78,8 +102,18 @@
                     <h1 class="page-title">
                         Xin chào, <span th:text="${session.user.fullName}">Bạn</span>! 👋
                     </h1>
-                    <div class="page-subtitle">Tổng quan tiến độ học tập của bạn</div>
+                    <div style="display:flex; align-items:center; gap:12px">
+                        <div class="page-subtitle">Tổng quan tiến độ học tập của bạn</div>
+                        <div style="width:4px; height:4px; border-radius:50%; background:var(--border)"></div>
+                        <div id="current-date" style="font-size:14px; color:var(--text2); font-weight:600"></div>
+                    </div>
                 </div>
+
+                <script>
+                    document.getElementById('current-date').innerText = new Date().toLocaleDateString('vi-VN', {
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                    });
+                </script>
             </div>
 
             <!-- STATS GRID -->
@@ -117,50 +151,52 @@
                 <!-- Course Progress -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">📊 Tiến độ theo môn học</div>
+                        <div class="card-title">Tiến độ theo môn học</div>
                     </div>
                     <div style="padding:24px;display:flex;flex-direction:column;gap:16px">
                         <!-- Dynamic: render per course -->
                         <div th:if="${courseProgressList != null and !courseProgressList.isEmpty()}"
                             th:each="cp : ${courseProgressList}">
-                            <div style="display:flex;justify-content:space-between;font-size:15px;margin-bottom:6px">
+                            <div style="display:flex;justify-content:space-between;font-size:17px;margin-bottom:6px">
                                 <span th:text="${cp.courseName}" style="font-weight:600">Môn học</span>
-                                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--green)"
+                                <span style="font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--green)"
                                     th:text="${cp.pct + '%'}">0%</span>
                             </div>
                             <div class="progress-wrap">
                                 <div class="progress-bar" th:style="'width:' + ${cp.pct} + '%'"></div>
                             </div>
-                            <div style="font-size:12px;color:var(--text2);margin-top:4px"
+                             <div style="font-size:14px;color:var(--text2);margin-top:4px"
                                 th:text="${cp.done + '/' + cp.total + ' nhiệm vụ hoàn thành'}">0/0 nhiệm vụ hoàn thành
                             </div>
                         </div>
                         <div th:if="${courseProgressList == null or courseProgressList.isEmpty()}"
-                            style="color:var(--text2);font-size:13px">Chưa có môn học nào.</div>
+                             style="color:var(--text2);font-size:15px">Chưa có môn học nào.</div>
                     </div>
                 </div>
 
                 <!-- Attention Tasks -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">⚠️ Nhiệm vụ cần chú ý</div>
+                        <div class="card-title">Nhiệm vụ cần chú ý</div>
                     </div>
                     <div
-                        style="padding:24px;display:flex;flex-direction:column;gap:12px;max-height:320px;overflow-y:auto">
-                        <div th:if="${attentionTasks != null and !attentionTasks.isEmpty()}"
-                            th:each="t : ${attentionTasks}" style="border-radius:6px;padding:10px 12px;"
-                            th:style="'border-radius:6px;padding:10px 12px;background:var(--bg3);border-left:3px solid ' + (${t.overdue} ? 'var(--red)' : 'var(--orange)')">
-                            <div style="font-size:15px;font-weight:600" th:text="${t.name}">Nhiệm vụ</div>
-                            <div style="font-size:11px;color:var(--text2);margin-top:2px">
+                        style="padding:24px;display:flex;flex-direction:column;gap:12px">
+                        <a th:if="${attentionTasks != null and !attentionTasks.isEmpty()}"
+                            th:each="t : ${attentionTasks}" 
+                            th:href="${t.planId != null and t.planId > 0 ? '/plans/' + t.planId : '#'}"
+                            class="notif-item"
+                            th:style="'margin: 0; padding: 12px 16px; border-left: 4px solid ' + (${t.overdue} ? 'var(--red)' : 'var(--orange)')">
+                             <div class="notif-item-title" th:text="${t.name}">Nhiệm vụ</div>
+                             <div class="notif-item-body">
                                 <span th:text="${t.courseName}">Môn học</span> ·
                                 <span th:if="${t.overdue}" style="color:var(--red)">Quá hạn</span>
                                 <span th:if="${!t.overdue}" style="color:var(--orange)">Sắp hết hạn</span>
                                 · <span th:text="${t.deadlineDisplay}">deadline</span>
                             </div>
-                        </div>
+                        </a>
                         <div th:if="${attentionTasks == null or attentionTasks.isEmpty()}"
-                            style="color:var(--text2);font-size:13px;text-align:center;padding:20px">
-                            ✅ Không có nhiệm vụ cần chú ý
+                             style="color:var(--text2);font-size:15px;text-align:center;padding:20px">
+                            Không có nhiệm vụ cần chú ý
                         </div>
                     </div>
                 </div>
@@ -169,7 +205,7 @@
             <!-- Study Plans -->
             <div class="card" style="margin-top:16px">
                 <div class="card-header">
-                    <div class="card-title">📅 Kế hoạch học tập</div>
+                    <div class="card-title">Kế hoạch học tập</div>
                     <a th:href="@{/plans}" class="btn btn-secondary btn-sm">Xem tất cả</a>
                 </div>
                 <div style="padding:24px;display:flex;flex-direction:column;gap:12px">
@@ -178,19 +214,19 @@
                         <div class="plan-info">
                             <div class="plan-name" th:text="${p.name}">Kế hoạch</div>
                             <div class="plan-dates"
-                                th:text="'📅 ' + ${p.startDateDisplay} + ' → ' + ${p.endDateDisplay}">📅 ngày</div>
+                                th:text="${p.startDateDisplay} + ' → ' + ${p.endDateDisplay}">ngày</div>
                         </div>
                         <div class="plan-progress-wrap">
                             <div class="plan-percent" th:text="${p.pct + '% hoàn thành'}">0% hoàn thành</div>
                             <div class="progress-wrap">
                                 <div class="progress-bar blue" th:style="'width:' + ${p.pct} + '%'"></div>
                             </div>
-                            <div style="font-size:11px;color:var(--text2)"
+                             <div style="font-size:13px;color:var(--text2)"
                                 th:text="${p.done + '/' + p.total + ' nhiệm vụ'}">0/0 nhiệm vụ</div>
                         </div>
                     </div>
                     <div th:if="${dashPlans == null or dashPlans.isEmpty()}"
-                        style="color:var(--text2);font-size:13px;padding:12px">
+                         style="color:var(--text2);font-size:15px;padding:12px">
                         Chưa có kế hoạch học tập.
                         <a th:href="@{/plans}" style="color:var(--accent)">Tạo kế hoạch ngay →</a>
                     </div>

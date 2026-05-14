@@ -54,9 +54,7 @@ public class DashboardController {
         model.addAttribute("overdueTasks", overdueTasks);
         model.addAttribute("progressPct",  progressPct);
 
-        // ── Unread reminders badge ────────────────────────────────────
-
-
+        // unreadReminders is already handled by GlobalControllerAdvice
         // ── Course progress list ──────────────────────────────────────
         List<Map<String, Object>> courseProgressList = new ArrayList<>();
         for (com.nhom14.model.Course c : courses) {
@@ -85,8 +83,10 @@ public class DashboardController {
             row.put("name",          t.getTaskName());
             row.put("courseName",    t.getCourseName() != null ? t.getCourseName() : "—");
             row.put("overdue",       over);
-            row.put("deadlineDisplay", t.getDeadline() != null
-                    ? t.getDeadline().substring(0, 16).replace("T", " ") : "");
+            String dl = t.getDeadline();
+            row.put("deadlineDisplay", (dl != null && dl.length() >= 16)
+                    ? dl.substring(0, 16).replace("T", " ") : (dl != null ? dl : ""));
+            row.put("planId",        t.getPlanId());
             attentionTasks.add(row);
             if (attentionTasks.size() >= 10) break;
         }

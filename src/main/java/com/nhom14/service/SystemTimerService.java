@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * SystemTimerService: chạy ngầm định kỳ (mỗi 5 phút), quét Task sắp đến hạn < 24h
+ * SystemTimerService: chạy ngầm định kỳ (mỗi 5 phút), quét Task sắp đến hạn <
+ * 24h
  * và tạo Reminder tự động — giới hạn không quá 2 thông báo / task / 24h.
  */
 @Service
@@ -18,39 +19,42 @@ public class SystemTimerService {
     @org.springframework.beans.factory.annotation.Autowired
     private EmailService emailService;
 
-    private final TaskDAO     taskDAO     = new TaskDAO();
+    private final TaskDAO taskDAO = new TaskDAO();
     private final ReminderDAO reminderDAO = new ReminderDAO();
 
     /** Chạy mỗi 5 phút */
     @Scheduled(fixedDelay = 5 * 60 * 1000)
     public void checkAndSendReminders() {
         List<Task> upcoming = taskDAO.findUpcomingForAll();
-        System.out.println("[Timer] Đang quét nhiệm vụ sắp đến hạn... Tìm thấy: " + upcoming.size());
-        
+        System.out.println("[Timer] Scanning Task is UPCOMING... Found: " + upcoming.size());
+
         for (Task t : upcoming) {
             int userId = getUserIdByPlanId(t.getPlanId());
-            if (userId <= 0) continue;
+            if (userId <= 0)
+                continue;
 
             // Giới hạn 2 thông báo / task / 24h
             int sentCount = reminderDAO.countSentLast24h(t.getTaskId());
             if (sentCount >= 2) {
-                System.out.println("[Timer] Bỏ qua task " + t.getTaskId() + " vì đã gửi " + sentCount + " thông báo trong 24h.");
+                System.out.println(
+                        "[Timer] Bỏ qua task " + t.getTaskId() + " vì đã gửi " + sentCount + " thông báo trong 24h.");
                 continue;
             }
 
             String displayDeadline = t.getDeadline() != null ? t.getDeadline().replace("T", " ") : "";
-            if (displayDeadline.length() > 16) displayDeadline = displayDeadline.substring(0, 16);
+            if (displayDeadline.length() > 16)
+                displayDeadline = displayDeadline.substring(0, 16);
 
             String msg = "⚠️ Nhắc nhở: Nhiệm vụ \"" + t.getTaskName()
                     + "\" sẽ đến hạn lúc " + displayDeadline + ". Hãy hoàn thành sớm!";
-            
+
             boolean inserted = reminderDAO.insert(new Reminder(t.getTaskId(), userId, msg));
             if (inserted) {
                 System.out.println("[Timer] Đã tạo thông báo cho user " + userId + ": " + t.getTaskName());
                 // Gửi cả Email nếu có email người dùng
                 String userEmail = getUserEmailById(userId);
                 if (userEmail != null) {
-                    emailService.sendTaskReminder(userEmail, t.getTaskName(), displayDeadline); 
+                    emailService.sendTaskReminder(userEmail, t.getTaskName(), displayDeadline);
                 }
             }
         }

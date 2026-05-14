@@ -12,23 +12,47 @@
 <body>
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
-        <div class="logo">📚 StudyReminder</div>
-        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
-        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
-        <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
-        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+        <div class="nav-left">
+            <div class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo">StudyReminder</div>
+        </div>
 
         <div class="nav-right">
+            <a th:href="@{/dashboard}" class="nav-btn">Dashboard</a>
+            <a th:href="@{/courses}" class="nav-btn">Môn học</a>
+            <a th:href="@{/tasks}" class="nav-btn">Nhiệm vụ</a>
+            <a th:href="@{/plans}" class="nav-btn">Kế hoạch</a>
+
+            <div style="width: 1px; height: 30px; background: var(--border); margin: 0 10px;"></div>
+
             <a th:href="@{/reminders}" class="btn btn-secondary btn-sm active" id="notif-toggle-btn"
-                style="position:relative;text-decoration:none">
-                🔔 Thông báo
+                style="position:relative;text-decoration:none; min-width: 100px;">
+                Thông báo
                 <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
-                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:12px;margin-left:4px">•</span>
             </a>
             <a th:href="@{/profile}" class="avatar" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
     </nav>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            sidebar.classList.toggle('hidden');
+            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden'));
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const isHidden = localStorage.getItem('sidebarHidden') === 'true';
+            if (isHidden) {
+                document.getElementById('main-sidebar').classList.add('hidden');
+            }
+        });
+    </script>
 
     <!-- ════ APP ════ -->
     <div class="app" id="main-app">
@@ -37,33 +61,33 @@
         <div class="sidebar" id="main-sidebar">
             <div class="sidebar-section">Tổng quan</div>
             <a th:href="@{/dashboard}" class="sidebar-item">
-                <span class="icon">🏠</span>Dashboard
+                Dashboard
             </a>
 
             <div class="sidebar-section">Học tập</div>
             <a th:href="@{/courses}" class="sidebar-item">
-                <span class="icon">📖</span>Môn học
+                Môn học
             </a>
             <a th:href="@{/tasks}" class="sidebar-item">
-                <span class="icon">✅</span>Nhiệm vụ
+                Nhiệm vụ
             </a>
             <a th:href="@{/plans}" class="sidebar-item">
-                <span class="icon">📅</span>Kế hoạch
+                Kế hoạch
             </a>
 
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item active">
-                <span class="icon">🔔</span>Nhắc nhở
+                Nhắc nhở
                 <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
-                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:12px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
             <a th:href="@{/profile}" class="sidebar-item">
-                <span class="icon">👤</span>Hồ sơ
+                Hồ sơ
             </a>
             <a th:href="@{/logout}" class="sidebar-item">
-                <span class="icon">🚪</span>Đăng xuất
+                Đăng xuất
             </a>
         </div>
 
@@ -72,13 +96,13 @@
             <!-- PAGE HEADER -->
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">🔔 Thông báo nhắc nhở</h1>
+                    <h1 class="page-title">Thông báo nhắc nhở</h1>
                     <div class="page-subtitle">
                         Hệ thống tự động gửi nhắc nhở khi nhiệm vụ còn dưới 24 giờ đến hạn
                     </div>
                 </div>
                 <div style="display:flex;gap:8px;align-items:center">
-                    <span th:if="${unreadReminders != null and unreadReminders > 0}" style="font-size:13px;color:var(--text2)">
+                    <span th:if="${unreadReminders != null and unreadReminders > 0}" style="font-size:15px;color:var(--text2)">
                         <span style="color:var(--red);font-weight:700" th:text="${unreadReminders}">0</span> chưa đọc
                     </span>
                     <form th:action="@{/reminders/read-all}" method="post"
@@ -90,8 +114,8 @@
                     <!-- Manual trigger cho testing (TC4-PUSH-1A) -->
                     <form th:action="@{/api/reminder/trigger}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-secondary btn-sm" id="btn-trigger-reminder"
-                            title="Manual trigger: kiểm tra ngay các task sắp đến hạn">
-                            ⚡ Kiểm tra ngay
+                            title="Kiểm tra ngay các task sắp đến hạn">
+                            Kiểm tra ngay
                         </button>
                     </form>
                 </div>
@@ -99,41 +123,34 @@
 
             <!-- Flash messages -->
             <div th:if="${success}"
-                style="margin-bottom:12px;padding:10px 16px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px"
+                style="margin-bottom:12px;padding:10px 16px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:15px"
                 th:text="${success}"></div>
 
             <!-- REMINDER LIST -->
             <div class="card">
                 <div th:if="${reminders != null and !reminders.isEmpty()}">
                     <div th:each="r : ${reminders}"
-                        th:style="${!r.read} ? 'border-left:4px solid var(--accent);background:var(--bg2);' : 'border-left:4px solid var(--bg3);opacity:0.7;'"
-                        style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px">
+                        class="notif-item"
+                        th:style="${!r.read} ? 'border-left:4px solid var(--accent);' : 'opacity:0.7;'"
+                        style="display:flex;align-items:flex-start;gap:14px;margin:12px 20px;position:relative">
 
-                        <!-- Icon -->
-                        <div style="font-size:24px;min-width:32px;text-align:center">
-                            <span th:if="${!r.read}">🔔</span>
-                            <span th:if="${r.read}" style="opacity:0.4">🔕</span>
-                        </div>
-
-                        <!-- Content -->
-                        <div style="flex:1">
-                            <div style="font-size:14px;font-weight:600;margin-bottom:4px" th:text="${r.message}">Nội
-                                dung thông báo</div>
-                            <div style="display:flex;gap:12px;font-size:11px;color:var(--text2);margin-top:4px">
-                                <span>📋 <span th:text="${r.taskName ?: 'Nhiệm vụ'}">Task</span></span>
-                                <span>🕐 <span th:text="${r.sentAt}">thời gian</span></span>
-                                <span th:if="${!r.read}" style="color:var(--accent);font-weight:600">● Chưa đọc</span>
-                                <span th:if="${r.read}" style="color:var(--text2)">✓ Đã đọc</span>
+                        <!-- Content Link - Safe simple concatenation -->
+                        <a th:href="${r.planId > 0 ? '/plans/' + r.planId : '#'}" 
+                           th:styleappend="${r.planId <= 0} ? 'cursor:default' : ''"
+                           style="flex:1;text-decoration:none;color:inherit;display:block">
+                            <div class="notif-item-title" style="font-size:16px;font-weight:700;margin-bottom:6px" th:text="${r.message}">Nội dung thông báo</div>
+                            <div class="notif-item-body" style="display:flex;gap:12px;font-size:13px;color:var(--text2);margin-top:4px">
+                                <span><span th:text="${r.taskName ?: 'Nhiệm vụ'}">Task</span></span>
+                                <span><span th:text="${r.sentAt}">thời gian</span></span>
+                                <span th:if="${!r.read}" style="color:var(--accent);font-weight:700">Mới</span>
+                                <span th:if="${r.read}" style="color:var(--text2)">Đã xem</span>
                             </div>
-                        </div>
+                        </a>
 
-                        <!-- Action -->
-                        <div th:if="${!r.read}" style="min-width:100px">
-                            <form th:action="@{/reminders/{id}/read(id=${r.reminderId})}" method="post">
-                                <button type="submit" class="btn btn-secondary btn-sm"
-                                    th:id="'btn-read-' + ${r.reminderId}">
-                                    ✓ Đánh dấu đọc
-                                </button>
+                        <!-- Action - Keep outside the link -->
+                        <div th:if="${!r.read}" style="min-width:100px; display: flex; align-items: center; justify-content: flex-end; z-index: 2;">
+                            <form th:action="@{/reminders/{id}/read(id=${r.reminderId})}" method="post" style="margin:0">
+                                <button type="submit" class="btn btn-secondary btn-sm" style="font-size:12px">Đánh dấu đã đọc</button>
                             </form>
                         </div>
                     </div>
@@ -142,15 +159,14 @@
                 <!-- Empty state -->
                 <div th:if="${reminders == null or reminders.isEmpty()}"
                     style="padding:60px 40px;text-align:center;color:var(--text2)">
-                    <div style="font-size:48px;margin-bottom:16px">🔕</div>
+                    <div style="font-size:48px;margin-bottom:16px"></div>
                     <div style="font-size:16px;font-weight:600;margin-bottom:8px">Không có thông báo nào</div>
-                    <div style="font-size:13px">Hệ thống sẽ tự động gửi thông báo khi nhiệm vụ còn dưới 24 giờ đến hạn.
+                    <div style="font-size:15px">Hệ thống sẽ tự động gửi thông báo khi nhiệm vụ còn dưới 24 giờ đến hạn.
                     </div>
                     <div style="margin-top:16px;display:flex;gap:12px;justify-content:center">
-                        <a th:href="@{/tasks}" class="btn btn-secondary btn-sm">✅ Xem nhiệm vụ</a>
+                        <a th:href="@{/tasks}" class="btn btn-secondary btn-sm">Xem nhiệm vụ</a>
                         <form th:action="@{/api/reminder/trigger}" method="post" style="display:inline">
-                            <button type="submit" class="btn btn-primary btn-sm" id="btn-trigger-now">⚡ Kiểm tra
-                                ngay</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="btn-trigger-now">Kiểm tra ngay</button>
                         </form>
                     </div>
                 </div>
@@ -158,8 +174,8 @@
 
             <!-- INFO BOX -->
             <div class="card" style="margin-top:16px;padding:16px 20px">
-                <div style="font-size:13px;color:var(--text2)">
-                    <div style="font-weight:600;margin-bottom:8px;color:var(--text1)">ℹ️ Thông tin về hệ thống nhắc nhở
+                <div style="font-size:15px;color:var(--text2)">
+                    <div style="font-weight:600;margin-bottom:8px;color:var(--text1)">Thông tin về hệ thống nhắc nhở
                     </div>
                     <ul style="margin:0;padding-left:20px;line-height:1.8">
                         <li>Hệ thống tự động quét mỗi <strong>5 phút</strong> và gửi thông báo khi nhiệm vụ còn &lt; 24

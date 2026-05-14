@@ -30,8 +30,8 @@ public class ReminderDAO {
     public List<Reminder> findByUser(int userId) {
         List<Reminder> list = new ArrayList<>();
         String sql = """
-            SELECT r.*, t.taskName FROM reminders r
-            JOIN tasks t ON r.taskId = t.taskId
+            SELECT r.*, t.taskName, t.planId FROM reminders r
+            LEFT JOIN tasks t ON r.taskId = t.taskId
             WHERE r.userId=?
             ORDER BY r.sentAt DESC
         """;
@@ -73,6 +73,7 @@ public class ReminderDAO {
         Reminder r = new Reminder();
         r.setReminderId(rs.getInt("reminderId"));
         r.setTaskId(rs.getInt("taskId"));
+        try { r.setPlanId(rs.getInt("planId")); } catch (SQLException ignored) {}
         r.setUserId(rs.getInt("userId"));
         r.setMessage(rs.getString("message"));
         r.setSentAt(rs.getString("sentAt"));

@@ -11,24 +11,48 @@
 <body>
     <!-- ════ NAV ════ -->
     <nav id="main-nav">
-        <div class="logo">📚 StudyReminder</div>
-        <a th:href="@{/dashboard}" class="nav-btn">🏠 Dashboard</a>
-        <a th:href="@{/courses}" class="nav-btn">📖 Môn học</a>
-        <a th:href="@{/tasks}" class="nav-btn">✅ Nhiệm vụ</a>
-        <a th:href="@{/plans}" class="nav-btn">📅 Kế hoạch</a>
+        <div class="nav-left">
+            <div class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo">StudyReminder</div>
+        </div>
 
         <div class="nav-right">
+            <a th:href="@{/dashboard}" class="nav-btn">Dashboard</a>
+            <a th:href="@{/courses}" class="nav-btn">Môn học</a>
+            <a th:href="@{/tasks}" class="nav-btn">Nhiệm vụ</a>
+            <a th:href="@{/plans}" class="nav-btn">Kế hoạch</a>
+
+            <div style="width: 1px; height: 30px; background: var(--border); margin: 0 10px;"></div>
+
             <a th:href="@{/reminders}" class="btn btn-secondary btn-sm" id="notif-toggle-btn"
-                style="position:relative;text-decoration:none">
-                🔔 Thông báo
+                style="position:relative;text-decoration:none; min-width: 100px;">
+                Thông báo
                 <span th:if="${unreadReminders != null and unreadReminders > 0}" class="badge"
                     th:text="${unreadReminders}"
-                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:10px;margin-left:4px">•</span>
+                    style="background:var(--red);color:#fff;border-radius:50%;padding:1px 5px;font-size:12px;margin-left:4px">•</span>
             </a>
             <a th:href="@{/profile}" class="avatar active" id="user-avatar" th:title="${session.user.fullName}"
                 th:text="${#strings.substring(session.user.fullName, 0, 1)}">U</a>
         </div>
     </nav>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            sidebar.classList.toggle('hidden');
+            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden'));
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const isHidden = localStorage.getItem('sidebarHidden') === 'true';
+            if (isHidden) {
+                document.getElementById('main-sidebar').classList.add('hidden');
+            }
+        });
+    </script>
 
     <!-- ════ APP ════ -->
     <div class="app" id="main-app">
@@ -37,56 +61,56 @@
         <div class="sidebar" id="main-sidebar">
             <div class="sidebar-section">Tổng quan</div>
             <a th:href="@{/dashboard}" class="sidebar-item">
-                <span class="icon">🏠</span>Dashboard
+                Dashboard
             </a>
 
             <div class="sidebar-section">Học tập</div>
             <a th:href="@{/courses}" class="sidebar-item">
-                <span class="icon">📖</span>Môn học
+                Môn học
             </a>
             <a th:href="@{/tasks}" class="sidebar-item">
-                <span class="icon">✅</span>Nhiệm vụ
+                Nhiệm vụ
             </a>
             <a th:href="@{/plans}" class="sidebar-item">
-                <span class="icon">📅</span>Kế hoạch
+                Kế hoạch
             </a>
             
             <div class="sidebar-section">Thông báo</div>
             <a th:href="@{/reminders}" class="sidebar-item">
-                <span class="icon">🔔</span>Nhắc nhở
+                Nhắc nhở
                 <span th:if="${unreadReminders != null and unreadReminders > 0}" th:text="${unreadReminders}"
-                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px">•</span>
+                    style="margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:12px">•</span>
             </a>
 
             <div class="sidebar-section">Tài khoản</div>
             <a th:href="@{/profile}" class="sidebar-item active">
-                <span class="icon">👤</span>Hồ sơ
+                Hồ sơ
             </a>
             <a th:href="@{/logout}" class="sidebar-item">
-                <span class="icon">🚪</span>Đăng xuất
+                Đăng xuất
             </a>
         </div>
 
         <div class="main">
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">👤 Hồ sơ cá nhân</h1>
+                    <h1 class="page-title">Hồ sơ cá nhân</h1>
                     <div class="page-subtitle">Quản lý thông tin tài khoản và bảo mật</div>
                 </div>
             </div>
 
             <div th:if="${success}" class="alert alert-success"
-                style="margin-bottom:16px;padding:12px;background:rgba(63,185,80,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px"
+                style="margin-bottom:16px;padding:12px;background:rgba(63,185,80,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:15px"
                 th:text="${success}"></div>
             <div th:if="${error}" class="alert alert-error"
-                style="margin-bottom:16px;padding:12px;background:rgba(248,81,73,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:13px"
+                style="margin-bottom:16px;padding:12px;background:rgba(248,81,73,0.1);border:1px solid var(--red);border-radius:8px;color:var(--red);font-size:15px"
                 th:text="${error}"></div>
 
             <div class="two-col">
                 <!-- Thông tin cơ bản -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">📝 Thông tin cơ bản</div>
+                        <div class="card-title">Thông tin cơ bản</div>
                     </div>
                     <div style="padding:24px">
                         <form th:action="@{/profile/update}" method="post">
@@ -117,7 +141,7 @@
                                 <div style="display:flex;gap:8px;align-items:center">
                                     <span th:if="${session.user.isAdmin()}" class="tag role-admin">ADMIN</span>
                                     <span th:if="${!session.user.isAdmin()}" class="tag role-student">STUDENT</span>
-                                    <span style="font-size:12px;color:var(--text2)"
+                                     <span style="font-size:14px;color:var(--text2)"
                                         th:text="'Ngày tạo: ' + ${session.user.createdAt}"></span>
                                 </div>
                             </div>
@@ -129,7 +153,7 @@
                 <!-- Đổi mật khẩu -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">🔒 Đổi mật khẩu</div>
+                        <div class="card-title">Đổi mật khẩu</div>
                     </div>
                     <div style="padding:24px">
                         <form th:action="@{/profile/change-password}" method="post">
@@ -150,12 +174,12 @@
             <!-- Vùng nguy hiểm -->
             <div class="card" style="margin-top:24px;border-color:rgba(248,81,73,0.4)">
                 <div class="card-header" style="background:rgba(248,81,73,0.05)">
-                    <div class="card-title" style="color:var(--red)">⚠️ Vùng nguy hiểm</div>
+                    <div class="card-title" style="color:var(--red)">Vùng nguy hiểm</div>
                 </div>
                 <div style="padding:20px;display:flex;justify-content:space-between;align-items:center">
                     <div>
-                        <div style="font-weight:700;font-size:14px">Xóa tài khoản</div>
-                        <div style="font-size:12px;color:var(--text2);margin-top:2px">Một khi bạn xóa tài khoản, tất cả
+                        <div style="font-weight:700;font-size:16px">Xóa tài khoản</div>
+                         <div style="font-size:14px;color:var(--text2);margin-top:2px">Một khi bạn xóa tài khoản, tất cả
                             dữ liệu kế hoạch, môn học và nhiệm vụ sẽ bị xóa vĩnh viễn.</div>
                     </div>
                     <form th:action="@{/profile/delete}" method="post"

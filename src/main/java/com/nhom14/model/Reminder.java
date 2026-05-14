@@ -3,6 +3,7 @@ package com.nhom14.model;
 public class Reminder {
     private int    reminderId;
     private int    taskId;
+    private int    planId;
     private int    userId;
     private String message;
     private String sentAt;
@@ -23,6 +24,8 @@ public class Reminder {
     public void   setTaskId(int v)           { taskId     = v; }
     public int    getUserId()                { return userId; }
     public void   setUserId(int v)           { userId     = v; }
+    public int    getPlanId()                { return planId; }
+    public void   setPlanId(int v)           { planId     = v; }
     public String getMessage()               { return message; }
     public void   setMessage(String v)       { message    = v; }
     public String getSentAt()                { return sentAt; }
